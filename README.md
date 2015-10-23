@@ -7,4 +7,4 @@
 ## C. = Cassandra  
 ## K. = Kafka
 
-## Trying some default stack für Big Data (May come out different from the above).
+## Trying some default stack for Big Data prototypes (May come out different from the above).
