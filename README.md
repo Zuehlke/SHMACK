@@ -9,17 +9,6 @@ K. = Kafka
 
 ## Trying some default stack for Big Data prototypes (May come out different from the above).
 
-### Installation
-* **Always** create the AWS clusters in Region **"us-west-1"** as "eu-central-1" (Frankfurt) does not work (instances are created and rolled back without any obvious reason)
-* To create a setup according to the tutorial follow the steps [here](https://mesosphere.com/amazon/setup/) TODO: Change this to use `initial_setup.sh`
-* TODO automated setup from scratch, see https://github.com/Zuehlke/SHMACK/issues/1
-
-
-##### Affiliate
-* Focusgroup - Big Data / Cloud
-* Team - TODO
-* Initiator - wgi
-
 #<font color="red">WARNING: things can get expensive $$$$$ !</font>
 When setting up the tutorial servers on Amazon AWS and letting them running, there will be monthly costs of approx **1700 $** !
 Please make sure that servers are only used as required. See [FAQ](#avoidBill) section in this document.
@@ -29,13 +18,34 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 * Details for Backlog-Items are github issues with a link from the Backlog
 * Any files used for work on specific issues can be found **[here](https://github.com/Zuehlke/SHMACK/tree/master/03_analysis_design/Issues)**, see also **[FAQ](#nonImplFiles)**
 * Whatever can be automated shall be automated and checked in the `04_implementation` folder **[here](https://github.com/Zuehlke/SHMACK/tree/master/04_implementation)** (common sense may be applied ;-)
-* The [Vision][#vision]
+* The [Vision](#vision)
+* [Installation instructions](#installation)
 
 # Vision #
 We want like to be fast when ramping up cloud infrastructure.
 We do not want to answer "we never did this" to customers when asked.
 We want to know where the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
 **@wgi: TODO Please correct / append this vision.**
+
+### Installation
+* **Always** create the AWS clusters in Region **`us-west-1`** as `eu-central-1` (Frankfurt) does not work (instances are created and rolled back without any obvious reason)
+* To create a setup according to the tutorial follow the steps [here](https://mesosphere.com/amazon/setup/) TODO: Change this to use `initial_setup.sh`
+* TODO automated setup from scratch, see https://github.com/Zuehlke/SHMACK/issues/1
+* To be done once:
+  * Create AWS account **[here](https://aws.amazon.com/de/)**
+  * Create a Virtual Machine using Ubuntu (recommended Version >= 14.04.03 LTS), **[download](http://www.ubuntu.com/download/desktop)** using any Virtualization software you like, e.g. VirtualBox or VMWare
+  * In the Virtual machine
+    * `mkdir ${HOME}/shmack`
+    * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+    * `cd ${HOME}/shmack/repo/04_implementation && sudo setup_ubuntu.sh`
+* To create the stack
+  * Clone the res
+
+
+##### Affiliate
+* Focusgroup - Big Data / Cloud
+* Team - TODO
+* Initiator - wgi
 
 # Links #
 * [Mesosphere Homepage](https://mesosphere.com/)
