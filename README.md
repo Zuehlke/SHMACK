@@ -22,24 +22,52 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 * [Installation instructions](#installation)
 
 # Vision #
-We want like to be fast when ramping up cloud infrastructure.
-We do not want to answer "we never did this" to customers when asked.
-We want to know where the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
-**@wgi: TODO Please correct / append this vision.**
+* We want like to be fast when ramping up cloud infrastructure.
+* We do not want to answer "we never did this" to customers when asked.
+* We want to know where the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
+* We want to create a RUA for Machine Learning to acquire customers and show competence.
+
+* **@wgi: TODO Please correct / append this vision.**
 
 ### Installation
 * **Always** create the AWS clusters in Region **`us-west-1`** as `eu-central-1` (Frankfurt) does not work (instances are created and rolled back without any obvious reason)
 * To create a setup according to the tutorial follow the steps [here](https://mesosphere.com/amazon/setup/) TODO: Change this to use `initial_setup.sh`
 * TODO automated setup from scratch, see https://github.com/Zuehlke/SHMACK/issues/1
-* To be done once:
-  * Create AWS account **[here](https://aws.amazon.com/de/)**
-  * Create a Virtual Machine using Ubuntu (recommended Version >= 14.04.03 LTS), **[download](http://www.ubuntu.com/download/desktop)** using any Virtualization software you like, e.g. VirtualBox or VMWare
-  * In the Virtual machine
-    * `mkdir ${HOME}/shmack`
-    * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
-    * `cd ${HOME}/shmack/repo/04_implementation && sudo setup_ubuntu.sh`
-* To create the stack
-  * Clone the res
+
+#### To be done once:
+* Create AWS account **[here](https://aws.amazon.com/de/)**
+* Create a Virtual Machine using **[LinuxMint](http://www.linuxmint.com/download.php)** (derivate of Ubuntu, but much better usability, recommended Version >= 17.02), using any Virtualization software you like, e.g. VirtualBox or VMWare
+* In the Virtual machine
+  * `sudo apt-get install xsel`
+  * setup GIT (source of commands: https://help.github.com/articles/set-up-git/ )
+    * `git config --global user.name "YOUR NAME"`
+    * `git config --global user.email "your_GITHUB_email_address@example.com"`
+    * `git config --global push.default simple`
+    * Setup github Credentials
+      * `git config --global credential.helper cache`
+      * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
+  * `mkdir ${HOME}/shmack`
+  * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+  * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H setup_ubuntu.sh`
+  * Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
+    * Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
+      * https://console.aws.amazon.com/iam/home?#users
+      * Username: `shmack`
+      * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
+    * `aws configure`
+      * `AWS Access Key ID [None]: [from browser page]`
+      * `AWS Secret Access Key [None]: [from browser page]`
+      * `Default region name [None]: **us-west-1**`  (VERY important, DO NOT change this!)
+      * `Default output format [None]: json`
+    * Assign Admin-Permissions to user `smack`: 
+https://console.aws.amazon.com/iam/home?#users/shmack 
+    * Create a AWS Key-Pair in region **us-west-1**: 
+https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
+      * Name: `shmack-key-pair-01`
+
+    
+#### Stack Creation and Deletion 
+  * `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
 
 
 ##### Affiliate
@@ -51,11 +79,16 @@ We want to know where the issues and traps are when setting up cloud infrastruct
 * [Mesosphere Homepage](https://mesosphere.com/)
 * [Documentation](http://docs.mesosphere.com/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
+* [DCOS Service Availability](https://docs.mesosphere.com/reference/servicestatus/)
 * Articles
   * [MESOSPHERE DATACENTER OPERATING SYSTEM IS NOW GENERALLY AVAILABLE](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
   * [MEET A NEW VERSION OF SPARK, BUILT JUST FOR THE DCOS](https://mesosphere.com/blog/2015/06/15/meet-a-new-version-of-spark-built-just-for-the-dcos/)
   * [EVERYTHING YOU NEED TO KNOW ABOUT SCALA AND BIG DATA](https://mesosphere.com/blog/2015/07/24/learn-everything-you-need-to-know-about-scala-and-big-data-in-oakland/)
   * [APPLE DETAILS HOW IT REBUILT SIRI ON MESOS](https://mesosphere.com/blog/2015/04/23/apple-details-j-a-r-v-i-s-the-mesos-framework-that-runs-siri/)
+* Other Ressources
+  * AMP Lab - Reference Architecture: https://amplab.cs.berkeley.edu/software/
+  * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/  
+  * Public Datasets (S3): https://aws.amazon.com/de/public-data-sets/
 
 
 # Glossary
@@ -63,6 +96,9 @@ We want to know where the issues and traps are when setting up cloud infrastruct
 |--------|--------|
 | Issue  | = Can be a **"User Story"** (to be in sync with scrum and github terminology) or a **Bug**|
 
+
+# Important Limitations / Things to consider before going productive
+* As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 
 
 # FAQ
@@ -104,3 +140,15 @@ ___
 
 [github]:https://github.com/zuehlke-ch
 [bitbucket]:https://bitbucket.org/zuehlke/
+
+
+
+      * **Option 2: SSH-Connection** (Pro: fine control, Con: does not work in Corporate network as SSH is required)
+        * Create a SSH Key Pair (accept all defaults)
+        * `ssh-keygen -t rsa -b 4096 -C "your_GITHUB_email_address@example.com"`
+        * Associate Key Pair with github:
+          * `ssh-agent -s`
+          * `ssh-add ~/.ssh/id_rsa`
+          * `xsel --clipboard < ~/.ssh/id_rsa.pub`  (copies public key into clipboard)
+          * Open SSH Settings and Add Key from clipboard: https://github.com/settings/ssh
+          * Test it: `ssh -T git@github.com` (Successful if your github is displayed as output)
