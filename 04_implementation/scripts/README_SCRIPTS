@@ -1,0 +1,22 @@
+Content of directories:
+- scripts         
+     --> all public scripts
+- scripts/helpers 
+     --> all non-public scripts
+- scripts/target/current-state
+     --> shared state between scripts, e.g. current StackId
+- scripts/target/tmp-output
+     --> temporary output from scripts, not intended to be shared
+
+
+Public scripts ...
+- ... must start with 
+        cd `dirname $0`
+        source ./shmack_env
+- ... may use any number of helper scripts
+
+
+
+
+
+

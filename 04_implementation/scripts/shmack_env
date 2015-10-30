@@ -1,0 +1,36 @@
+# This environment has to be sourced by all public scripts.
+# It defines paths to files which are shared among scripts.
+
+echo "Appliying shmack_env..."
+
+if [ -f "./shmack_env" ] ; then
+  export SCRIPTS_DIR=`pwd`
+else 
+  echo "Scripts must ALWAYS be executed with correct current directory, i.e. directory of 'shmack_env'"
+  exit 99
+fi
+
+set -o pipefail
+
+function run {
+    "$@"
+    local status=$?
+    if [ $status -ne 0 ]; then
+        echo "Failed to execute $*" >&2
+	kill -9 $$ >> /dev/null
+    fi
+    return $status
+}
+export -f run
+
+export TMP_OUTPUT_DIR=${SCRIPTS_DIR}/target/tmp-output
+run mkdir -p ${TMP_OUTPUT_DIR}
+
+export CURRENT_STATE_DIR=${SCRIPTS_DIR}/target/current-state
+run mkdir -p ${CURRENT_STATE_DIR}
+
+export CURRENT_STACK_ID_FILE=${CURRENT_STATE_DIR}/StackId
+export CURRENT_STACK_NAME_FILE=${CURRENT_STATE_DIR}/StackName
+
+PATH=${SCRIPTS_DIR}/helpers:${PATH}
+export PATH

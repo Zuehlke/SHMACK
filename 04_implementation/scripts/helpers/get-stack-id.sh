@@ -6,6 +6,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-`dirname $0`/get-single-json-value.sh StackId $1 || exit 1
+
+run python ${SCRIPTS_DIR}/helpers/get-single-json-value.py StackId $1 
 
 
