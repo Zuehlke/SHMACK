@@ -1,8 +1,8 @@
 #/bin/bash
 
 cd `dirname $0`
-source ./shmack_env
-pwd
+. ./shmack_env
+
 
 run apt-get update
 run apt-get -y install git-cola git-gui awscli python-setuptools python-virtualenv geany curl

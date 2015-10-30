@@ -12,7 +12,7 @@ Content of directories:
 Public scripts ...
 - ... must start with 
         cd `dirname $0`
-        source ./shmack_env
+        . ./shmack_env
 - ... may use any number of helper scripts
 
 

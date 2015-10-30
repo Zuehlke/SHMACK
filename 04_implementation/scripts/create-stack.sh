@@ -1,7 +1,7 @@
 #/bin/bash
 
 cd `dirname $0`
-source ./shmack_env
+. ./shmack_env
 
 run mkdir -p target
 
@@ -70,4 +70,6 @@ function deploySmackStack {
 	run dcos package install cassandra
 }
 run deploySmackStack
+
+run openMesosMasterConsole
 
