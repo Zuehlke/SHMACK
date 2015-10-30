@@ -23,14 +23,13 @@ function run {
 }
 export -f run
 
-export DCOS_INSTALL_DIR=${SCRIPTS_DIR}/target/dcos
-run mkdir -p ${DCOS_INSTALL_DIR}
+export TARGET_DIR=${SCRIPTS_DIR}/target
 
-export TMP_OUTPUT_DIR=${SCRIPTS_DIR}/target/tmp-output
-run mkdir -p ${TMP_OUTPUT_DIR}
+export DCOS_INSTALL_DIR=${TARGET_DIR}/dcos
 
-export CURRENT_STATE_DIR=${SCRIPTS_DIR}/target/current-state
-run mkdir -p ${CURRENT_STATE_DIR}
+export TMP_OUTPUT_DIR=${TARGET_DIR}/tmp-output
+
+export CURRENT_STATE_DIR=${TARGET_DIR}/current-state
 
 export CURRENT_STACK_ID_FILE=${CURRENT_STATE_DIR}/StackId
 export CURRENT_STACK_NAME_FILE=${CURRENT_STATE_DIR}/StackName

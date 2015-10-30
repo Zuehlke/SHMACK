@@ -17,6 +17,11 @@ SLAVE_INSTANCE_COUNT=3
 ###################################################################################################
 ########  NOTHING to change below this line (no hardcoded values)
 ###################################################################################################
+
+run mkdir -p ${DCOS_INSTALL_DIR}
+run mkdir -p ${TMP_OUTPUT_DIR}
+run mkdir -p ${CURRENT_STATE_DIR}
+
 # AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
 PARAMETERS=""
 PARAMETERS="${PARAMETERS} ParameterKey=AcceptEULA,ParameterValue=Yes"
