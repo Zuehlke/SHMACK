@@ -34,16 +34,17 @@ CLOUD_FORMATION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/cloud-formation-result.json
 echo "${STACK_NAME}" > ${CURRENT_STACK_NAME_FILE}
 
 echo "Creating stack ${STACK_NAME} in aws..."
-run aws cloudformation create-stack --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
+run aws cloudformation create-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
 
 echo "Extracting StackId:"
 run get-stack-id.sh ${CLOUD_FORMATION_OUTPUT_FILE} | tee ${CURRENT_STACK_ID_FILE} 
 
+date
 echo -n "Stack creation initialized. Waiting for all EC2 instances ready..."
 function waitForStackCreateComplete {
 	STACK_DESCRIPTION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/stack-description.json
 	while true; do 
-		run aws cloudformation describe-stacks --stack-name ${STACK_NAME} > ${STACK_DESCRIPTION_OUTPUT_FILE}		
+		run aws cloudformation describe-stacks --output json --stack-name ${STACK_NAME} > ${STACK_DESCRIPTION_OUTPUT_FILE}		
 		STATUS=`get-stack-status.sh ${STACK_DESCRIPTION_OUTPUT_FILE}`
 		case "$STATUS" in
 			"CREATE_COMPLETE" )
@@ -63,6 +64,7 @@ function waitForStackCreateComplete {
 	done
 }
 waitForStackCreateComplete
+date
 
 getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
@@ -74,6 +76,14 @@ function deploySmackStack {
 	run dcos package install cassandra
 }
 run deploySmackStack
+date
 
 run openMesosMasterConsole
+
+echo "Master URL: http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`"
+echo "Public Slave URL: http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_FILE}`"
+
+echo "see also: open-shmack-master-console.sh"
+echo "see also: open-shmack-client.sh"
+
 
