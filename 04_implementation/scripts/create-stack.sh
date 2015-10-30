@@ -3,7 +3,6 @@
 cd `dirname $0`
 . ./shmack_env
 
-run mkdir -p target
 
 ###################################################################################################
 ########  All parameters are here, maybe change them to command line options later
