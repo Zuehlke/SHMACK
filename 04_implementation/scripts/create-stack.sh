@@ -30,7 +30,7 @@ CLOUD_FORMATION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/cloud-formation-result.json
 echo "${STACK_NAME}" > ${CURRENT_STACK_NAME_FILE}
 
 echo "Creating stack ${STACK_NAME} in aws..."
-#run aws cloudformation create-stack --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
+run aws cloudformation create-stack --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
 
 echo "Extracting StackId:"
 run get-stack-id.sh ${CLOUD_FORMATION_OUTPUT_FILE} | tee ${CURRENT_STACK_ID_FILE} 
@@ -60,6 +60,11 @@ function waitForStackCreateComplete {
 }
 waitForStackCreateComplete
 
+getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
+getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
 
-
+function deploySmackStack {
+	echo "XXXXXaaa"
+}
+run deploySmackStack
 
