@@ -48,7 +48,7 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
   * `mkdir ${HOME}/shmack`
   * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
-  * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H setup_ubuntu.sh`
+  * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
   * Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
     * Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
       * https://console.aws.amazon.com/iam/home?#users
@@ -134,21 +134,16 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
            |- Any files you like to work on
 ````
 
+# Troubleshooting
+## I get a `SignatureDoesNotMatch` error in aws-cli.
+Likely the clock of your virtual maching is wrong. 
+To fix is:
+* Shutdown VM completely (reboot is *not* enough in VirtualBox)
+* Start VM
+* Now the time should be OK 
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
 
 [github]:https://github.com/zuehlke-ch
 [bitbucket]:https://bitbucket.org/zuehlke/
-
-
-
-      * **Option 2: SSH-Connection** (Pro: fine control, Con: does not work in Corporate network as SSH is required)
-        * Create a SSH Key Pair (accept all defaults)
-        * `ssh-keygen -t rsa -b 4096 -C "your_GITHUB_email_address@example.com"`
-        * Associate Key Pair with github:
-          * `ssh-agent -s`
-          * `ssh-add ~/.ssh/id_rsa`
-          * `xsel --clipboard < ~/.ssh/id_rsa.pub`  (copies public key into clipboard)
-          * Open SSH Settings and Add Key from clipboard: https://github.com/settings/ssh
-          * Test it: `ssh -T git@github.com` (Successful if your github is displayed as output)
