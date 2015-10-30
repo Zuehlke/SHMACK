@@ -23,6 +23,9 @@ function run {
 }
 export -f run
 
+export DCOS_INSTALL_DIR=${SCRIPTS_DIR}/target/dcos
+run mkdir -p ${DCOS_INSTALL_DIR}
+
 export TMP_OUTPUT_DIR=${SCRIPTS_DIR}/target/tmp-output
 run mkdir -p ${TMP_OUTPUT_DIR}
 
@@ -35,4 +38,5 @@ export CURRENT_MESOS_MASTER_DNS_FILE=${CURRENT_STATE_DIR}/MesosMasterDnsAddress
 export CURRENT_PUBLIC_SLAVE_DNS_FILE=${CURRENT_STATE_DIR}/PublicSlaveDnsAddress
 
 PATH=${SCRIPTS_DIR}/helpers:${PATH}
+PATH=${PATH}:${DCOS_INSTALL_DIR}/bin
 export PATH
