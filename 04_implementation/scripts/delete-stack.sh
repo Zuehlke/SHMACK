@@ -6,7 +6,7 @@ cd `dirname $0`
 STACK_NAME=`cat ${CURRENT_STACK_NAME_FILE}`
 STACK_ID=`cat ${CURRENT_STACK_ID_FILE}`
 
-echo "Deleting stack ${STACK_NAME} in aws..."
+echo "Deleting stack ${STACK_NAME} in aws, (ID=${STACK_ID})..."
 # use ${STACK_NAME}  for deletion as this is more robust as the name of a stack never changes
 run aws cloudformation delete-stack --output json --stack-name ${STACK_NAME} 
 
