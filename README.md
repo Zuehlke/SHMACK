@@ -40,6 +40,7 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 * Create AWS account **[here](https://aws.amazon.com/de/)**
 * Create a Virtual Machine 
   * Recommended: **[Ubuntu >= 14.04.3 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+    * Optional: Install cinnamon desktop manager: http://www.webupd8.org/2014/12/install-cinnamon-24-stable-in-ubuntu.html
   * Alternative: **[LinuxMint >= 17.02](http://www.linuxmint.com/download.php)** with VirtualBox 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
