@@ -30,9 +30,6 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 * **@wgi: TODO Please correct / append this vision.**
 
 ### Installation
-* **Always** create the AWS clusters in Region **`us-west-1`** as `eu-central-1` (Frankfurt) does not work (instances are created and rolled back without any obvious reason)
-* To create a setup according to the tutorial follow the steps [here](https://mesosphere.com/amazon/setup/) TODO: Change this to use `initial_setup.sh`
-* TODO automated setup from scratch, see https://github.com/Zuehlke/SHMACK/issues/1
 
 #### To be done once:
 * Create AWS account **[here](https://aws.amazon.com/de/)**
@@ -67,10 +64,17 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 
     
 #### Stack Creation and Deletion 
+##### Stack Creation
   * `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
+  * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
+  * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
+  * Confirm cassandra installation: `Continue installing? [yes/no]` --> yes
+  
+##### Stack Deletion
+  * `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
 
 
-##### Affiliate
+#### Affiliate
 * Focusgroup - Big Data / Cloud
 * Team - TODO
 * Initiator - wgi
@@ -140,7 +144,7 @@ Likely the clock of your virtual maching is wrong.
 To fix is:
 * Shutdown VM completely (reboot is *not* enough in VirtualBox)
 * Start VM
-* Now the time should be OK 
+* Now the clock of the VM should be OK and aws-cli should work fine again.
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
