@@ -1,10 +1,15 @@
 # S.H.M.A.C.K
 
 S. = Spark
+
 H. = Hatch
+
 M. = Mesos
+
 A. = Akka
+
 C. = Cassandra
+
 K. = Kafka
 
 ## Trying some default stack for Big Data prototypes (May come out different from the above).
@@ -39,7 +44,7 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
-  * `sudo apt-get install xsel`
+  * `sudo apt-get install xsel git`
   * setup GIT (source of commands: https://help.github.com/articles/set-up-git/ )
     * `git config --global user.name "YOUR NAME"`
     * `git config --global user.email "your_GITHUB_email_address@example.com"`
@@ -58,25 +63,36 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
     * `aws configure`
       * `AWS Access Key ID [None]: [from browser page]`
       * `AWS Secret Access Key [None]: [from browser page]`
-      * `Default region name [None]: **us-west-1**`  (VERY important, DO NOT change this!)
+      * `Default region name [None]: us-west-1`  (VERY important, DO NOT change this!)
       * `Default output format [None]: json`
     * Assign Admin-Permissions to user `smack`: 
 https://console.aws.amazon.com/iam/home?#users/shmack 
     * Create a AWS Key-Pair in region **us-west-1**: 
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
-      * Name: `shmack-key-pair-01`
+      * Key pair name: `shmack-key-pair-01` 
+        **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
 
     
 #### Stack Creation and Deletion 
 ##### Stack Creation
   * `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
+    * Wait approx. 10 Minutes
+    * **Do NOT interrupt the script!**
+    * In case of failures see [Troubleshoting Section](#setupFailing)
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
   * Confirm cassandra installation: `Continue installing? [yes/no]` --> yes
   
+<a name="stackDeletion"></a>
 ##### Stack Deletion
-  * `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
-
+  * Option 1 (recommended):
+    `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
+  * Option 2 (manual):
+    * go to https://console.aws.amazon.com/cloudformation/ and delete the stack
+  * Verification (to avoid too high bills) make sure that...
+	* ... the stack is deleted: https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks?filter=active
+	* ... there are no autoscaling groups left: https://us-west-1.console.aws.amazon.com/ec2/autoscaling/home
+	* ... there are no running EC2 instances or Volumes: https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1
 
 #### Affiliate
 * Focusgroup - Big Data / Cloud
@@ -111,18 +127,18 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 
 
 # FAQ
-## How do I avoid to be surprised by a monthly bill of **1700 $** ?<a name="avoidBill"></a>
+<a name="avoidBill"></a>
+## How do I avoid to be surprised by a monthly bill of **1700 $** ?
 As of 2015-10-23 there is **no** officially supported way to suspend AWS EC2 instances.
 see [Stackoverflow](http://stackoverflow.com/questions/31848810/mesososphere-dcos-cluster-on-aws-ec2-instances-are-terminated-and-again-restart) and [Issue](https://github.com/Zuehlke/SHMACK/issues/2)
 
 The only official supported way to stop AWS bills is to completely delete the stack.
 **ATTENTION**: 
 * To delete a stack it is not sufficient to just terminate the EC2 instances as they are contained in an autoscaling group.
-* To delete a stack 
-  * go to https://console.aws.amazon.com/cloudformation/ and delete the stack
-  * make sure that there are no autoscaling groups left: https://us-west-1.console.aws.amazon.com/ec2/autoscaling/home
+* To delete a stack see **[here](#stackDeletion)**
 
-## Where is the Backlog?<a name="backlog"></a>
+<a name="backlog"></a>
+## Where is the Backlog?
 The Backlog is an Excel-File which contains for each story
 - the short name 
 - the Category 
@@ -133,7 +149,8 @@ We use the Excel-Format due to the following reasons:
 2. we want to filter for open issues only (otherwise the backlog would become too long)
 3. we do not (yet) want to introduce another tool like trello to keep thing simple and together.
 
-## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?<a name="nonImplFiles"></a>
+<a name="nonImplFiles"></a>
+## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?
 Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMACK/tree/master/03_analysis_design/Issues
 ````
 <git-repo-root>
@@ -146,10 +163,15 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
 Likely the clock of your virtual maching is wrong. 
-To fix is:
+To fix this:
 * Shutdown VM completely (reboot is *not* enough in VirtualBox)
 * Start VM
 * Now the clock of the VM should be OK and aws-cli should work fine again.
+
+## What should I do if the setup of the stack has failed?<a name="setupFailing"></a>
+* Try to understand the failure and fix it. Goal: As much as possible is automated and others do not fall into the same issue.
+* Delete the stack to make sure there are no costs, see **[here](#stackDeletion)**
+* If you still habe time: Try to create the stack again from scratch, but do not forget the **[running costs](#avoidBill)**...
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
