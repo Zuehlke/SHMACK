@@ -175,6 +175,8 @@ To fix this:
 * Try to understand the failure and fix it. Goal: As much as possible is automated and others do not fall into the same issue.
 * Delete the stack to make sure there are no costs, see **[here](#stackDeletion)**
 * If you still habe time: Try to create the stack again from scratch, but do not forget the **[running costs](#avoidBill)**...
+
+
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket

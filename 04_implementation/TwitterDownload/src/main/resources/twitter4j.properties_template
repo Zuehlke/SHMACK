@@ -1,0 +1,9 @@
+# To get the required tokens visit 
+# https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+# and create a new Twitter application
+
+debug=false
+oauth.consumerKey=*********************
+oauth.consumerSecret=******************************************
+oauth.accessToken=**************************************************
+oauth.accessTokenSecret=******************************************

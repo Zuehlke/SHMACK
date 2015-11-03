@@ -1,4 +1,11 @@
 ~*
 target
+build
+bin
 scratch.sh
-
+twitter4j.properties
+.project
+.classpath
+.gradle
+.nb-gradle
+.settings
