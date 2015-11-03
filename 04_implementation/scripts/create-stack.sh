@@ -78,8 +78,10 @@ function deploySmackStack {
 run deploySmackStack
 date
 
-run openMesosMasterConsole
+run open-shmack-master-console.sh
 
+echo
+echo 
 echo "Master URL: http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`"
 echo "Public Slave URL: http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_FILE}`"
 
