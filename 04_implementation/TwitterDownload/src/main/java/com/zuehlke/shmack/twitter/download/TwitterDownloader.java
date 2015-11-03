@@ -34,7 +34,7 @@ import com.google.common.base.Preconditions;
  */
 public class TwitterDownloader {
 
-    private static final String TARGET_TWEETS_JSON_FILE = "target/tweets.json";
+    private static final String TARGET_TWEETS_JSON_FILE = "build/tweets.json";
 
     private static final int MAX_PAGE_SIZE = 100;
 
