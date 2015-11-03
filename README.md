@@ -33,9 +33,11 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 
 #### To be done once:
 * Create AWS account **[here](https://aws.amazon.com/de/)**
-* Create a Virtual Machine using **[LinuxMint](http://www.linuxmint.com/download.php)** (derivate of Ubuntu, but much better usability, recommended Version >= 17.02), using any Virtualization software you like, e.g. VirtualBox or VMWare
+* Create a Virtual Machine 
+  * Recommended: **[Ubuntu >= 14.04.3 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+  * Alternative: **[LinuxMint >= 17.02](http://www.linuxmint.com/download.php)** with VirtualBox 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
-  * Do not forget to install the VM-tools to enable copy/paste between host and VM.
+  * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
   * `sudo apt-get install xsel`
   * setup GIT (source of commands: https://help.github.com/articles/set-up-git/ )
