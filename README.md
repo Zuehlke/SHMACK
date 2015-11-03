@@ -78,7 +78,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 ##### Stack Creation
   * `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
-    * **Do NOT interrupt the script!**
+    * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
@@ -90,6 +90,8 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
     `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
   * Option 2 (manual):
     * go to https://console.aws.amazon.com/cloudformation/ and delete the stack
+  * Troubleshooting
+    * Sometimes the deletion failes after approx. 20 minutes as a default VPC security group cannot be deleted. Reasons are likely race conditions. In this case the repetition of the stack deletion (either by Option 1 or Option 2) likely resolves the problem.
   * Verification (to avoid too high bills) make sure that...
 	* ... the stack is deleted: https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks?filter=active
 	* ... there are no autoscaling groups left: https://us-west-1.console.aws.amazon.com/ec2/autoscaling/home
