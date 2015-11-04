@@ -9,4 +9,4 @@ cd `dirname $0`
 SSH_IP_ADDRESS=`getSshIpAddress.sh`
 echo "SSH into ${SSH_IP_ADDRESS}..."
 
-
+ssh -i ${SSH_KEY_LOCATION} core@${SSH_IP_ADDRESS}

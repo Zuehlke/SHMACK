@@ -23,6 +23,8 @@ function run {
 }
 export -f run
 
+export SSH_KEY_LOCATION=${HOME}/shmack/shmack-key-pair-01.pem
+
 export TARGET_DIR=${SCRIPTS_DIR}/target
 
 export DCOS_INSTALL_DIR=${TARGET_DIR}/dcos
