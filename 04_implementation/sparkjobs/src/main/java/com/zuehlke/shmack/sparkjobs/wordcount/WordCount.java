@@ -15,6 +15,9 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
 
+/**
+ * @see http://spark.apache.org/examples.html
+ */
 public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> implements Serializable {
 
     private static final long serialVersionUID = 1L;
