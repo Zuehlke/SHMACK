@@ -74,6 +74,10 @@ function deploySmackStack {
 	run curl -O https://downloads.mesosphere.io/dcos-cli/install.sh
 	run bash install.sh . http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
 	run dcos package install cassandra
+	run dcos package install chronos
+	run dcos package install hdfs
+	run dcos package install marathon
+	run dcos package install spark
 }
 run deploySmackStack
 date
