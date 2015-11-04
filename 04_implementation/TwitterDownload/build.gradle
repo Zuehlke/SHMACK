@@ -22,9 +22,10 @@ dependencies {
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
     
-    runtime 'org.twitter4j:twitter4j-stream:4.0.4'
-    runtime 'org.twitter4j:twitter4j-async:4.0.4'
-	runtime 'com.google.guava:guava:18.0'
-	runtime 'commons-io:commons-io:2.4'
+    compile 'org.twitter4j:twitter4j-stream:4.0.4'
+    compile 'org.twitter4j:twitter4j-async:4.0.4'
+    
+	compile 'com.google.guava:guava:18.0'
+	compile 'commons-io:commons-io:2.4'
 	
 }

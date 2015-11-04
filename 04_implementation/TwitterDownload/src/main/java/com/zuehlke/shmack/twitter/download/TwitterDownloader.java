@@ -8,15 +8,11 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import twitter4j.Query;
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 import twitter4j.TwitterObjectFactory;
-import twitter4j.conf.ConfigurationBuilder;
 
 import com.google.common.base.Preconditions;
 
