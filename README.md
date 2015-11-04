@@ -72,6 +72,9 @@ https://console.aws.amazon.com/iam/home?#users/shmack
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
       * Key pair name: `shmack-key-pair-01` 
         **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
+      * Save the key pair to `${HOME}/shmack/shmack-key-pair-01.pem`
+        **Attention: Use exactly this filename as it is referenced in the scripts!**
+      * `chmod 600 ${HOME}/shmack/shmack-key-pair-01.pem
 
     
 #### Stack Creation and Deletion 
@@ -82,7 +85,12 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
-  * Confirm cassandra installation: `Continue installing? [yes/no]` --> yes
+  * Confirm all installations (several times): `Continue installing? [yes/no]` --> yes
+  * Login once using ssh (in order to add mesos master to known hosts)
+    * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-master.sh`
+    * Confirm SSH security prompt
+    * Logout from the cluser (press `Ctrl-d` or type `exit`)
+
   
 <a name="stackDeletion"></a>
 ##### Stack Deletion
