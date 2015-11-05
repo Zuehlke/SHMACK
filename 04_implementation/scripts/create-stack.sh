@@ -82,6 +82,8 @@ function deploySmackStack {
 run deploySmackStack
 date
 
+run update-node-info.sh
+
 run open-shmack-master-console.sh
 
 echo
