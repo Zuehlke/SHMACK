@@ -72,9 +72,9 @@ https://console.aws.amazon.com/iam/home?#users/shmack
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
       * Key pair name: `shmack-key-pair-01` 
         **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
-      * Save the key pair to `${HOME}/shmack/shmack-key-pair-01.pem`
+      * Save the key pair to `${HOME}/.ssh/shmack-key-pair-01.pem`
         **Attention: Use exactly this filename as it is referenced in the scripts!**
-      * `chmod 600 ${HOME}/shmack/shmack-key-pair-01.pem
+      * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem
   * Install Java 8 (taken from https://wiki.ubuntuusers.de/Java/Installation/Oracle_Java/Java_8 )
     * Download the `*.-x64.tgz` from http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html, e.g. `jdk-8u65-linux-x64.tar.gz`
     * Extract and install the downloaded file to /usr/java
