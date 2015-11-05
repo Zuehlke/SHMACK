@@ -150,6 +150,9 @@ export PATH
   * AMP Lab - Reference Architecture: https://amplab.cs.berkeley.edu/software/
   * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/  
   * Public Datasets (S3): https://aws.amazon.com/de/public-data-sets/
+  * Reference Architecture for Netflix Style recommendation engines: https://github.com/fluxcapacitor
+  * Apache Spark Example Use Cases (with Code): https://github.com/4Quant
+  * Apache Spark Twitter Word Count: https://github.com/snowplow/spark-example-project
 
 
 # Glossary
