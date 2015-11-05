@@ -10,16 +10,16 @@ if [ "$#" -ne 2 ]; then
 fi
 
 
-SSH_IP_ADDRESS=`getSshIpAddress.sh`
+MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_MASTER_IP_ADDRESS_FILE}"`
 SRC="$1"
 DEST="$2"
 
 echo "Source     : $SRC"
 echo "Destination: $DEST"
-echo "Syncing with SSH to ${SSH_IP_ADDRESS}..."
+echo "Syncing with SSH to ${MASTER_IP_ADDRESS}..."
 
 # see http://stackoverflow.com/questions/5527068/how-do-you-use-an-identity-file-with-rsync
 eval $(ssh-agent) # Create agent and environment variables
 ssh-add ${SSH_KEY_LOCATION}
 
-rsync -avzh --delete "${SRC}" core@${SSH_IP_ADDRESS}:"${DEST}" 
+rsync -avzh --delete "${SRC}" core@${MASTER_IP_ADDRESS}:"${DEST}" 
