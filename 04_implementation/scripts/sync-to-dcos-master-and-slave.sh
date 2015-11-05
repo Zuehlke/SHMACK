@@ -3,17 +3,19 @@
 cd `dirname $0`
 . ./shmack_env
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
     echo "Illegal number of parameters"
-    echo "Usage: `basename $0` <src> <dest>"
+    echo "Usage: `basename $0` <src> <dest> <0-based-slave-index>"
     exit 1
 fi
 
-MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
-SLAVE_IP_ADDRESS=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} 0 "hostname"`
-
 SRC="$1"
 DEST="$2"
+SLAVE_INDEX="$3"
+
+MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
+SLAVE_IP_ADDRESS=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX} "hostname"`
+
 
 echo "Source     : $SRC"
 echo "Destination: $DEST"
