@@ -75,6 +75,32 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
       * Save the key pair to `${HOME}/shmack/shmack-key-pair-01.pem`
         **Attention: Use exactly this filename as it is referenced in the scripts!**
       * `chmod 600 ${HOME}/shmack/shmack-key-pair-01.pem
+  * Install Java 8 (taken from https://wiki.ubuntuusers.de/Java/Installation/Oracle_Java/Java_8 )
+    * Download the `*.-x64.tgz` from http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html, e.g. `jdk-8u65-linux-x64.tar.gz`
+    * Extract and install the downloaded file to /usr/java
+```
+sudo apt-get -y purge openjdk*
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get -y install oracle-java8-installer
+sudo apt-get -y install oracle-java8-set-default
+```
+    * Check installation: `java -version`
+
+  * Download and install eclipse
+    * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
+    * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-1-linux-gtk-x86_64.tar.gz` 
+  * Append the following lines at the **end** of your `${HOME}/.bashrc`
+```
+alias eclipse='${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
+PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
+export PATH
+```
+  * Add gradle support to eclipse
+    * open `eclipse`
+    * Open `Help --> Eclipse Marketplace`
+    * Install `Gradle IDE Pack`
+  * Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
 
     
 #### Stack Creation and Deletion 
