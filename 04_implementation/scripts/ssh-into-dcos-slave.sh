@@ -1,6 +1,6 @@
 #/bin/bash
 
-cd `dirname $0`
+cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
 
 if [ "$#" -ne 1 ]; then

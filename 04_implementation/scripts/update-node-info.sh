@@ -1,6 +1,6 @@
 #/bin/bash
 
-cd `dirname $0`
+cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
 
 MASTER_NODE_METADATA_FILE=${TMP_OUTPUT_DIR}/master-node-metadata.json

@@ -11,7 +11,7 @@ Content of directories:
 
 Public scripts ...
 - ... must start with 
-        cd `dirname $0`
+        cd `dirname ${BASH_SOURCE[0]}`
         . ./shmack_env
 - ... may use any number of helper scripts
 

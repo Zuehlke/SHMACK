@@ -1,6 +1,6 @@
 #/bin/bash
 
-cd `dirname $0`
+cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
 
 STACK_NAME=`cat ${CURRENT_STACK_NAME_FILE}`
