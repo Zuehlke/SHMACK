@@ -19,10 +19,6 @@ SLAVE_IP_ADDRESS=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX} 
 echo "Source     : $SRC"
 echo "Destination: $DEST"
 
-# see http://stackoverflow.com/questions/5527068/how-do-you-use-an-identity-file-with-rsync
-eval $(ssh-agent) # Create agent and environment variables
-ssh-add ${SSH_KEY_LOCATION}
-
 echo "Syncing from Slave ${SLAVE_IP_ADDRESS} to Master ${MASTER_IP_ADDRESS}..."
 run ssh -A -t core@${MASTER_IP_ADDRESS} rsync -avzh --delete core@${SLAVE_IP_ADDRESS}:"${SRC}" "${DEST}"  
 

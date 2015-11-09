@@ -45,3 +45,22 @@ PATH=${SCRIPTS_DIR}:${PATH}
 PATH=${SCRIPTS_DIR}/helpers:${PATH}
 PATH=${PATH}:${DCOS_INSTALL_DIR}/bin
 export PATH
+
+# taken from http://rabexc.org/posts/pitfalls-of-ssh-agents
+# see also http://stackoverflow.com/questions/5527068/how-do-you-use-an-identity-file-with-rsync
+function setup-ssh-agent {
+	ssh-add ${SSH_KEY_LOCATION} &>/dev/null
+	if [ "$?" -ne 0 ]; then
+	  test -r ~/.ssh-agent && \
+	    eval "$(<~/.ssh-agent)" >/dev/null
+
+	  ssh-add ${SSH_KEY_LOCATION} &>/dev/null
+	  if [ "$?" -ne 0 ]; then
+	    (umask 066; ssh-agent > ~/.ssh-agent)
+	    eval "$(<~/.ssh-agent)" >/dev/null
+            ssh-add ${SSH_KEY_LOCATION}
+ 	    echo "Added SSH-Key to ssh-agent."
+	  fi
+	fi
+}
+setup-ssh-agent
