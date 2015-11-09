@@ -22,7 +22,5 @@ echo "Destination: $DEST"
 echo "Syncing from Slave ${SLAVE_IP_ADDRESS} to Master ${MASTER_IP_ADDRESS}..."
 run ssh -A -t core@${MASTER_IP_ADDRESS} rsync -avzh --delete core@${SLAVE_IP_ADDRESS}:"${SRC}" "${DEST}"  
 
-echo "Syncing with SSH from Master to local: ${MASTER_IP_ADDRESS}..."
-run rsync -avzh --delete core@${MASTER_IP_ADDRESS}:"${DEST}" "${DEST}" 
 
 

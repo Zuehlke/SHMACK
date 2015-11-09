@@ -14,4 +14,8 @@ dependencies {
 
     compile 'org.twitter4j:twitter4j-stream:4.0.4'
     compile 'org.twitter4j:twitter4j-async:4.0.4'
+    
+	compile 'com.google.guava:guava:18.0'
+	compile 'commons-io:commons-io:2.4'
+	compile 'org.apache.commons:commons-exec:1.3'
 }
