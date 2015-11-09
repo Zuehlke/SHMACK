@@ -18,8 +18,4 @@ echo "Source     : $SRC"
 echo "Destination: $DEST"
 echo "Syncing with SSH to ${MASTER_IP_ADDRESS}..."
 
-# see http://stackoverflow.com/questions/5527068/how-do-you-use-an-identity-file-with-rsync
-eval $(ssh-agent) # Create agent and environment variables
-ssh-add ${SSH_KEY_LOCATION}
-
 rsync -avzh --delete "${SRC}" core@${MASTER_IP_ADDRESS}:"${DEST}" 
