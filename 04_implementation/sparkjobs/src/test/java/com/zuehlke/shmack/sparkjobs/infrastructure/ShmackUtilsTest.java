@@ -20,8 +20,7 @@ public class ShmackUtilsTest {
 	private static final String FILENAME_1 = "file1.txt";
 	private static final String FILENAME_2 = "file2.txt";
 
-	@BeforeClass
-	public static void createDirectoryToTransfer() throws IOException {
+	private static void resetTransferDirectories() throws IOException {
 		if (LOCAL_SRC_DIR.exists()) {
 			FileUtils.forceDelete(LOCAL_SRC_DIR);
 		}
@@ -43,11 +42,22 @@ public class ShmackUtilsTest {
 
 	@Test
 	public void testSyncFolderToMasterAndSlave() throws ExecuteException, IOException {
+		resetTransferDirectories();
 		ShmackUtils.syncFolderToMasterAndSlave(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromSlave(REMOTE_DIR, LOCAL_TARGET_DIR);
 		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
 		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
 	}
+
+	@Test
+	public void testSyncFolderToMaster() throws ExecuteException, IOException {
+		resetTransferDirectories();
+		ShmackUtils.syncFolderToMaster(LOCAL_SRC_DIR, REMOTE_DIR);
+		ShmackUtils.syncFolderFromMaster(REMOTE_DIR, LOCAL_TARGET_DIR);
+		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
+		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
+	}
+
 
 	private void assertFileContentEquals(File expectedFilesDir, File actualFilesDir, String filename)
 			throws IOException {
