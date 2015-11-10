@@ -200,6 +200,11 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
            |- Any files you like to work on
 ````
 
+## How do I scale up/down the number of slave nodes?
+`${HOME}/shmack/repo/04_implementation/scripts/change-number-of-slaves.sh <new number of slaves>`
+**Attention**: Data in HDFS is **destroyed** when scaling down 3 slave nodes or less!!
+
+
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
 Likely the clock of your virtual maching is wrong. 
