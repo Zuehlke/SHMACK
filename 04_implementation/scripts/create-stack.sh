@@ -12,7 +12,7 @@ STACK_NAME="MyShmackStack-1"
 TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
 KEY_PAIR_NAME="shmack-key-pair-01"
 PUBLIC_SLAVE_INSTANCE_COUNT=1
-SLAVE_INSTANCE_COUNT=3
+SLAVE_INSTANCE_COUNT=5
 
 ###################################################################################################
 ########  NOTHING to change below this line (no hardcoded values)
