@@ -55,6 +55,10 @@ function waitForStackUpdateComplete {
 				echo -n "."
 				sleep 5
 				;;
+                        "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS" )
+				echo -n "."
+				sleep 5
+				;;
 			*)
 				echo "Invalid status for AWS Stack: $STATUS"
 				exit 1 
