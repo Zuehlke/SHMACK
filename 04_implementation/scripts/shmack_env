@@ -1,8 +1,6 @@
 # This environment has to be sourced by all public scripts.
 # It defines paths to files which are shared among scripts.
 
-echo "Appliying shmack_env..."
-
 if [ -f "./shmack_env" ] ; then
   export SCRIPTS_DIR=`pwd`
 else 
