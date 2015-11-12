@@ -1,6 +1,7 @@
 package com.zuehlke.shmack.sparkjobs.infrastructure;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import java.util.Date;
 
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ShmackUtilsTest {
@@ -58,7 +58,6 @@ public class ShmackUtilsTest {
 		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
 	}
 
-
 	private void assertFileContentEquals(File expectedFilesDir, File actualFilesDir, String filename)
 			throws IOException {
 
@@ -70,6 +69,13 @@ public class ShmackUtilsTest {
 
 		assertEquals("Content of " + actualFile.getAbsolutePath(), expectedContent, actualContent);
 
+	}
+
+	@Test
+	public void testRunOnMaster() throws ExecuteException, IOException {
+		ExecuteResult result = ShmackUtils.runOnMaster("hostname");
+		// example hostname: ip-10-0-7-102.us-west-1.compute.internal
+		assertTrue("Hostname of aws-node: " + result, result.getStandardOutput().contains("compute.internal"));
 	}
 
 }
