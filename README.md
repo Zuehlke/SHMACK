@@ -112,10 +112,10 @@ export PATH
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
   * Confirm all installations (several times): `Continue installing? [yes/no]` --> yes
-  * Login once using ssh (in order to add mesos master to known hosts)
-    * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-master.sh`
-    * Confirm SSH security prompt
-    * Logout from the cluser (press `Ctrl-d` or type `exit`)
+  * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts)
+    * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
+    * Confirm SSH security prompts
+    * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
 
   
 <a name="stackDeletion"></a>
@@ -213,11 +213,24 @@ To fix this:
 * Start VM
 * Now the clock of the VM should be OK and aws-cli should work fine again.
 
-## What should I do if the setup of the stack has failed?<a name="setupFailing"></a>
+<a name="setupFailing"></a>
+## What should I do if the setup of the stack has failed?
 * Try to understand the failure and fix it. Goal: As much as possible is automated and others do not fall into the same issue.
 * Delete the stack to make sure there are no costs, see **[here](#stackDeletion)**
 * If you still habe time: Try to create the stack again from scratch, but do not forget the **[running costs](#avoidBill)**...
 
+
+## What should I do if ssh does not work?
+In most cases the reason for this is that ssh is blocked by corporate networks.
+Solution: Unplug network cable and use `zred` WiFi.
+
+## What should I do to check if the setup was successful?
+Execute the testcase `ShmackUtilsTest` .
+If this testcase fails: see **[here](#inTestcasesFailing)**
+
+<a name="inTestcasesFailing"></a>
+## What should I do if Integration testcases do not work?
+Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 
 ___
 * [github] - See other project from Zühlke on github

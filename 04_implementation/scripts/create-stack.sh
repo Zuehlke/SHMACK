@@ -84,6 +84,10 @@ date
 
 run update-node-info.sh
 
+echo
+read -p "Press Enter to confirm ssh-identities (and logout from cluster after confirmations)." 
+${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0
+
 run open-shmack-master-console.sh
 
 echo
@@ -94,6 +98,5 @@ echo "Public Slave URL: http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_FILE}`"
 echo "see also: open-shmack-master-console.sh"
 echo "see also: open-shmack-client.sh"
 echo
-read -p "Press Enter to confirm ssh-identities (and logout from cluster after confirmations)." 
-${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0
+
 
