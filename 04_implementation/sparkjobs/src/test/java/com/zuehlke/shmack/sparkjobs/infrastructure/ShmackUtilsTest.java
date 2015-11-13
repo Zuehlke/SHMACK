@@ -17,10 +17,10 @@ public class ShmackUtilsTest {
 	private final static File LOCAL_SRC_DIR = new File("build/RemoteDataTransferTest/local-src-dir/");
 	private final static File LOCAL_TARGET_DIR = new File("build/RemoteDataTransferTest/local-target-dir/");
 	private final static File REMOTE_DIR = new File("/tmp/ssh-transfer-test/");
-	private static final String FILENAME_1 = "file1.txt";
-	private static final String FILENAME_2 = "file2.txt";
 
-	private static void resetTransferDirectories() throws IOException {
+	private static final int SMALL_NUMBER_OF_FILES = 2;
+
+	private static void resetTransferDirectories(int numberOfFiles) throws IOException {
 		if (LOCAL_SRC_DIR.exists()) {
 			FileUtils.forceDelete(LOCAL_SRC_DIR);
 		}
@@ -28,8 +28,13 @@ public class ShmackUtilsTest {
 			FileUtils.forceDelete(LOCAL_TARGET_DIR);
 		}
 		FileUtils.forceMkdir(LOCAL_SRC_DIR);
-		writeRandomFileContent(FILENAME_1);
-		writeRandomFileContent(FILENAME_2);
+		for (int i = 0; i < numberOfFiles; i++) {
+			writeRandomFileContent(getTestFilename(i));
+		}
+	}
+
+	private static String getTestFilename(int i) {
+		return "test-file-" + i + ".txt";
 	}
 
 	private static void writeRandomFileContent(String targetFileName) throws IOException {
@@ -42,20 +47,25 @@ public class ShmackUtilsTest {
 
 	@Test
 	public void testSyncFolderMasterAndSlave() throws ExecuteException, IOException {
-		resetTransferDirectories();
+		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
 		ShmackUtils.syncFolderToMasterAndSlave(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromSlave(REMOTE_DIR, LOCAL_TARGET_DIR);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+	}
+
+	private void assertFolderContentEquals(File localSrcDir, File localTargetDir) throws IOException {
+		File[] localSrcFiles = localSrcDir.listFiles();
+		for (File file : localSrcFiles) {
+			assertFileContentEquals(localSrcDir, localTargetDir, file.getName());
+		}
 	}
 
 	@Test
 	public void testSyncFolderMaster() throws ExecuteException, IOException {
-		resetTransferDirectories();
+		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
 		ShmackUtils.syncFolderToMaster(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromMaster(REMOTE_DIR, LOCAL_TARGET_DIR);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
 	}
 
 	private void assertFileContentEquals(File expectedFilesDir, File actualFilesDir, String filename)
@@ -80,12 +90,10 @@ public class ShmackUtilsTest {
 
 	@Test
 	public void testSyncFolderHdfs() throws ExecuteException, IOException {
-		resetTransferDirectories();
+		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
 		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
-		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
 	}
-
 
 }
