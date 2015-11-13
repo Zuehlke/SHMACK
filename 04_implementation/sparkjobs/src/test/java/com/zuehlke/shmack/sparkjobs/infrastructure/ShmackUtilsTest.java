@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ShmackUtilsTest {
@@ -19,6 +20,7 @@ public class ShmackUtilsTest {
 	private final static File REMOTE_DIR = new File("/tmp/ssh-transfer-test/");
 
 	private static final int SMALL_NUMBER_OF_FILES = 2;
+	private static final int LARGE_NUMBER_OF_FILES = 1000;
 
 	private static void resetTransferDirectories(int numberOfFiles) throws IOException {
 		if (LOCAL_SRC_DIR.exists()) {
@@ -91,6 +93,15 @@ public class ShmackUtilsTest {
 	@Test
 	public void testSyncFolderHdfs() throws ExecuteException, IOException {
 		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
+		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
+		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+	}
+
+	@Test
+	//@Ignore("Only intended to be invoked in scenarios for testing failover of Cluster, e.g. when removing number of clients")
+	public void testSyncFolderHdfsManyFiles() throws ExecuteException, IOException {
+		resetTransferDirectories(LARGE_NUMBER_OF_FILES);
 		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
 		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
