@@ -10,6 +10,5 @@ if [ "$#" -lt 1 ]; then
 fi
 
 MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
-echo ssh -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} "$@"
 ssh -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} "source /etc/profile.d/dcos.sh ; "$@" "
 
