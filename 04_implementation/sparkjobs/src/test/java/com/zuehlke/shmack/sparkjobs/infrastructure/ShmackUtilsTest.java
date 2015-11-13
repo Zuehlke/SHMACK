@@ -34,14 +34,14 @@ public class ShmackUtilsTest {
 
 	private static void writeRandomFileContent(String targetFileName) throws IOException {
 		String fileContent = "This is content of " + targetFileName
-				+ " .\n It intentionally varies on each test invocation: " + (new Date());
+				+ " .\n It intentionally varies on each test invocation: " + (new Date()) + " - " + System.nanoTime();
 		File targetFile = new File(LOCAL_SRC_DIR, targetFileName);
 		FileUtils.writeStringToFile(targetFile, fileContent, StandardCharsets.UTF_8);
 		System.out.println("Created source file: " + targetFile.getAbsolutePath());
 	}
 
 	@Test
-	public void testSyncFolderToMasterAndSlave() throws ExecuteException, IOException {
+	public void testSyncFolderMasterAndSlave() throws ExecuteException, IOException {
 		resetTransferDirectories();
 		ShmackUtils.syncFolderToMasterAndSlave(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromSlave(REMOTE_DIR, LOCAL_TARGET_DIR);
@@ -50,7 +50,7 @@ public class ShmackUtilsTest {
 	}
 
 	@Test
-	public void testSyncFolderToMaster() throws ExecuteException, IOException {
+	public void testSyncFolderMaster() throws ExecuteException, IOException {
 		resetTransferDirectories();
 		ShmackUtils.syncFolderToMaster(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromMaster(REMOTE_DIR, LOCAL_TARGET_DIR);
@@ -77,5 +77,15 @@ public class ShmackUtilsTest {
 		// example hostname: ip-10-0-7-102.us-west-1.compute.internal
 		assertTrue("Hostname of aws-node: " + result, result.getStandardOutput().contains("compute.internal"));
 	}
+
+	@Test
+	public void testSyncFolderHdfs() throws ExecuteException, IOException {
+		resetTransferDirectories();
+		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
+		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_1);
+		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, FILENAME_2);
+	}
+
 
 }
