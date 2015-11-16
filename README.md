@@ -233,6 +233,13 @@ If this testcase fails: see **[here](#inTestcasesFailing)**
 ## What should I do if Integration testcases do not work?
 Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 
+## What should I do if Spark-Jobs are failing?
+* Open the mesos Web-UI `${HOME}/shmack/repo/04_implementation/scripts/open-shmack-mesos-console.sh`
+* Click on the Link to the `sandbox` of your spark-job
+* Click on `stderr`  
+* Example see: **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-7%20Spark%20Word%20Count/Issue-7%20Spark%20Word%20Count.docx)**
+
+
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
