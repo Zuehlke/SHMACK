@@ -1,9 +1,7 @@
-package com.zuehlke.shmack.sparkjobs.wordcount;
+package com.zuehlke.shmack.sparkjobs.base;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
-
-import com.zuehlke.shmack.sparkjobs.base.SparkTestBase;
 
 public class LocalSparkTestBase extends SparkTestBase {
 

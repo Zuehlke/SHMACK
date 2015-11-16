@@ -6,6 +6,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.Test;
 
+import com.zuehlke.shmack.sparkjobs.base.LocalSparkTestBase;
 import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 
 public class WordCountLocalTest extends LocalSparkTestBase {
