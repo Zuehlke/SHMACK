@@ -1,4 +1,4 @@
-package com.zuehlke.shmack.sparkjobs.wordcount;
+package com.zuehlke.shmack.sparkjobs.tutorials;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +12,6 @@ import org.apache.spark.api.java.JavaSparkContext;
 
 import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestBase;
-import com.zuehlke.shmack.sparkjobs.tutorials.JavaSparkPi;
 
 public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 

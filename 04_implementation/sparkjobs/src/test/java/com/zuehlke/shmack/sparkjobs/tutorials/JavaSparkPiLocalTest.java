@@ -1,4 +1,4 @@
-package com.zuehlke.shmack.sparkjobs.wordcount;
+package com.zuehlke.shmack.sparkjobs.tutorials;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,6 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.Test;
 
 import com.zuehlke.shmack.sparkjobs.base.LocalSparkTestBase;
-import com.zuehlke.shmack.sparkjobs.tutorials.JavaSparkPi;
 
 public class JavaSparkPiLocalTest extends LocalSparkTestBase {
 
