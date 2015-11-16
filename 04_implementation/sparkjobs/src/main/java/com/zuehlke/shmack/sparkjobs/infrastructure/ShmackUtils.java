@@ -16,10 +16,8 @@ public class ShmackUtils {
 
 	public static void syncFolderToMasterAndSlave(File localSrcDir, File targetDirectory, int slaveIndex)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash sync-to-dcos-master-and-slave.sh " + localSrcDir.getAbsolutePath() + "/ "
-				+ targetDirectory.getAbsolutePath() + "/ " + slaveIndex;
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-to-dcos-master-and-slave.sh", localSrcDir.getAbsolutePath() + "/ ",
+				targetDirectory.getAbsolutePath() + "/", String.valueOf(slaveIndex));
 	}
 
 	public static void syncFolderFromSlave(File remoteSrcDir, File localTargetDir)
@@ -29,42 +27,32 @@ public class ShmackUtils {
 
 	public static void syncFolderFromSlave(File remoteSrcDir, File localTargetDir, int slaveIndex)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash sync-from-slave-to-local.sh " + remoteSrcDir.getAbsolutePath() + "/ "
-				+ localTargetDir.getAbsolutePath() + "/ " + slaveIndex;
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-from-slave-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
+				localTargetDir.getAbsolutePath() + "/", String.valueOf(slaveIndex));
 	}
 
 	public static void syncFolderToMaster(File localSrcDir, File targetDirectory) throws ExecuteException, IOException {
 		createDirectoryOnMasterIfNotExists(targetDirectory);
-		String line = "/bin/bash sync-to-dcos-master.sh " + localSrcDir.getAbsolutePath() + "/ "
-				+ targetDirectory.getAbsolutePath() + "/";
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-to-dcos-master.sh", localSrcDir.getAbsolutePath() + "/ ",
+				targetDirectory.getAbsolutePath() + "/");
 	}
 
 	public static void syncFolderFromMaster(File remoteSrcDir, File localTargetDir)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash sync-from-master-to-local.sh " + remoteSrcDir.getAbsolutePath() + "/ "
-				+ localTargetDir.getAbsolutePath() + "/";
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-from-master-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
+				localTargetDir.getAbsolutePath() + "/");
 	}
 
 	public static void syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash sync-to-hdfs.sh " + localSrcDir.getAbsolutePath() + "/ "
-				+ hdfsTargetDirectory.getAbsolutePath() + "/";
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
+				hdfsTargetDirectory.getAbsolutePath() + "/");
 	}
 
 	public static void syncFolderFromHdfs(File hdfsSrcDirectory, File localTargetDir)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash sync-from-hdfs-to-local.sh " + hdfsSrcDirectory.getAbsolutePath() + "/ "
-				+ localTargetDir.getAbsolutePath() + "/";
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
+				localTargetDir.getAbsolutePath() + "/");
 	}
 
 	/**
@@ -72,10 +60,8 @@ public class ShmackUtils {
 	 */
 	public static void copyFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		String line = "/bin/bash copy-to-hdfs.sh " + localSrcDir.getAbsolutePath() + "/ "
-				+ hdfsTargetDirectory.getAbsolutePath() + "/";
-		CommandLine cmdLine = CommandLine.parse(line);
-		runOnLocalhost(cmdLine);
+		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
+				hdfsTargetDirectory.getAbsolutePath() + "/");
 	}
 
 	private static void createDirectoryOnMasterIfNotExists(File toCreate) throws ExecuteException, IOException {
@@ -89,7 +75,7 @@ public class ShmackUtils {
 		return hdfsPath;
 	}
 
-	private static String getHdfsPath(File hdfsTargetDirectory) {
+	public static String getHdfsPath(File hdfsTargetDirectory) {
 		return "hdfs://hdfs" + hdfsTargetDirectory.getAbsolutePath();
 	}
 
@@ -117,7 +103,7 @@ public class ShmackUtils {
 		return runOnLocalhost(exceptionHandling, cmdLineOnLocalhost);
 	}
 
-	public static ExecuteResult runOnLocalHost(String executable, String... arguments)
+	public static ExecuteResult runOnLocalhost(String executable, String... arguments)
 			throws ExecuteException, IOException {
 		return runOnLocalhost(ExecExceptionHandling.THROW_EXCEPTION_IF_EXIT_CODE_NOT_0, executable, arguments);
 	}
@@ -129,10 +115,6 @@ public class ShmackUtils {
 		ExecuteResult result = runOnLocalhost(exceptionHandling, cmdLine);
 		return result;
 
-	}
-
-	private static ExecuteResult runOnLocalhost(CommandLine cmdLineOnLocalhost) throws ExecuteException, IOException {
-		return runOnLocalhost(ExecExceptionHandling.THROW_EXCEPTION_IF_EXIT_CODE_NOT_0, cmdLineOnLocalhost);
 	}
 
 	private static ExecuteResult runOnLocalhost(ExecExceptionHandling exceptionHandling, CommandLine cmdLineOnLocalhost)

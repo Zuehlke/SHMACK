@@ -2,6 +2,7 @@ package com.zuehlke.shmack.sparkjobs.infrastructure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +100,40 @@ public class ShmackUtilsTest {
 	}
 
 	@Test
-	//@Ignore("Only intended to be invoked in scenarios for testing failover of Cluster, e.g. when removing number of clients")
+	public void testDeleteAndCopyFolderHdfs() throws ExecuteException, IOException {
+		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
+		ShmackUtils.deleteFolderInHdfs(REMOTE_DIR);
+		ShmackUtils.copyFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
+		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+
+		assertHdfsFolderNumberOfFiles(REMOTE_DIR, SMALL_NUMBER_OF_FILES);
+		ShmackUtils.deleteFolderInHdfs(REMOTE_DIR);
+		assertHdfsFolderDoesNotExist(REMOTE_DIR);
+	}
+
+	private void assertHdfsFolderNumberOfFiles(File remoteDir, int expectedNumberOfFiles) throws ExecuteException, IOException {
+		ExecuteResult executeResult = ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsPath(remoteDir));
+		assertTrue(executeResult.getStandardOutput().startsWith("Found " + expectedNumberOfFiles + " items"));
+	}
+
+	private void assertHdfsFolderDoesNotExist(File remoteDir) throws IOException {
+		try {
+			ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsPath(remoteDir));
+			fail("Exception expected here.");
+		} catch (ExecuteException e) {
+			assertExceptionMessageContains(e, "No such file or directory");
+		}
+	}
+
+	private void assertExceptionMessageContains(ExecuteException e, String expectedSubstring) {
+		if (!e.getMessage().contains(expectedSubstring)) {
+			fail("Exception does not contain '" + expectedSubstring + "': " + e.getMessage() );
+		}
+	}
+
+	@Test
+	@Ignore("Only intended to be invoked in scenarios for testing failover of Cluster, e.g. when removing number of clients")
 	public void testSyncFolderHdfsManyFiles() throws ExecuteException, IOException {
 		resetTransferDirectories(LARGE_NUMBER_OF_FILES);
 		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
