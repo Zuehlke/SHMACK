@@ -1,4 +1,4 @@
-package com.zuehlke.shmack.sparkjobs.wordcount;
+package com.zuehlke.shmack.sparkjobs.base;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

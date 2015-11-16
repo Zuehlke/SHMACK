@@ -10,6 +10,8 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 
+import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
+
 import scala.Tuple2;
 import twitter4j.Status;
 import twitter4j.TwitterException;
@@ -53,5 +55,10 @@ public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> im
         });
         return counts;
     }
+
+	@Override
+	public String getApplicationName() {
+		return "WordCount";
+	}
 
 }

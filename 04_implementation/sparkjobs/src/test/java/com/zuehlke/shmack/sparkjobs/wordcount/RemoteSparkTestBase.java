@@ -5,10 +5,10 @@ import org.apache.spark.api.java.JavaSparkContext;
 
 import com.zuehlke.shmack.sparkjobs.base.SparkTestBase;
 
-public class LocalSparkTestBase extends SparkTestBase {
+public class RemoteSparkTestBase extends SparkTestBase {
 
-    protected JavaSparkContext createSparkContext(String appName) {
-        final SparkConf conf = new SparkConf().setAppName(appName).setMaster("local[*]")
+    protected JavaSparkContext createSparkContext() {
+        final SparkConf conf = new SparkConf().setAppName("JavaWordCount").setMaster("local[2]")
                 .set("spark.executor.memory", "1g");
         return new JavaSparkContext(conf);
     }
