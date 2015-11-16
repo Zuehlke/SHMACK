@@ -51,14 +51,12 @@ public class ShmackUtils {
 		runOnLocalhost(cmdLine);
 	}
 
-	/**
-	 * @return the full HDFS-Path
-	 */
-	public static String syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
+	public static void syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		deleteFolderInHdfs(hdfsTargetDirectory);
-		String hdfsPath = copyFolderToHdfs(localSrcDir, hdfsTargetDirectory);
-		return hdfsPath;
+		String line = "/bin/bash sync-to-hdfs.sh " + localSrcDir.getAbsolutePath() + "/ "
+				+ hdfsTargetDirectory.getAbsolutePath() + "/";
+		CommandLine cmdLine = CommandLine.parse(line);
+		runOnLocalhost(cmdLine);
 	}
 
 	public static void syncFolderFromHdfs(File hdfsSrcDirectory, File localTargetDir)
@@ -72,15 +70,12 @@ public class ShmackUtils {
 	/**
 	 * @return the full HDFS-Path
 	 */
-	public static String copyFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
+	public static void copyFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		File intermediateDirOnMaster = new File("/tmp/hdfs-xchange/to-hdfs" + hdfsTargetDirectory.getAbsolutePath());
-		syncFolderToMaster(localSrcDir, intermediateDirOnMaster);
-		String hdfsPath = getHdfsPath(hdfsTargetDirectory);
-		runOnMaster("hadoop", "fs", "-mkdir", "-p", hdfsPath);
-		runOnMaster("hadoop", "fs", "-copyFromLocal", "-f", "-p", intermediateDirOnMaster.getAbsolutePath() + "/*",
-				hdfsPath + "/");
-		return hdfsPath;
+		String line = "/bin/bash copy-to-hdfs.sh " + localSrcDir.getAbsolutePath() + "/ "
+				+ hdfsTargetDirectory.getAbsolutePath() + "/";
+		CommandLine cmdLine = CommandLine.parse(line);
+		runOnLocalhost(cmdLine);
 	}
 
 	private static void createDirectoryOnMasterIfNotExists(File toCreate) throws ExecuteException, IOException {

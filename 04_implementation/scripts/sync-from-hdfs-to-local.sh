@@ -20,7 +20,7 @@ fi
 echo "Remote Source        : $SRC"
 echo "Local Destination    : $DEST"
 
-INTERMEDIATE_DIR="/tmp/hdfs-xchange/from-hdfs/${DEST}"
+INTERMEDIATE_DIR="/tmp/hdfs-xchange/from-hdfs/${SRC}"
 run run-on-dcos-master.sh rm -rf "${INTERMEDIATE_DIR}"
 run run-on-dcos-master.sh mkdir -p "${INTERMEDIATE_DIR}"
 HDFS_PATH="hdfs://hdfs${SRC}"
