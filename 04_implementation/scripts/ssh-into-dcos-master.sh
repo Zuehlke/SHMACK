@@ -8,6 +8,7 @@ cd `dirname ${BASH_SOURCE[0]}`
 
 SSH_IP_ADDRESS=`cat ${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}`
 echo "SSH into ${SSH_IP_ADDRESS}..."
+echo "  (If this blocks, make sure the network does allow ssh. Most Corporate Networks don't!)"
 
 # we intentionally use the direct SSH syntax to be able to check whether the ssh connection is OK. 
 # This is required for the rsync in sync-to-dcos-master.sh

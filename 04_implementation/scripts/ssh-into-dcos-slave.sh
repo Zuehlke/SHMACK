@@ -17,6 +17,7 @@ MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
 SLAVE_ID=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX} "id"`
 SLAVE_INTERNAL_IP=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX} "hostname"`
 echo "SSH into SLAVE ID ${SLAVE_ID} with internal IP-Address ${SLAVE_INTERNAL_IP}..."
+echo "  (If this blocks, make sure the network does allow ssh. Most Corporate Networks don't!)"
 
 ssh -A -t -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} ssh -A -t core@${SLAVE_INTERNAL_IP}
 
