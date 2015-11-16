@@ -24,7 +24,7 @@ echo "Local Destination    : $DEST"
 HDFS_PATH="hdfs://hdfs${DEST}"
 
 INTERMEDIATE_DIR="/tmp/hdfs-xchange/to-hdfs/${DEST}"
-run sync-to-dcos-master.sh "${SRC}" "${INTERMEDIATE_DIR}"
-run run-on-dcos-master.sh hadoop fs -mkdir -p "${HDFS_PATH}"
+run sync-to-dcos-master.sh "${SRC}/" "${INTERMEDIATE_DIR}/"
+run run-on-dcos-master.sh hadoop fs -mkdir -p "${HDFS_PATH}/"
 run run-on-dcos-master.sh hadoop fs -copyFromLocal -f -p "${INTERMEDIATE_DIR}/*" "${HDFS_PATH}/"
 
