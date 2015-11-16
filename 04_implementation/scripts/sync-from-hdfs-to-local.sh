@@ -12,14 +12,10 @@ fi
 SRC="$1"
 DEST="$2"
 
-if [[ "$SRC" =~ ^/.* ]]; then
-    echo "SRC starts with / --> ;-)"
-else 
-    echo "SRC must start with /"
+if [[ "$SRC" =~ ^[^/].* ]]; then
+    echo "SRC (first argument) must start with /"
     exit 1
 fi
-
-MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
 
 echo "Remote Source        : $SRC"
 echo "Local Destination    : $DEST"
