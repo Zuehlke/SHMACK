@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
@@ -17,6 +18,19 @@ import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
 public final class JavaSparkPi extends TestableSparkJob<Double> implements Serializable {
 
 	private static final long serialVersionUID = 2597935909649303078L;
+	
+	public static void main(String[] args) throws Exception {
+	    SparkConf sparkConf = new SparkConf().setAppName("JavaSparkPi");
+	    JavaSparkContext jsc = new JavaSparkContext(sparkConf);
+	    
+	    JavaSparkPi javaSparkPi = new JavaSparkPi();
+	    Double result = javaSparkPi.execute(jsc);
+
+	    System.out.println("Pi is roughly " + result);
+
+	    jsc.stop();
+	  }
+	
 	
 	@SuppressWarnings("serial")
 	@Override
