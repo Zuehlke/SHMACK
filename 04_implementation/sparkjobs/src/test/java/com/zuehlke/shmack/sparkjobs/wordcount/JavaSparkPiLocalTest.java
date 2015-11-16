@@ -12,9 +12,9 @@ public class JavaSparkPiLocalTest extends LocalSparkTestBase {
 
 	@Test
 	public void testWordCount() {
-		final JavaSparkPi wordCount = new JavaSparkPi();
-		try (JavaSparkContext spark = createSparkContext(wordCount.getApplicationName())) {
-			final Double result = wordCount.execute(spark);
+		final JavaSparkPi sparkPi = new JavaSparkPi();
+		try (JavaSparkContext spark = createSparkContext(sparkPi.getApplicationName())) {
+			final Double result = sparkPi.execute(spark);
 			assertEquals(Math.PI, result, 1e-2);
 		}
 	}

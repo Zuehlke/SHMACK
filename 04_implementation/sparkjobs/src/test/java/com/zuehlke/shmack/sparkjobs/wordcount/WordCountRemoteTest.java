@@ -15,7 +15,7 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
     public void testWordCount() {
         final String inputFile = "src/test/resources/tweets/tweets_big_data_2000.json";
         final WordCount wordCount = new WordCount(inputFile);
-        try (JavaSparkContext spark = createSparkContext()) {
+        try (JavaSparkContext spark = createSparkContext(wordCount.getApplicationName())) {
             final JavaPairRDD<String, Integer> rdd = wordCount.execute(spark);
             final SortedCounts<String> sortedCounts = SortedCounts.create(rdd);
             assertEquals(7446, sortedCounts.size());
