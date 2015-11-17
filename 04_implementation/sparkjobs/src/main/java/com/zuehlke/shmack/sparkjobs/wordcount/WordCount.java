@@ -1,11 +1,8 @@
 package com.zuehlke.shmack.sparkjobs.wordcount;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -13,7 +10,6 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 
-import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
 
 import scala.Tuple2;
@@ -31,27 +27,6 @@ public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> im
 
 	public WordCount(final String inputFile) {
 		this.inputFile = inputFile;
-	}
-
-	public static void main(String[] args) throws IOException, URISyntaxException {
-
-		HdfsUtils.pingHdfs();
-
-		String inputFile = "hdfs://hdfs/sparkjobs-tests-resources/tweets/tweets_big_data_2000.json";
-		System.out.println("Using input file for testing: " + inputFile);
-		WordCount wordCount = new WordCount(inputFile);
-
-		try (JavaSparkContext spark = createSparkContext(wordCount.getApplicationName())) {
-			final JavaPairRDD<String, Integer> result = wordCount.execute(spark);
-			long count = result.count();
-			System.out.println("Number of unique words: " + count);
-		}
-	}
-
-	protected static JavaSparkContext createSparkContext(String appName) {
-		SparkConf sparkConf = new SparkConf().setAppName(appName);
-		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
-		return jsc;
 	}
 
 	@SuppressWarnings("serial")

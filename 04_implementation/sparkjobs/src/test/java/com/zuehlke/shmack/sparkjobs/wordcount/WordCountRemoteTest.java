@@ -31,6 +31,9 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 	 * </pre>
 	 */
 	public static void main(String[] args) throws IOException, URISyntaxException {
+		
+		HdfsUtils.pingHdfs();
+		
 		String inputFile = "hdfs://hdfs/sparkjobs-tests-resources/tweets/tweets_big_data_2000.json";
 		System.err.println("Using input file for testing: " + inputFile);
 		WordCount sparkPi = new WordCount(inputFile);
@@ -40,15 +43,15 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 
 			final SortedCounts<String> sortedCounts = SortedCounts.create(result);
 
+			String textFileContent = sortedCounts.toString();
+
 			File textFile = new File("/tmp/WordCountRemoteTest/Result.txt");
-			System.out.println("Writing results to HDFS file " + textFile.getAbsolutePath() );
-			String fileContent = sortedCounts.toString();
-			HdfsUtils.writeStringToHdfsFile(textFile, fileContent, StandardCharsets.UTF_8);
+			String hdfsPath = HdfsUtils.writeStringToHdfsFile(textFile, textFileContent, StandardCharsets.UTF_8);
+			System.out.println("Written results as Text to HDFS file " + hdfsPath );
 
-			System.out.println("Writing results to HDFS file " + textFile.getAbsolutePath() );
 			File binFile = new File("/tmp/WordCountRemoteTest/Result.bin");
-			HdfsUtils.writeStringToHdfsFile(binFile, fileContent, StandardCharsets.UTF_8);
-
+			hdfsPath = HdfsUtils.writeObjectToHdfsFile(binFile, sortedCounts, StandardCharsets.UTF_8);
+			System.out.println("Written results as Serialized Object to HDFS file " + hdfsPath );
 		}
 	}
 
