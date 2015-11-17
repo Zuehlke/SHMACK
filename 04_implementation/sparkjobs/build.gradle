@@ -9,6 +9,8 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
 
+sourceCompatibility = 1.7
+
 dependencies {
 	compile 'org.apache.spark:spark-core_2.11:1.5.1'
 
