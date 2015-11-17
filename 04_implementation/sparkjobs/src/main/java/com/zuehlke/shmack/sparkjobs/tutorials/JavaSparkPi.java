@@ -1,15 +1,19 @@
 package com.zuehlke.shmack.sparkjobs.tutorials;
 
+import java.io.File;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 
+import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
 
 /**
@@ -28,6 +32,13 @@ public final class JavaSparkPi extends TestableSparkJob<Double> implements Seria
 
 	    System.out.println("Pi is roughly " + result);
 
+	    File file = new File("/tmp/JavaSparkResult");
+		System.out.println("Writing result to local file: " + file.getAbsolutePath());
+		String fileContent = "Result: " + result;
+		FileUtils.writeStringToFile(file, fileContent, StandardCharsets.UTF_8);
+
+		HdfsUtils.writeStringToHdfsFile(file, fileContent, StandardCharsets.UTF_8);
+		
 	    jsc.stop();
 	  }
 	
