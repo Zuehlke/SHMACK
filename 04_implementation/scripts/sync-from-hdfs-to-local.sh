@@ -12,10 +12,8 @@ fi
 SRC="$1"
 DEST="$2"
 
-if [[ "$SRC" =~ ^[^/].* ]]; then
-    echo "SRC (first argument) must start with /"
-    exit 1
-fi
+run assert-absolute-path.sh "${SRC}" 
+run assert-absolute-path.sh "${DEST}" 
 
 echo "Remote Source        : $SRC"
 echo "Local Destination    : $DEST"

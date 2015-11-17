@@ -13,6 +13,9 @@ SRC="$1"
 DEST="$2"
 SLAVE_INDEX="$3"
 
+run assert-absolute-path.sh "${SRC}" 
+run assert-absolute-path.sh "${DEST}" 
+
 MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
 SLAVE_IP_ADDRESS=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX} "hostname"`
 

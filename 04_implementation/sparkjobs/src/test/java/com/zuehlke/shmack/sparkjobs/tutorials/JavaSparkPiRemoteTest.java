@@ -32,7 +32,7 @@ public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 
 			File file = new File("/tmp/JavaSparkResult");
 			System.out.println("Writing result to local file: " + file.getAbsolutePath());
-			String fileContent = "Result: " + result;
+			String fileContent = "Result from JavaSparkPiRemoteTest: " + result;
 			FileUtils.writeStringToFile(file, fileContent, StandardCharsets.UTF_8);
 
 			HdfsUtils.writeStringToHdfsFile(file, fileContent, StandardCharsets.UTF_8);

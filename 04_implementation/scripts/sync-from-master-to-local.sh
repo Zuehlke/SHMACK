@@ -12,6 +12,9 @@ fi
 SRC="$1"
 DEST="$2"
 
+run assert-absolute-path.sh "${SRC}" 
+run assert-absolute-path.sh "${DEST}" 
+
 MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
 
 echo "Remote Source        : $SRC"

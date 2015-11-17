@@ -14,7 +14,9 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class ShmackUtilsTest {
+import com.zuehlke.shmack.sparkjobs.base.ShmackTestBase;
+
+public class ShmackUtilsTest extends ShmackTestBase {
 
 	private final static File LOCAL_SRC_DIR = new File("build/RemoteDataTransferTest/local-src-dir/");
 	private final static File LOCAL_TARGET_DIR = new File("build/RemoteDataTransferTest/local-target-dir/");
@@ -112,8 +114,10 @@ public class ShmackUtilsTest {
 		assertHdfsFolderDoesNotExist(REMOTE_DIR);
 	}
 
-	private void assertHdfsFolderNumberOfFiles(File remoteDir, int expectedNumberOfFiles) throws ExecuteException, IOException {
-		ExecuteResult executeResult = ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsPath(remoteDir));
+	private void assertHdfsFolderNumberOfFiles(File remoteDir, int expectedNumberOfFiles)
+			throws ExecuteException, IOException {
+		ExecuteResult executeResult = ShmackUtils.runOnMaster("hadoop", "fs", "-ls",
+				ShmackUtils.getHdfsPath(remoteDir));
 		assertTrue(executeResult.getStandardOutput().startsWith("Found " + expectedNumberOfFiles + " items"));
 	}
 
@@ -128,7 +132,7 @@ public class ShmackUtilsTest {
 
 	private void assertExceptionMessageContains(ExecuteException e, String expectedSubstring) {
 		if (!e.getMessage().contains(expectedSubstring)) {
-			fail("Exception does not contain '" + expectedSubstring + "': " + e.getMessage() );
+			fail("Exception does not contain '" + expectedSubstring + "': " + e.getMessage());
 		}
 	}
 
@@ -139,6 +143,15 @@ public class ShmackUtilsTest {
 		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
 		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
 		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+	}
+
+	@Test
+	public void testSubmitSparkJob() throws ExecuteException, IOException {
+		ExecuteResult executeResult = ShmackUtils.runOnLocalhost("bash", "submit-spark-job.sh",
+				"-Dspark.mesos.coarse=true", "--driver-cores", "1", "--driver-memory", "1024M",
+				"--class", "org.apache.spark.examples.SparkPi",
+				"https://downloads.mesosphere.com/spark/assets/spark-examples_2.10-1.4.0-SNAPSHOT.jar", "30");
+		assertExecuteResultStandardOutputContains("Run job succeeded. Submission id:", executeResult);
 	}
 
 }

@@ -3,7 +3,7 @@ package com.zuehlke.shmack.sparkjobs.base;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 
-public class RemoteSparkTestBase extends SparkTestBase {
+public class RemoteSparkTestBase extends ShmackTestBase {
 
     protected static JavaSparkContext createSparkContext(String appName) {
         SparkConf sparkConf = new SparkConf().setAppName(appName);
