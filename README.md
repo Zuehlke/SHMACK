@@ -40,7 +40,10 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 * Create AWS account **[here](https://aws.amazon.com/de/)**
 * Create a Virtual Machine 
   * Recommended: **[Ubuntu >= 14.04.3 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
-    * Optional: Install cinnamon desktop manager: http://www.webupd8.org/2014/12/install-cinnamon-24-stable-in-ubuntu.html
+    * Optional: Install cinnamon desktop manager: 
+      * http://www.webupd8.org/2014/12/install-cinnamon-24-stable-in-ubuntu.html
+      * Un-Assign `Ctrl-Space` using `ibus-setup`  see **[here](http://askubuntu.com/questions/445676/ctrl-space-not-working-in-terminal-after-installing-cinnamon)**
+        
   * Alternative: **[LinuxMint >= 17.02](http://www.linuxmint.com/download.php)** with VirtualBox 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
@@ -54,7 +57,7 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
       * `git config --global credential.helper cache`
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
   * `mkdir ${HOME}/shmack`
-  * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+  * `cd ${HOME}/shmack && git clone https://<yourgithubusername>@github.com/Zuehlke/SHMACK.git repo`
   * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
   * Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
     * Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
@@ -72,17 +75,20 @@ https://console.aws.amazon.com/iam/home?#users/shmack
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
       * Key pair name: `shmack-key-pair-01` 
         **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
-      * Save the key pair to `${HOME}/.ssh/shmack-key-pair-01.pem`
+      * Create .ssh directory `mkdir ${HOME}/.ssh`
+      * Save the key pair (copy-paste is OK) `vim.tiny ${HOME}/.ssh/shmack-key-pair-01.pem`
         **Attention: Use exactly this filename as it is referenced in the scripts!**
-      * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem
+      * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
 
   * Download and install eclipse
     * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
     * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-1-linux-gtk-x86_64.tar.gz` 
   * Append the following lines at the **end** of your `${HOME}/.bashrc`
 ```
+alias cds='cd ${HOME}/shmack/repo/'
 alias eclipse='${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
+PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
 export PATH
 ```
   * Add gradle support to eclipse
@@ -99,12 +105,13 @@ export PATH
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
-  * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes
+  * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes (first time only)
   * Confirm all installations (several times): `Continue installing? [yes/no]` --> yes
   * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts)
     * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
     * Confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
+  * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
 
   
 <a name="stackDeletion"></a>
@@ -197,6 +204,13 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 ## Which Java Version can be used?
 As of 2015-11-17 Spark-Jobs are failing because only Java 7 is available in the cluster.
 Therefore Java 7 must be used until support for Java 8 is available.
+Remark: as of 2015-11-17 the EC2 instance have Java 8!
+
+<a name="checkStackSetup"></a>
+## What should I do to check if the setup was successful?
+Execute the testcase `ShmackUtilsTest` in eclipse.
+If this testcase fails: see **[here](#inTestcasesFailing)**
+
 
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
@@ -218,7 +232,7 @@ In most cases the reason for this is that ssh is blocked by corporate networks.
 Solution: Unplug network cable and use `zred` WiFi.
 
 ## What should I do to check if the setup was successful?
-Execute the testcase `ShmackUtilsTest` .
+Execute the testcase `ShmackUtilsTest` in eclipse.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
 <a name="inTestcasesFailing"></a>
