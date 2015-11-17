@@ -75,17 +75,6 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
       * Save the key pair to `${HOME}/.ssh/shmack-key-pair-01.pem`
         **Attention: Use exactly this filename as it is referenced in the scripts!**
       * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem
-  * Install Java 8 (taken from https://wiki.ubuntuusers.de/Java/Installation/Oracle_Java/Java_8 )
-    * Download the `*.-x64.tgz` from http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html, e.g. `jdk-8u65-linux-x64.tar.gz`
-    * Extract and install the downloaded file to /usr/java
-```
-sudo apt-get -y purge openjdk*
-sudo add-apt-repository ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get -y install oracle-java8-installer
-sudo apt-get -y install oracle-java8-set-default
-```
-    * Check installation: `java -version`
 
   * Download and install eclipse
     * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
@@ -205,6 +194,9 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 `${HOME}/shmack/repo/04_implementation/scripts/change-number-of-slaves.sh <new number of slaves>`
 **Attention**: Data in HDFS is **destroyed** when scaling down 3 slave nodes or less!!
 
+## Which Java Version can be used?
+As of 2015-11-17 Spark-Jobs are failing because only Java 7 is available in the cluster.
+Therefore Java 7 must be used until support for Java 8 is available.
 
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
