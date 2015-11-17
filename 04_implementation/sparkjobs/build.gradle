@@ -34,6 +34,8 @@ task fatJar(type: Jar) {
 }
 
 // taken from http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
+// see also https://discuss.gradle.org/t/removing-dependencies-from-a-jar-file-during-jar-task/5521
+// https://discuss.gradle.org/t/excluding-some-dependencies-when-building-fat-jar/4562
 task fatJarWithTests(type: Jar) {
     baseName = project.name + '-all-with-tests'
     //from { configurations.testCompile.collect { it.isDirectory() ? it : zipTree(it) } }
