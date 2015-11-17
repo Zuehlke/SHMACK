@@ -11,8 +11,13 @@ if (!hasProperty('mainClass')) {
 
 sourceCompatibility = 1.7
 
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
 dependencies {
-	compile 'org.apache.spark:spark-core_2.11:1.5.1'
+	provided 'org.apache.spark:spark-core_2.11:1.5.1'
 
     compile 'org.twitter4j:twitter4j-stream:4.0.4'
     compile 'org.twitter4j:twitter4j-async:4.0.4'
@@ -28,9 +33,16 @@ task fatJar(type: Jar) {
     with jar
 }
 
+// taken from http://kennethjorgensen.com/blog/2014/fat-jars-with-excluded-dependencies-in-gradle
 task fatJarWithTests(type: Jar) {
     baseName = project.name + '-all-with-tests'
-    from { configurations.testCompile.collect { it.isDirectory() ? it : zipTree(it) } }
+    //from { configurations.testCompile.collect { it.isDirectory() ? it : zipTree(it) } }
+    
+    from {
+        (configurations.testCompile - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
     from sourceSets.test.output
     with jar
 }
