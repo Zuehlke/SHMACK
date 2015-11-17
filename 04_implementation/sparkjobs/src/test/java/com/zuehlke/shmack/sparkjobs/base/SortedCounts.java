@@ -1,6 +1,7 @@
 package com.zuehlke.shmack.sparkjobs.base;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +13,13 @@ import org.apache.spark.api.java.JavaPairRDD;
 
 import scala.Tuple2;
 
-public class SortedCounts<T> implements Iterable<SortedCounts.Entry<T>> {
+public class SortedCounts<T> implements Iterable<SortedCounts.Entry<T>> , Serializable {
 
-    public static class Entry<T> implements Comparable<Entry<T>> {
+	private static final long serialVersionUID = 1;
+
+	public static class Entry<T> implements Comparable<Entry<T>>, Serializable {
+
+		private static final long serialVersionUID = 1;
 
         private final long count;
         private final T value;
@@ -74,8 +79,22 @@ public class SortedCounts<T> implements Iterable<SortedCounts.Entry<T>> {
     public void print(PrintStream out) {
         for (int i = 0; i < sortedEntries.size(); i++) {
             Entry<T> entry = sortedEntries.get(i);
-            out.println(i + ".: " + entry.getCount() + ": " + entry.getValue());
+            out.println(entryToString(i, entry));
         }
+    }
+
+	private String entryToString(int i, Entry<T> entry) {
+		return i + ".: " + entry.getCount() + ": " + entry.getValue();
+	}
+    
+    @Override
+    public String toString() {
+    	StringBuilder s = new StringBuilder();
+        for (int i = 0; i < sortedEntries.size(); i++) {
+            Entry<T> entry = sortedEntries.get(i);
+            s.append(entryToString(i, entry)).append("\n");
+        }
+		return s.toString();
     }
 
 }
