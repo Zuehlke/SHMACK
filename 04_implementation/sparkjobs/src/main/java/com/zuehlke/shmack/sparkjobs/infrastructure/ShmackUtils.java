@@ -2,10 +2,12 @@ package com.zuehlke.shmack.sparkjobs.infrastructure;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.io.FileUtils;
 
 public class ShmackUtils {
 
@@ -54,7 +56,6 @@ public class ShmackUtils {
 		runOnLocalhost("/bin/bash", "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
 				localTargetDir.getAbsolutePath() + "/");
 	}
-
 
 	private static void createDirectoryOnMasterIfNotExists(File toCreate) throws ExecuteException, IOException {
 		runOnMaster("mkdir", "-p", toCreate.getAbsolutePath());
@@ -134,10 +135,30 @@ public class ShmackUtils {
 	}
 
 	public static void copyToHdfs(File localSrcFile, File hdfsTargetFile) throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcFile.getAbsolutePath(), hdfsTargetFile.getAbsolutePath() );
+		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcFile.getAbsolutePath(),
+				hdfsTargetFile.getAbsolutePath());
 	}
 
 	public static void copyFromHdfs(File hdfsSrcFile, File localTargetFile) throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "copy-from-hdfs.sh", hdfsSrcFile.getAbsolutePath(), localTargetFile.getAbsolutePath() );
+		runOnLocalhost("/bin/bash", "copy-from-hdfs.sh", hdfsSrcFile.getAbsolutePath(),
+				localTargetFile.getAbsolutePath());
 	}
+
+	public static void writeStringToHdfs(File targetFile, String fileContent) throws IOException {
+		File tmpFile = File.createTempFile("copy-to-hdfs", null);
+		FileUtils.writeStringToFile(tmpFile, fileContent, StandardCharsets.UTF_8);
+		copyToHdfs(tmpFile, targetFile);
+		FileUtils.deleteQuietly(tmpFile);
+	}
+
+	public static String readStringFromHdfs(File srcFile) throws IOException {
+		File tmpFile = File.createTempFile("read-from-hdfs", null);
+		try {
+			copyFromHdfs(srcFile, tmpFile);
+			return FileUtils.readFileToString(tmpFile, StandardCharsets.UTF_8);
+		} finally {
+			FileUtils.deleteQuietly(tmpFile);
+		}
+	}
+
 }

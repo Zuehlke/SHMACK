@@ -43,11 +43,15 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	}
 
 	private static void writeRandomFileContent(String targetFileName) throws IOException {
-		String fileContent = "This is content of " + targetFileName
-				+ " .\n It intentionally varies on each test invocation: " + (new Date()) + " - " + System.nanoTime();
+		String fileContent = getVariableFileContent(targetFileName);
 		File targetFile = new File(LOCAL_SRC_DIR, targetFileName);
 		FileUtils.writeStringToFile(targetFile, fileContent, StandardCharsets.UTF_8);
 		System.out.println("Created source file: " + targetFile.getAbsolutePath());
+	}
+
+	private static String getVariableFileContent(String targetFileName) {
+		return "This is content of " + targetFileName
+				+ " .\n It intentionally varies on each test invocation: " + (new Date()) + " - " + System.nanoTime();
 	}
 
 	@Test
@@ -177,6 +181,15 @@ public class ShmackUtilsTest extends ShmackTestBase {
 				"org.apache.spark.examples.SparkPi",
 				"https://downloads.mesosphere.com/spark/assets/spark-examples_2.10-1.4.0-SNAPSHOT.jar", "30");
 		assertExecuteResultStandardOutputContains("Run job succeeded. Submission id:", executeResult);
+	}
+
+	@Test
+	public void testHdfsReadWriteFile() throws ExecuteException, IOException {
+		File targetFileName = new File(REMOTE_DIR, "read-write-testfile.txt");
+		String expectedContent = getVariableFileContent(targetFileName.getName());
+		ShmackUtils.writeStringToHdfs(targetFileName, expectedContent);
+		String actualContent = ShmackUtils.readStringFromHdfs(targetFileName);
+		assertEquals(expectedContent, actualContent);
 	}
 
 }
