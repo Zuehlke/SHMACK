@@ -102,18 +102,43 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	}
 
 	@Test
-	public void testDeleteAndCopyFolderHdfs() throws ExecuteException, IOException {
+	public void testDeleteAndCopyFileHdfs() throws ExecuteException, IOException {
 		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
-		ShmackUtils.deleteFolderInHdfs(REMOTE_DIR);
-		ShmackUtils.copyFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
-		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
-		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+		String testFilename = getTestFilename(0);
 
-		assertHdfsFolderNumberOfFiles(REMOTE_DIR, SMALL_NUMBER_OF_FILES);
-		ShmackUtils.deleteFolderInHdfs(REMOTE_DIR);
-		assertHdfsFolderDoesNotExist(REMOTE_DIR);
+		File hdfsFile = new File("/tmp/copy-file-test", testFilename);
+		
+		ShmackUtils.deleteInHdfs(hdfsFile);
+		assertHdfsFileOrFolderDoesNotExist(hdfsFile);
+		
+		File localSrcFile = new File(LOCAL_SRC_DIR, testFilename);
+		ShmackUtils.copyToHdfs(localSrcFile, hdfsFile);
+
+		File localTargetFile = new File(LOCAL_TARGET_DIR, testFilename);
+		ShmackUtils.copyFromHdfs(hdfsFile, localTargetFile);
+		
+		assertFileContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR, testFilename);
+		
+		ShmackUtils.deleteInHdfs(hdfsFile);
+		assertHdfsFileOrFolderDoesNotExist(hdfsFile);
 	}
 
+	@Test
+	public void testDeleteAndCopyFolderHdfs() throws ExecuteException, IOException {
+		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
+		
+		ShmackUtils.deleteInHdfs(REMOTE_DIR);
+		assertHdfsFileOrFolderDoesNotExist(REMOTE_DIR);
+		
+		ShmackUtils.copyToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
+		ShmackUtils.copyFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
+		assertHdfsFolderNumberOfFiles(REMOTE_DIR, SMALL_NUMBER_OF_FILES);
+
+		ShmackUtils.deleteInHdfs(REMOTE_DIR);
+		assertHdfsFileOrFolderDoesNotExist(REMOTE_DIR);
+	}
+	
 	private void assertHdfsFolderNumberOfFiles(File remoteDir, int expectedNumberOfFiles)
 			throws ExecuteException, IOException {
 		ExecuteResult executeResult = ShmackUtils.runOnMaster("hadoop", "fs", "-ls",
@@ -121,7 +146,7 @@ public class ShmackUtilsTest extends ShmackTestBase {
 		assertTrue(executeResult.getStandardOutput().startsWith("Found " + expectedNumberOfFiles + " items"));
 	}
 
-	private void assertHdfsFolderDoesNotExist(File remoteDir) throws IOException {
+	private void assertHdfsFileOrFolderDoesNotExist(File remoteDir) throws IOException {
 		try {
 			ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsPath(remoteDir));
 			fail("Exception expected here.");
@@ -148,8 +173,8 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	@Test
 	public void testSubmitSparkJob() throws ExecuteException, IOException {
 		ExecuteResult executeResult = ShmackUtils.runOnLocalhost("bash", "submit-spark-job.sh",
-				"-Dspark.mesos.coarse=true", "--driver-cores", "1", "--driver-memory", "1024M",
-				"--class", "org.apache.spark.examples.SparkPi",
+				"-Dspark.mesos.coarse=true", "--driver-cores", "1", "--driver-memory", "1024M", "--class",
+				"org.apache.spark.examples.SparkPi",
 				"https://downloads.mesosphere.com/spark/assets/spark-examples_2.10-1.4.0-SNAPSHOT.jar", "30");
 		assertExecuteResultStandardOutputContains("Run job succeeded. Submission id:", executeResult);
 	}

@@ -55,21 +55,13 @@ public class ShmackUtils {
 				localTargetDir.getAbsolutePath() + "/");
 	}
 
-	/**
-	 * @return the full HDFS-Path
-	 */
-	public static void copyFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
-			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
-				hdfsTargetDirectory.getAbsolutePath() + "/");
-	}
 
 	private static void createDirectoryOnMasterIfNotExists(File toCreate) throws ExecuteException, IOException {
 		runOnMaster("mkdir", "-p", toCreate.getAbsolutePath());
 
 	}
 
-	public static String deleteFolderInHdfs(File hdfsTargetDirectory) throws ExecuteException, IOException {
+	public static String deleteInHdfs(File hdfsTargetDirectory) throws ExecuteException, IOException {
 		String hdfsPath = getHdfsPath(hdfsTargetDirectory);
 		runOnMaster("hadoop", "fs", "-rm", "-f", "-r", hdfsPath);
 		return hdfsPath;
@@ -139,5 +131,13 @@ public class ShmackUtils {
 			break;
 		}
 		return result;
+	}
+
+	public static void copyToHdfs(File localSrcFile, File hdfsTargetFile) throws ExecuteException, IOException {
+		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcFile.getAbsolutePath(), hdfsTargetFile.getAbsolutePath() );
+	}
+
+	public static void copyFromHdfs(File hdfsSrcFile, File localTargetFile) throws ExecuteException, IOException {
+		runOnLocalhost("/bin/bash", "copy-from-hdfs.sh", hdfsSrcFile.getAbsolutePath(), localTargetFile.getAbsolutePath() );
 	}
 }
