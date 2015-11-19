@@ -10,7 +10,7 @@ import com.zuehlke.shmack.sparkjobs.base.LocalSparkTestBase;
 public class JavaSparkPiLocalTest extends LocalSparkTestBase {
 
 	@Test
-	public void testWordCount() {
+	public void testWordCount() throws Exception {
 		final JavaSparkPi sparkPi = new JavaSparkPi();
 		try (JavaSparkContext spark = createSparkContext(sparkPi.getApplicationName())) {
 			final Double result = sparkPi.execute(spark);

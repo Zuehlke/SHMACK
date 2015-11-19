@@ -12,7 +12,7 @@ import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 public class WordCountLocalTest extends LocalSparkTestBase {
 
     @Test
-    public void testWordCount() {
+    public void testWordCount() throws Exception {
         final String inputFile = "src/test/resources/tweets/tweets_big_data_2000.json";
         final WordCount wordCount = new WordCount(inputFile);
         try (JavaSparkContext spark = createSparkContext(wordCount.getApplicationName())) {

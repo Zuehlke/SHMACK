@@ -12,17 +12,21 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.exec.ExecuteException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Progressable;
 
+/**
+ * These Utils assume that the addessed HDFS filesystem is DIRECTLY reachable
+ * from localhost, e.g. the master node.
+ */
 public class HdfsUtils {
 
 	private static final String MESOS_HDFS_PREFIX = "hdfs://hdfs";
 
-	public static String writeStringToHdfsFile(File file, String fileContent)
-			throws IOException, URISyntaxException {
+	public static String writeStringToHdfsFile(File file, String fileContent) throws IOException, URISyntaxException {
 		return writeStringToHdfsFile(file, fileContent, StandardCharsets.UTF_8);
 	}
 
@@ -56,7 +60,7 @@ public class HdfsUtils {
 	}
 
 	/**
-	 * @return 
+	 * @return
 	 * @return the hdfs-path of the written file
 	 */
 	public static String writeObjectToHdfsFile(File file, Serializable fileContent)
@@ -82,11 +86,24 @@ public class HdfsUtils {
 
 	/**
 	 * This method is a workaround to access HDFS-Files from within Spark-Jobs.
-	 * @see https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-7%20Spark%20Word%20Count/Hostname-Not-Found-in-Spark-Job.docx
+	 * 
+	 * @see https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/
+	 *      Issues/Issue-7%20Spark%20Word%20Count/Hostname-Not-Found-in-Spark-
+	 *      Job.docx
 	 */
 	public static void pingHdfs() throws IOException, URISyntaxException {
 		File textFile = new File("/tmp/ping.txt");
 		writeStringToHdfsFile(textFile, "Ping OK", StandardCharsets.UTF_8);
 	}
 
+	public static void deleteInHdfs(File file) throws ExecuteException, IOException, URISyntaxException {
+		String hdfsPath = MESOS_HDFS_PREFIX + file.getAbsolutePath();
+		Configuration configuration = new Configuration();
+		try (FileSystem hdfs = FileSystem.get(new URI(MESOS_HDFS_PREFIX), configuration)) {
+			Path path = new Path(hdfsPath);
+			if (hdfs.exists(path)) {
+				hdfs.delete(path, true);
+			}
+		}
+	}
 }

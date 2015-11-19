@@ -1,16 +1,7 @@
 package com.zuehlke.shmack.sparkjobs.wordcount;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-
 import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestBase;
-import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 
 public class WordCountRemoteTest extends RemoteSparkTestBase {
 
@@ -30,29 +21,15 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 	 * drwxrwxr-x   - core core          0 2015-11-17 12:46 hdfs://hdfs/sparkjobs-tests-resources/tweets
 	 * </pre>
 	 */
-	public static void main(String[] args) throws IOException, URISyntaxException {
-		
+	public static void main(String[] args) throws Exception {
+
 		HdfsUtils.pingHdfs();
-		
+
 		String inputFile = "hdfs://hdfs/sparkjobs-tests-resources/tweets/tweets_big_data_2000.json";
 		System.err.println("Using input file for testing: " + inputFile);
-		WordCount sparkPi = new WordCount(inputFile);
-
-		try (JavaSparkContext spark = createSparkContext(sparkPi.getApplicationName())) {
-			final JavaPairRDD<String, Integer> result = sparkPi.execute(spark);
-
-			final SortedCounts<String> sortedCounts = SortedCounts.create(result);
-
-			String textFileContent = sortedCounts.toString();
-
-			File textFile = new File("/tmp/WordCountRemoteTest/Result.txt");
-			String hdfsPath = HdfsUtils.writeStringToHdfsFile(textFile, textFileContent, StandardCharsets.UTF_8);
-			System.out.println("Written results as Text to HDFS file " + hdfsPath );
-
-			File binFile = new File("/tmp/WordCountRemoteTest/Result.bin");
-			hdfsPath = HdfsUtils.writeObjectToHdfsFile(binFile, sortedCounts, StandardCharsets.UTF_8);
-			System.out.println("Written results as Serialized Object to HDFS file " + hdfsPath );
-		}
+		WordCount wordCount = new WordCount(inputFile);
+		WordCountRemoteTest myTest = new WordCountRemoteTest();
+		myTest.executeWithStatusTracking(wordCount);
 	}
 
 }
