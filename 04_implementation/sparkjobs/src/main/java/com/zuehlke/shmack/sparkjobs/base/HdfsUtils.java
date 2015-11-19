@@ -21,6 +21,11 @@ public class HdfsUtils {
 
 	private static final String MESOS_HDFS_PREFIX = "hdfs://hdfs";
 
+	public static String writeStringToHdfsFile(File file, String fileContent)
+			throws IOException, URISyntaxException {
+		return writeStringToHdfsFile(file, fileContent, StandardCharsets.UTF_8);
+	}
+
 	/**
 	 * @return
 	 * @see http://stackoverflow.com/questions/16000840/write-a-file-in-hdfs-
@@ -54,7 +59,7 @@ public class HdfsUtils {
 	 * @return 
 	 * @return the hdfs-path of the written file
 	 */
-	public static String writeObjectToHdfsFile(File file, Serializable fileContent, Charset charset)
+	public static String writeObjectToHdfsFile(File file, Serializable fileContent)
 			throws IOException, URISyntaxException {
 		String hdfsPath = MESOS_HDFS_PREFIX + file.getAbsolutePath();
 		Configuration configuration = new Configuration();
