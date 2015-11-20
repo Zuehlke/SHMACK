@@ -49,6 +49,9 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 
 	private static boolean fatJarAlreadyCopied;
 
+	private int driverCores = 1;
+	private String driverMemory = "2G";
+
 	/**
 	 * @param testcaseId
 	 *            used to create distinct directories for results and input
@@ -143,9 +146,9 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 		cmdLine.addArgument("submit-spark-job.sh");
 		cmdLine.addArgument("-Dspark.mesos.coarse=true");
 		cmdLine.addArgument("--driver-cores");
-		cmdLine.addArgument("1");
+		cmdLine.addArgument(String.valueOf(getDriverCores()));
 		cmdLine.addArgument("--driver-memory");
-		cmdLine.addArgument("2G");
+		cmdLine.addArgument(getDriverMemory());
 		cmdLine.addArgument("--class");
 		cmdLine.addArgument(testClass.getName());
 		cmdLine.addArgument(hdfsJarFileURL);
@@ -194,6 +197,22 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 
 	public void writeRemoteResultAsStringToFile(Object remoteResult) throws IOException {
 		FileUtils.writeStringToFile(getLocalResultTextFile(), String.valueOf(remoteResult), StandardCharsets.UTF_8);
+	}
+
+	public int getDriverCores() {
+		return driverCores;
+	}
+
+	public void setDriverCores(int driverCores) {
+		this.driverCores = driverCores;
+	}
+
+	public String getDriverMemory() {
+		return driverMemory;
+	}
+
+	public void setDriverMemory(String driverMemory) {
+		this.driverMemory = driverMemory;
 	}
 
 }
