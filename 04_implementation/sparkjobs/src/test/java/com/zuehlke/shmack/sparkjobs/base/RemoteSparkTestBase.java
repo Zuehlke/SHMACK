@@ -1,7 +1,7 @@
 package com.zuehlke.shmack.sparkjobs.base;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -90,6 +90,14 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 		return new File(SPARK_TESTS_HDFS_FOLDER, this.getClass().getName());
 	}
 
+	private File getLocalTestJobFolder() {
+		return new File("build/spark-tests", this.getClass().getName());
+	}
+
+	private File getLocalResultFile() {
+		return new File(getLocalTestJobFolder(), RESULT_FILENAME);
+	}
+
 	protected void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
 		if (!ressourcesAlreadyInSync) {
 			System.out.println("Synchronizing test resources to HDFS: " + HDFS_RESSOURCES_DIRECTORY.getAbsolutePath());
@@ -150,10 +158,13 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 
 	@SuppressWarnings("unchecked")
 	protected <T extends Serializable> T getRemoteResult() throws Exception {
-		byte[] bytes = ShmackUtils.readByteArrayFromHdfs(getHdfsResultFile());
-		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-		Object result = ois.readObject();
-		return (T) result;
+		File localResultFile = getLocalResultFile();
+		System.out.println("Copying result to " + localResultFile.getAbsolutePath() + " ...");
+		ShmackUtils.copyFromHdfs(getHdfsResultFile(), localResultFile);
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(localResultFile))) {
+			Object result = ois.readObject();
+			return (T) result;
+		}
 	}
 
 }
