@@ -146,13 +146,13 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	private void assertHdfsFolderNumberOfFiles(File remoteDir, int expectedNumberOfFiles)
 			throws ExecuteException, IOException {
 		ExecuteResult executeResult = ShmackUtils.runOnMaster("hadoop", "fs", "-ls",
-				ShmackUtils.getHdfsPath(remoteDir));
+				ShmackUtils.getHdfsURL(remoteDir));
 		assertTrue(executeResult.getStandardOutput().startsWith("Found " + expectedNumberOfFiles + " items"));
 	}
 
 	private void assertHdfsFileOrFolderDoesNotExist(File remoteDir) throws IOException {
 		try {
-			ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsPath(remoteDir));
+			ShmackUtils.runOnMaster("hadoop", "fs", "-ls", ShmackUtils.getHdfsURL(remoteDir));
 			fail("Exception expected here.");
 		} catch (ExecuteException e) {
 			assertExceptionMessageContains(e, "No such file or directory");

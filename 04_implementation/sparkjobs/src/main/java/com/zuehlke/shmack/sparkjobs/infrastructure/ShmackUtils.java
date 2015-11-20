@@ -62,13 +62,13 @@ public class ShmackUtils {
 
 	}
 
-	public static String deleteInHdfs(File hdfsTargetDirectory) throws ExecuteException, IOException {
-		String hdfsPath = getHdfsPath(hdfsTargetDirectory);
+	public static String deleteInHdfs(File hdfsFileOrFolderToDelete) throws ExecuteException, IOException {
+		String hdfsPath = getHdfsURL(hdfsFileOrFolderToDelete);
 		runOnMaster("hadoop", "fs", "-rm", "-f", "-r", hdfsPath);
 		return hdfsPath;
 	}
 
-	public static String getHdfsPath(File hdfsTargetDirectory) {
+	public static String getHdfsURL(File hdfsTargetDirectory) {
 		return "hdfs://hdfs" + hdfsTargetDirectory.getAbsolutePath();
 	}
 
@@ -152,10 +152,15 @@ public class ShmackUtils {
 	}
 
 	public static String readStringFromHdfs(File srcFile) throws IOException {
+		byte[] bytes = readByteArrayFromHdfs(srcFile);
+		return new String( bytes, StandardCharsets.UTF_8);
+	}
+
+	public static byte[] readByteArrayFromHdfs(File srcFile) throws IOException {
 		File tmpFile = File.createTempFile("read-from-hdfs", null);
 		try {
 			copyFromHdfs(srcFile, tmpFile);
-			return FileUtils.readFileToString(tmpFile, StandardCharsets.UTF_8);
+			return FileUtils.readFileToByteArray(tmpFile);
 		} finally {
 			FileUtils.deleteQuietly(tmpFile);
 		}
