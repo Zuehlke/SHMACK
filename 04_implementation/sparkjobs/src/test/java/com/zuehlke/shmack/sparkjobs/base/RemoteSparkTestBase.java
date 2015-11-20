@@ -11,11 +11,15 @@ import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.zuehlke.shmack.sparkjobs.infrastructure.ShmackUtils;
 
 public class RemoteSparkTestBase extends ShmackTestBase {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(RemoteSparkTestBase.class);
+	
 	private static final File SPARK_TESTS_HDFS_FOLDER = new File("/spark-tests");
 	private static final File HDFS_RESSOURCES_DIRECTORY = new File(SPARK_TESTS_HDFS_FOLDER, "resources");
 
@@ -100,7 +104,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 
 	protected void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
 		if (!ressourcesAlreadyInSync) {
-			System.out.println("Synchronizing test resources to HDFS: " + HDFS_RESSOURCES_DIRECTORY.getAbsolutePath());
+			LOGGER.info("Synchronizing test resources to HDFS: " + HDFS_RESSOURCES_DIRECTORY.getAbsolutePath());
 			ShmackUtils.syncFolderToHdfs(new File("src/test/resources"), HDFS_RESSOURCES_DIRECTORY);
 			ressourcesAlreadyInSync = true;
 		}
@@ -124,10 +128,10 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 	 */
 	protected void executeSparkRemote() throws Exception {
 		File hdfsTestJobFolder = getHdfsTestJobFolder();
-		System.out.println("HDFS Working Directory: hdfs://hdfs" + hdfsTestJobFolder.getAbsolutePath());
-		System.out.println("Deleting old status and result files...");
+		LOGGER.info("HDFS Working Directory: hdfs://hdfs" + hdfsTestJobFolder.getAbsolutePath());
+		LOGGER.info("Deleting old status and result files...");
 		ShmackUtils.deleteInHdfs(hdfsTestJobFolder);
-		System.out.println("Copying Fat-JAR to hdfs...");
+		LOGGER.info("Copying Fat-JAR to hdfs...");
 		File localJarFile = new File("build/libs/sparkjobs-all-with-tests-1.0-SNAPSHOT.jar");
 		File hdfsJarFile = new File(hdfsTestJobFolder, "spark-test-job.jar");
 		ShmackUtils.copyToHdfs(localJarFile, hdfsJarFile);
@@ -136,7 +140,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 
 		ShmackUtils.writeStringToHdfs(getHdfsStatusFile(), SUBMITTED);
 
-		System.out.println("Submitting Spark-Job...");
+		LOGGER.info("Submitting Spark-Job...");
 		ShmackUtils.runOnLocalhost("bash", "submit-spark-job.sh", "-Dspark.mesos.coarse=true", //
 				"--driver-cores", "1", //
 				"--driver-memory", "1024M", //
@@ -147,7 +151,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 		String statusText;
 		do {
 			statusText = ShmackUtils.readStringFromHdfs(getHdfsStatusFile());
-			System.out.println("Status from HDFS-File:" + statusText);
+			LOGGER.info("Status from HDFS-File:" + statusText);
 			Thread.sleep(STATUS_POLL_INTERVAL_MILLIS);
 		} while (RUNNING.equals(statusText) || SUBMITTED.equals(statusText));
 		if (!SUCCESSFUL.equals(statusText)) {
@@ -159,7 +163,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 	@SuppressWarnings("unchecked")
 	protected <T extends Serializable> T getRemoteResult() throws Exception {
 		File localResultFile = getLocalResultFile();
-		System.out.println("Copying result to " + localResultFile.getAbsolutePath() + " ...");
+		LOGGER.info("Copying result to " + localResultFile.getAbsolutePath() + " ...");
 		ShmackUtils.copyFromHdfs(getHdfsResultFile(), localResultFile);
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(localResultFile))) {
 			Object result = ois.readObject();

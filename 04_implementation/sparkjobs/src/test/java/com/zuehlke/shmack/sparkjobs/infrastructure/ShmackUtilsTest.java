@@ -13,11 +13,15 @@ import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.zuehlke.shmack.sparkjobs.base.ShmackTestBase;
 
 public class ShmackUtilsTest extends ShmackTestBase {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(ShmackUtilsTest.class);
+	
 	private final static File LOCAL_SRC_DIR = new File("build/RemoteDataTransferTest/local-src-dir/");
 	private final static File LOCAL_TARGET_DIR = new File("build/RemoteDataTransferTest/local-target-dir/");
 	private final static File REMOTE_DIR = new File("/tmp/ssh-transfer-test/");
@@ -46,7 +50,7 @@ public class ShmackUtilsTest extends ShmackTestBase {
 		String fileContent = getVariableFileContent(targetFileName);
 		File targetFile = new File(LOCAL_SRC_DIR, targetFileName);
 		FileUtils.writeStringToFile(targetFile, fileContent, StandardCharsets.UTF_8);
-		System.out.println("Created source file: " + targetFile.getAbsolutePath());
+		LOGGER.info("Created source file: " + targetFile.getAbsolutePath());
 	}
 
 	private static String getVariableFileContent(String targetFileName) {
