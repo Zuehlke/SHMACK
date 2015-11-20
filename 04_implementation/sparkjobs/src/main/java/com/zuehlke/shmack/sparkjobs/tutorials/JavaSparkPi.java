@@ -17,11 +17,16 @@ import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
 public final class JavaSparkPi extends TestableSparkJob<Double> implements Serializable {
 
 	private static final long serialVersionUID = 2597935909649303078L;
+	private int slices;
+
+	public JavaSparkPi(int slices) {
+		super();
+		this.slices = slices;
+	}
 
 	@SuppressWarnings("serial")
 	@Override
 	public Double execute(JavaSparkContext spark) {
-		int slices = 2;
 		int n = 100000 * slices;
 		List<Integer> l = new ArrayList<Integer>(n);
 		for (int i = 0; i < n; i++) {

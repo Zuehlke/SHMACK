@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
 
+import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.spark.SparkConf;
@@ -14,6 +15,8 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zuehlke.shmack.sparkjobs.infrastructure.ExecExceptionHandling;
+import com.zuehlke.shmack.sparkjobs.infrastructure.ExecuteResult;
 import com.zuehlke.shmack.sparkjobs.infrastructure.ShmackUtils;
 
 public class RemoteSparkTestBase extends ShmackTestBase {
@@ -125,8 +128,9 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 	    --class com.zuehlke.shmack.sparkjobs.wordcount.WordCountRemoteTest
 	    hdfs://hdfs/sparkjobs-tests-libs/sparkjobs-all-with-tests-1.0-SNAPSHOT.jar  30
 	 * </pre>
+	 * @param string 
 	 */
-	protected void executeSparkRemote() throws Exception {
+	protected void executeSparkRemote(String... sparkMainArguments) throws Exception {
 		File hdfsTestJobFolder = getHdfsTestJobFolder();
 		LOGGER.info("HDFS Working Directory: hdfs://hdfs" + hdfsTestJobFolder.getAbsolutePath());
 		LOGGER.info("Deleting old status and result files...");
@@ -141,10 +145,19 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 		ShmackUtils.writeStringToHdfs(getHdfsStatusFile(), SUBMITTED);
 
 		LOGGER.info("Submitting Spark-Job...");
-		ShmackUtils.runOnLocalhost("bash", "submit-spark-job.sh", "-Dspark.mesos.coarse=true", //
-				"--driver-cores", "1", //
-				"--driver-memory", "1024M", //
-				"--class", this.getClass().getName(), hdfsJarFileURL);
+		CommandLine cmdLine = new CommandLine("bash");
+		cmdLine.addArgument("submit-spark-job.sh");
+		cmdLine.addArgument("-Dspark.mesos.coarse=true");
+		cmdLine.addArgument("--driver-cores");
+		cmdLine.addArgument("1");
+		cmdLine.addArgument("--driver-memory");
+		cmdLine.addArgument("2G");
+		cmdLine.addArgument("--class");
+		cmdLine.addArgument(this.getClass().getName());
+		cmdLine.addArgument(hdfsJarFileURL);
+		cmdLine.addArguments(sparkMainArguments);
+		ExecuteResult result = ShmackUtils.runOnLocalhost(ExecExceptionHandling.THROW_EXCEPTION_IF_EXIT_CODE_NOT_0, cmdLine);
+		LOGGER.info(result.getStandardOutput());
 	}
 
 	protected void waitForSparkFinished() throws Exception {

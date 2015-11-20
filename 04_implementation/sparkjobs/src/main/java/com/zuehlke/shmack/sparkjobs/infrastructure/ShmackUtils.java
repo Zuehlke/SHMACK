@@ -110,7 +110,7 @@ public class ShmackUtils {
 
 	}
 
-	private static ExecuteResult runOnLocalhost(ExecExceptionHandling exceptionHandling, CommandLine cmdLineOnLocalhost)
+	public static ExecuteResult runOnLocalhost(ExecExceptionHandling exceptionHandling, CommandLine cmdLineOnLocalhost)
 			throws ExecuteException, IOException {
 		DefaultExecutor executor = new DefaultExecutor();
 		OutputsToStringStreamHandler streamHandler = new OutputsToStringStreamHandler();
