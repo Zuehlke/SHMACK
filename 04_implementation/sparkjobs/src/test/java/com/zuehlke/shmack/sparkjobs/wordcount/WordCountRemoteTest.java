@@ -29,7 +29,6 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 	}
 
 	public static void main(String[] args) throws Exception {
-
 		HdfsUtils.pingHdfs();
 
 		String inputFile = getHdfsTestRessourcePath("tweets/tweets_big_data_2000.json");

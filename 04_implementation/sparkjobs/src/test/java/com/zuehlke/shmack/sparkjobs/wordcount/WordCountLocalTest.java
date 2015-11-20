@@ -20,7 +20,7 @@ public class WordCountLocalTest extends LocalSparkTestBase {
             assertPosition(sortedCounts, 19, 126, "analytics");
             assertPosition(sortedCounts, 1473, 3, "explosive");
             assertPosition(sortedCounts, 7417, 1, "ετοιμαζε");
-            sortedCounts.print(System.out);
+            // sortedCounts.print(System.out);
         }
     }
 }
