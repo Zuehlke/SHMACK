@@ -32,7 +32,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 		runner.executeWithStatusTracking(job);
 	}
 
-	protected void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
+	protected synchronized void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
 		if (ressourcesAlreadyInSync) {
 			LOGGER.info("SKIPPING copy test resources to HDFS as already done before.");
 			return;

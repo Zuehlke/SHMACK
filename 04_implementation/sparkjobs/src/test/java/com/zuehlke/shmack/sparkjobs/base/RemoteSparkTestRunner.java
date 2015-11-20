@@ -158,7 +158,7 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 		LOGGER.info(result.getStandardOutput());
 	}
 
-	private File syncFatJatToHdfs() throws ExecuteException, IOException {
+	private synchronized File syncFatJatToHdfs() throws ExecuteException, IOException {
 		File localJarFile = new File("build/libs/sparkjobs-all-with-tests-1.0-SNAPSHOT.jar");
 		File hdfsJarFile = new File(SPARK_TESTS_HDFS_FOLDER, "spark-tests.jar");
 		if (fatJarAlreadyCopied) {
