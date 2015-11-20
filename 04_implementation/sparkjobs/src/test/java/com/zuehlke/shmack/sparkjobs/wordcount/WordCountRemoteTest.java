@@ -8,19 +8,23 @@ import org.slf4j.LoggerFactory;
 
 import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestBase;
+import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestRunner;
 import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 
 public class WordCountRemoteTest extends RemoteSparkTestBase {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(WordCountRemoteTest.class);
-	
+
 	@Test
 	public void testWordcountRemote() throws Exception {
 		syncTestRessourcesToHdfs();
-		executeSparkRemote();
-		waitForSparkFinished();
 
-		SortedCounts<String> sortedCounts = getRemoteResult();
+		RemoteSparkTestRunner runner = createTestRunner();
+
+		runner.executeSparkRemote();
+		runner.waitForSparkFinished();
+
+		SortedCounts<String> sortedCounts = runner.getRemoteResult();
 		assertEquals(7446, sortedCounts.size());
 		assertPosition(sortedCounts, 19, 126, "analytics");
 		assertPosition(sortedCounts, 1473, 3, "explosive");
@@ -31,11 +35,15 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 	public static void main(String[] args) throws Exception {
 		HdfsUtils.pingHdfs();
 
+		RemoteSparkTestRunner runner = createTestRunner();
 		String inputFile = getHdfsTestRessourcePath("tweets/tweets_big_data_2000.json");
 		LOGGER.info("Using input file for testing: " + inputFile);
 		WordCount wordCount = new WordCount(inputFile);
-		WordCountRemoteTest myTest = new WordCountRemoteTest();
-		myTest.executeWithStatusTracking(wordCount);
+		runner.executeWithStatusTracking(wordCount);
+	}
+
+	private static RemoteSparkTestRunner createTestRunner() {
+		return new RemoteSparkTestRunner(WordCountRemoteTest.class, "myTest-1");
 	}
 
 }

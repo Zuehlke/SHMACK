@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
 import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestBase;
+import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestRunner;
 
 public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 
@@ -29,13 +30,20 @@ public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 	}
 
 	private void testWordcountRemote(int nSlices, double allowedDelta) throws Exception {
-		executeSparkRemote(String.valueOf(nSlices));
-		waitForSparkFinished();
-		Double result = getRemoteResult();
-		writeRemoteResultAsStringToFile(result);
+		RemoteSparkTestRunner runner = createTestRunner(nSlices);
+		runner.executeSparkRemote(String.valueOf(nSlices));
+		runner.waitForSparkFinished();
+		Double result = runner.getRemoteResult();
+		runner.writeRemoteResultAsStringToFile(result);
 		LOGGER.info("Result of Pi with {} number of slices: {}", nSlices, result);
 		LOGGER.info("Difference from real Pi: {} ", Math.abs(Math.PI - result));
 		assertEquals(Math.PI, result.doubleValue(), allowedDelta);
+	}
+
+	private static RemoteSparkTestRunner createTestRunner(int nSlices) {
+		String testcaseId = "WordCount-" + nSlices;
+		RemoteSparkTestRunner runner = new RemoteSparkTestRunner(JavaSparkPiRemoteTest.class, testcaseId);
+		return runner;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -44,8 +52,8 @@ public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 		int nSlices = Integer.parseInt(args[0]);
 
 		JavaSparkPi sparkPi = new JavaSparkPi(nSlices);
-		JavaSparkPiRemoteTest myTest = new JavaSparkPiRemoteTest();
-		myTest.executeWithStatusTracking(sparkPi);
+		RemoteSparkTestRunner runner = createTestRunner(nSlices);
+		runner.executeWithStatusTracking(sparkPi);
 	}
 
 }
