@@ -10,6 +10,7 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 
+import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 import com.zuehlke.shmack.sparkjobs.base.TestableSparkJob;
 
 import scala.Tuple2;
@@ -20,7 +21,7 @@ import twitter4j.TwitterObjectFactory;
 /**
  * @see http://spark.apache.org/examples.html
  */
-public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> implements Serializable {
+public class WordCount extends TestableSparkJob<SortedCounts<String>> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private final String inputFile;
@@ -31,7 +32,7 @@ public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> im
 
 	@SuppressWarnings("serial")
 	@Override
-	public JavaPairRDD<String, Integer> execute(final JavaSparkContext spark) {
+	public SortedCounts<String> execute(final JavaSparkContext spark) {
 		final JavaRDD<String> textFile = spark.textFile(inputFile);
 		final JavaRDD<String> words = textFile.flatMap(new FlatMapFunction<String, String>() {
 			@Override
@@ -53,7 +54,7 @@ public class WordCount extends TestableSparkJob<JavaPairRDD<String, Integer>> im
 				return a + b;
 			}
 		});
-		return counts;
+		return SortedCounts.create(counts);
 	}
 
 	@Override
