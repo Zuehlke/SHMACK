@@ -32,6 +32,7 @@ public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 		executeSparkRemote(String.valueOf(nSlices));
 		waitForSparkFinished();
 		Double result = getRemoteResult();
+		writeRemoteResultAsStringToFile(result);
 		LOGGER.info("Result of Pi with {} number of slices: {}", nSlices, result);
 		LOGGER.info("Difference from real Pi: {} ", Math.abs(Math.PI - result));
 		assertEquals(Math.PI, result.doubleValue(), allowedDelta);

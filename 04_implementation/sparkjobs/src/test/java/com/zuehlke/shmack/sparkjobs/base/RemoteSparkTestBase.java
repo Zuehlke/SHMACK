@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -28,7 +30,8 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 
 	private static final String DETAILS_FILENAME = "DETAILS";
 	private static final String STATUS_FILENAME = "STATUS";
-	private static final String RESULT_FILENAME = "RESULT";
+	private static final String RESULT_BIN_FILENAME = "RESULT.bin";
+	private static final String RESULT_TEXT_FILENAME = "RESULT.txt";
 
 	protected static JavaSparkContext createSparkContext(String appName) {
 		SparkConf sparkConf = new SparkConf().setAppName(appName);
@@ -66,7 +69,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 	}
 
 	private void writeResultObject(Serializable result) throws IOException, URISyntaxException {
-		File binFile = new File(getHdfsTestJobFolder(), RESULT_FILENAME);
+		File binFile = new File(getHdfsTestJobFolder(), RESULT_BIN_FILENAME);
 		HdfsUtils.writeObjectToHdfsFile(binFile, result);
 	}
 
@@ -86,7 +89,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 	}
 
 	private File getHdfsResultFile() {
-		return new File(getHdfsTestJobFolder(), RESULT_FILENAME);
+		return new File(getHdfsTestJobFolder(), RESULT_BIN_FILENAME);
 	}
 
 	private File getHdfsDetailsFile() {
@@ -101,8 +104,12 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 		return new File("build/spark-tests", this.getClass().getName());
 	}
 
-	private File getLocalResultFile() {
-		return new File(getLocalTestJobFolder(), RESULT_FILENAME);
+	private File getLocalResultBinaryFile() {
+		return new File(getLocalTestJobFolder(), RESULT_BIN_FILENAME);
+	}
+
+	private File getLocalResultTextFile() {
+		return new File(getLocalTestJobFolder(), RESULT_TEXT_FILENAME);
 	}
 
 	protected void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
@@ -175,7 +182,7 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 
 	@SuppressWarnings("unchecked")
 	protected <T extends Serializable> T getRemoteResult() throws Exception {
-		File localResultFile = getLocalResultFile();
+		File localResultFile = getLocalResultBinaryFile();
 		LOGGER.info("Copying result to " + localResultFile.getAbsolutePath() + " ...");
 		ShmackUtils.copyFromHdfs(getHdfsResultFile(), localResultFile);
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(localResultFile))) {
@@ -183,5 +190,10 @@ public class RemoteSparkTestBase extends ShmackTestBase {
 			return (T) result;
 		}
 	}
+	
+
+	protected void writeRemoteResultAsStringToFile(Object remoteResult) throws IOException {
+		FileUtils.writeStringToFile(getLocalResultTextFile(), String.valueOf(remoteResult), StandardCharsets.UTF_8);
+	}	
 
 }
