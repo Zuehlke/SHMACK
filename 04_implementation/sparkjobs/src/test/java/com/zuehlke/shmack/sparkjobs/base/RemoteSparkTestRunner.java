@@ -135,6 +135,7 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 
 		String hdfsJarFileURL = ShmackUtils.getHdfsURL(hdfsJarFile);
 
+		LOGGER.info("Writing initial Job status to HDFS...");
 		ShmackUtils.writeStringToHdfs(getHdfsStatusFile(), SUBMITTED);
 
 		LOGGER.info("Submitting Spark-Job...");
