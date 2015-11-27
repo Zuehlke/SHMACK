@@ -14,21 +14,21 @@ public class JavaSparkPiLocalTest extends LocalSparkTestBase {
 	private final static Logger LOGGER = LoggerFactory.getLogger(JavaSparkPiLocalTest.class);
 	
 	@Test
-	public void testWordcountRemote_10_Slices() throws Exception {
-		testWordcountRemote(10, 1e-2);
+	public void testWordcountLocal_10_Slices() throws Exception {
+		testWordcountLocal(10, 1e-2);
 	}
 
 	@Test
-	public void testWordcountRemote_100_Slices() throws Exception {
-		testWordcountRemote(100, 1e-3);
+	public void testWordcountLocal_100_Slices() throws Exception {
+		testWordcountLocal(100, 1e-3);
 	}
 
 	@Test
-	public void testWordcountRemote_200_Slices() throws Exception {
-		testWordcountRemote(200, 1e-3);
+	public void testWordcountLocal_200_Slices() throws Exception {
+		testWordcountLocal(200, 1e-3);
 	}
 
-	private void testWordcountRemote(int nSlices, double allowedDelta) throws Exception {
+	private void testWordcountLocal(int nSlices, double allowedDelta) throws Exception {
 		final JavaSparkPi sparkPi = new JavaSparkPi( nSlices );
 		try (JavaSparkContext spark = createSparkContext(sparkPi.getApplicationName())) {
 			final Double result = sparkPi.execute(spark);
