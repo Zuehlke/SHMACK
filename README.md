@@ -86,7 +86,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * Append the following lines at the **end** of your `${HOME}/.bashrc`
 ```
 alias cds='cd ${HOME}/shmack/repo/'
-alias eclipse='${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
+alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
 export PATH
@@ -211,6 +211,94 @@ Remark: as of 2015-11-17 the EC2 instance have Java 8!
 Execute the testcase `ShmackUtilsTest` in eclipse.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
+## How can I execute Unit-Tests on a local Spark instance?
+Look at the examples:
+* `JavaSparkPiLocalTest`
+* `WordCountLocalTest`
+
+## How can I execute Unit-Tests on a remote Spark instance (i.e. in the Amazon EC2 cluster)?
+Look at the examples:
+* `JavaSparkPiRemoteTest`
+* `WordCountRemoteTest`
+
+Make sure that every thecase hase it's own `testcaseId`. This id needs only to be distinct only within one Test-Class.
+```
+String testcaseId = "WordCount-" + nSlices;
+RemoteSparkTestRunner runner = new RemoteSparkTestRunner(JavaSparkPiRemoteTest.class, testcaseId);
+```
+
+To execute the tests do the following:
+* invoke `gradle fatJarWithTests` (available as eclipse launch configuration)
+* invoke the JUnit test from within eclipse (or your favorite IDE)
+
+## How can I use `src/test/resources` on a remote Spark instance?
+* Synchronize the  `src/test/resources` to the HDFS filesystem
+  * `RemoteSparkTestBase#syncTestRessourcesToHdfs()`
+  * Example: `WordCountRemoteTest#testWordcountRemote()`
+  * Note that thanks to `rsync` **only changes** will be transferred from your laptop to the EC2 instance. This saves huge amounts of time and bandwith ;-). Nevertheless there is no efficient way to sync between the EC2-Master node and the EC2-HDFS Filesystem. But this should be no problem as bandwidth within the EC2 cluster is very high.
+  
+* Use the required ressource from within the Spark-Job (executed remotely) addressedb by the HDFS-URL , e.g.
+```
+   see WordCountRemoteTest#main():
+	// resolves to hdfs://hdfs/spark-tests/resources/tweets/tweets_big_data_2000.json
+    String inputFile = getHdfsTestRessourcePath("tweets/tweets_big_data_2000.json");
+```
+
+## How can I retrieve the results from a Unit-Test executed  on a remote Spark instance?
+Use the `RemoteSparkTestRunner#`**`getRemoteResult()`** as follows:
+* `executeSparkRemote(String...)`
+* `waitForSparkFinished()`
+* `getRemoteResult()`
+
+Examples: 
+* `JavaSparkPiRemoteTest`
+* `WordCountRemoteTest`
+
+## How does the JUnit-Test know when a Spark-Job is finished?
+The `RemoteSparkTestRunner#executeWithStatusTracking()` is to be invoked by the spark Job. It writes the state of the spark job to the HDFS filesystem
+The JUnit test uses the `RemoteSparkTestRunner` to poll the state, see `RemoteSparkTestRunner#waitForSparkFinished()`.
+
+Examples: 
+* `JavaSparkPiRemoteTest`
+* `WordCountRemoteTest`
+
+Nevertheless it can happen that due to a severe error, that the status in HDFS is not written.
+In this case see **[here](#sparkJobsFailing)** 
+
+## How can I execute command in the EC2 cluster from a local JUnit Test?
+
+Use methods provided by `ShmackUtils`:
+* `runOnMaster(CommandLine, ExecExceptionHandling)`
+* `runOnMaster(ExecExceptionHandling, String, String...)`
+* `runOnMaster(String, String...)`
+
+These methods will typically throw an exception if the return code is not 0 (can be controlled using ExecExceptionHandling).
+
+
+## How do I read / write files from / to the HDFS file system in the EC2 cluster?
+You can do this ...
+* ... either **locally** from your laptop:
+  * from JUnit Tests: use  method provided by `ShmackUtils`, e.g.
+    * `copyFromHdfs(File, File)`
+    * `copyToHdfs(File, File)`
+    * `syncFolderToHdfs(File, File)`
+    * `syncFolderFromHdfs(File, File)`
+    * `deleteInHdfs(File)`
+    * `getHdfsURL(File)`
+    * `readByteArrayFromHdfs(File)`
+    * `readStringFromHdfs(File)`
+    * Note that you can simply use a java.io.File to address files in HDFS, e.g. `/foo/bar.txt` will be written to the HDFS URL `hdfs://hdfs/foo/bar.txt`
+  
+  * from a bash:
+    * `copy-from-hdfs.sh`
+    * `copy-to-hdfs.sh`
+    * `sync-from-hdfs-to-local.sh`
+    * `sync-to-hdfs.sh`
+    
+* ... or from a Spark-Job executed **remote** in the EC2 cluster:
+  *  use `com.zuehlke.shmack.sparkjobs.base.HdfsUtils`
+
+
 
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
@@ -239,6 +327,8 @@ If this testcase fails: see **[here](#inTestcasesFailing)**
 ## What should I do if Integration testcases do not work?
 Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 
+
+<a name="sparkJobsFailing"></a>
 ## What should I do if Spark-Jobs are failing?
 * Open the mesos Web-UI `${HOME}/shmack/repo/04_implementation/scripts/open-shmack-mesos-console.sh`
 * Click on the Link to the `sandbox` of your spark-job
