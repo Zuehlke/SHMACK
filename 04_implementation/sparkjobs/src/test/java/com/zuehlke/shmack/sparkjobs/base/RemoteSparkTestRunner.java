@@ -69,7 +69,6 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	public final void executeWithStatusTracking(TestableSparkJob<? extends Serializable> job) throws Exception {
 		boolean successful = false;
 		try (JavaSparkContext spark = createSparkContext(job.getApplicationName())) {
-			HdfsUtils.deleteInHdfs(getHdfsTestJobFolder());
 			writeStatus(RUNNING, null);
 			Serializable result = job.execute(spark);
 			writeResultObject(result);
