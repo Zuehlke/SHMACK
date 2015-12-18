@@ -24,9 +24,10 @@ INTERMEDIATE_DIR="/tmp/hdfs-xchange/to-hdfs/${DEST}"
 
 # Directory
 if [ -d "$SRC" ] ; then
+  HDFS_DEST_PARENT="`dirname "${HDFS_DEST}"`"
   run sync-to-dcos-master.sh "${SRC}/" "${INTERMEDIATE_DIR}/"
-  run run-on-dcos-master.sh hadoop fs -mkdir -p "${HDFS_DEST}/"
-  run run-on-dcos-master.sh hadoop fs -copyFromLocal -f -p "${INTERMEDIATE_DIR}/*" "${HDFS_DEST}/"
+  run run-on-dcos-master.sh hadoop fs -mkdir -p "${HDFS_DEST_PARENT}/"
+  run run-on-dcos-master.sh hadoop fs -copyFromLocal -f -p "${INTERMEDIATE_DIR}/" "${HDFS_DEST_PARENT}/"
 else
 # files --> we use a sync folders approach here to avoid copying files already present
   FILENAME=`basename "$SRC"`
