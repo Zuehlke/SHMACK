@@ -336,7 +336,9 @@ Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 * Click on `stderr`  
 * Example see: **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-7%20Spark%20Word%20Count/Issue-7%20Spark%20Word%20Count.docx)**
 
-
+## To start with a clean state, you may delete the whole HDFS Filesystem as follows
+`ssh-into-dcos-master.sh`
+`hadoop fs -rm -r -f 'hdfs://hdfs/*'`
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
