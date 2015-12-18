@@ -179,8 +179,8 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 			Thread.sleep(STATUS_POLL_INTERVAL_MILLIS);
 		} while (RUNNING.equals(statusText) || SUBMITTED.equals(statusText));
 		if (!SUCCESSFUL.equals(statusText)) {
-			statusText = ShmackUtils.readStringFromHdfs(getHdfsDetailsFile());
-			throw new RuntimeException("Spark Execution failed. Details: \n" + statusText);
+			String errorDetails = ShmackUtils.readStringFromHdfs(getHdfsDetailsFile());
+			throw new RuntimeException("Spark Execution failed. Details: \n" + errorDetails);
 		}
 	}
 

@@ -15,21 +15,21 @@ public class JavaSparkPiRemoteTest extends RemoteSparkTestBase {
 	private final static Logger LOGGER = LoggerFactory.getLogger(JavaSparkPiRemoteTest.class);
 
 	@Test
-	public void testWordcountRemote_10_Slices() throws Exception {
-		testWordcountRemote(10, 1e-2);
+	public void testSparkPiRemote_10_Slices() throws Exception {
+		testSparkPiRemote(10, 1e-2);
 	}
 
 	@Test
-	public void testWordcountRemote_100_Slices() throws Exception {
-		testWordcountRemote(100, 1e-3);
+	public void testSparkPiRemote_100_Slices() throws Exception {
+		testSparkPiRemote(100, 1e-3);
 	}
 
 	@Test
-	public void testWordcountRemote_200_Slices() throws Exception {
-		testWordcountRemote(200, 1e-3);
+	public void testSparkPiRemote_200_Slices() throws Exception {
+		testSparkPiRemote(200, 1e-3);
 	}
 
-	private void testWordcountRemote(int nSlices, double allowedDelta) throws Exception {
+	private void testSparkPiRemote(int nSlices, double allowedDelta) throws Exception {
 		RemoteSparkTestRunner runner = createTestRunner(nSlices);
 		runner.executeSparkRemote(String.valueOf(nSlices));
 		runner.waitForSparkFinished();
