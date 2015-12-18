@@ -38,7 +38,8 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 
 #### To be done once:
 * Create AWS account **[here](https://aws.amazon.com/de/)**
-* Create a Virtual Machine 
+* Create a Virtual Machine $
+  * assign at least 4 GB RAM and 30 GB HDD! 
   * Recommended: **[Ubuntu >= 14.04.3 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
     * Optional: Install cinnamon desktop manager: 
       * http://www.webupd8.org/2014/12/install-cinnamon-24-stable-in-ubuntu.html
@@ -69,7 +70,7 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
       * `AWS Secret Access Key [None]: [from browser page]`
       * `Default region name [None]: us-west-1`  (VERY important, DO NOT change this!)
       * `Default output format [None]: json`
-    * Assign Admin-Permissions to user `smack`: 
+    * Assign Admin-Permissions to user `shmack` (Tab "Permissions", --> "Attach Policy" --> "Administrator Access"): 
 https://console.aws.amazon.com/iam/home?#users/shmack 
     * Create a AWS Key-Pair in region **us-west-1**: 
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
@@ -96,6 +97,9 @@ export PATH
     * Open `Help --> Eclipse Marketplace`
     * Install `Gradle IDE Pack`
   * Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
+    * "Import" --> "Gradle Project"
+    * Click "Build model"
+    * Select all projects
 
     
 #### Stack Creation and Deletion 
@@ -162,6 +166,7 @@ export PATH
 * What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
 * Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http acces is possible. https needs to be implemented.
+* Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
 
 
 # FAQ
@@ -200,7 +205,7 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 
 ## How do I scale up/down the number of slave nodes?
 `${HOME}/shmack/repo/04_implementation/scripts/change-number-of-slaves.sh <new number of slaves>`
-**Attention**: Data in HDFS is **destroyed** when scaling down 3 slave nodes or less!!
+**Attention**: Data in HDFS is **destroyed** when scaling down!!
 
 ## Which Java Version can be used?
 As of 2015-11-17 Spark-Jobs are failing because only Java 7 is available in the cluster.
