@@ -45,15 +45,15 @@ public class ShmackUtils {
 				localTargetDir.getAbsolutePath() + "/");
 	}
 
-	public static void syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
+	public static ExecuteResult syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "sync-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
+		return runOnLocalhost("/bin/bash", "sync-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
 				hdfsTargetDirectory.getAbsolutePath() + "/");
 	}
 
-	public static void syncFolderFromHdfs(File hdfsSrcDirectory, File localTargetDir)
+	public static ExecuteResult syncFolderFromHdfs(File hdfsSrcDirectory, File localTargetDir)
 			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
+		return runOnLocalhost("/bin/bash", "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
 				localTargetDir.getAbsolutePath() + "/");
 	}
 

@@ -104,8 +104,13 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	@Test
 	public void testSyncFolderHdfs() throws ExecuteException, IOException {
 		resetTransferDirectories(SMALL_NUMBER_OF_FILES);
-		ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
-		ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		
+		ExecuteResult syncFolderToHdfsResult = ShmackUtils.syncFolderToHdfs(LOCAL_SRC_DIR, REMOTE_DIR);
+		LOGGER.info(syncFolderToHdfsResult.toString());
+		
+		ExecuteResult syncFolderFromHdfsResult = ShmackUtils.syncFolderFromHdfs(REMOTE_DIR, LOCAL_TARGET_DIR);
+		LOGGER.info(syncFolderFromHdfsResult.toString());
+		
 		assertFolderContentEquals(LOCAL_SRC_DIR, LOCAL_TARGET_DIR);
 	}
 
