@@ -16,7 +16,7 @@ K. = Kafka
 
 SHMACK is open source under terms of Apache License 2.0 (see **[License Details](#license)**).
 For now, it provides a quick start to set up a Mesos cluster with Spark and Cassandra on Amazon Web Services (AWS), 
-with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity stack](#https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
+with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
 and being enriched by Hatch applications (closed source).
 
 #<font color="red">WARNING: things can get expensive $$$$$ !</font>
@@ -24,7 +24,7 @@ When setting up the tutorial servers on Amazon AWS and letting them running, the
 Please make sure that servers are only used as required. See [FAQ](#avoidBill) section in this document.
 
 Don't get scared too much - for temporary use, this is fine as 1700$ per month is still less than 60$ a day. 
-If the days are limited, e.g. for just a few days of experimentation, than this is fine - but better keep an eye on your [AWS costs](#https://console.aws.amazon.com/billing/home).
+If the days are limited, e.g. for just a few days of experimentation, than this is fine - but better keep an eye on your [AWS costs](https://console.aws.amazon.com/billing/home).
 For production, there would be many things needed to be done first anyway (see [Limitations](#limitations)) - so 
 running costs would be a rather minor issue.
 
@@ -67,7 +67,7 @@ Everything can be performed free of charge until you start up nodes in the cloud
     * Setup github Credentials
       * `git config --global credential.helper cache`
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
-    * Optional: You may consider installing an additional git GUI, on Mac OS X or Windows, [Atlassian SourceTree](*https://www.sourcetreeapp.com) works nice. 
+    * Optional: You may consider installing an additional git GUI, on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
   * Download and install a reasonable new JDK supporting Java 8
     * DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer
     * The JDK that is included in Ubuntu 14.04 LTS is unfortunately too old
