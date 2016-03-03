@@ -16,7 +16,7 @@ K. = Kafka
 
 SHMACK is open source under terms of Apache License 2.0 (see **[License Details](#license)**).
 For now, it provides a quick start to set up a Mesos cluster with Spark and Cassandra on Amazon Web Services (AWS), 
-with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
+with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
 and being enriched by Hatch applications (closed source).
 
 #<font color="red">WARNING: things can get expensive $$$$$ !</font>
@@ -191,6 +191,10 @@ export PATH
 # FAQ
 <a name="avoidBill"></a>
 ## How do I avoid to be surprised by a monthly bill of **1700 $** ?
+Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. 
+Set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences). 
+
+And then: be careful when to start and stop the AWS instances.
 As of 2015-10-23 there is **no** officially supported way to suspend AWS EC2 instances.
 see [Stackoverflow](http://stackoverflow.com/questions/31848810/mesososphere-dcos-cluster-on-aws-ec2-instances-are-terminated-and-again-restart) and [Issue](https://github.com/Zuehlke/SHMACK/issues/2)
 
