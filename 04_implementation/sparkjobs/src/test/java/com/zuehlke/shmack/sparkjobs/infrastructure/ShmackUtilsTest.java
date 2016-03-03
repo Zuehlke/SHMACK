@@ -29,6 +29,12 @@ public class ShmackUtilsTest extends ShmackTestBase {
 	private static final int SMALL_NUMBER_OF_FILES = 2;
 	private static final int LARGE_NUMBER_OF_FILES = 1000;
 
+	@Test
+	public void canFindScripts() {
+		File fileInScriptDir = new File(ShmackUtils.determineScriptDir() + "shmack_env");
+		assertTrue("File " + fileInScriptDir + "must exist", fileInScriptDir.exists());
+	}
+
 	private static void resetTransferDirectories(int numberOfFiles) throws IOException {
 		if (LOCAL_SRC_DIR.exists()) {
 			FileUtils.forceDelete(LOCAL_SRC_DIR);
@@ -200,5 +206,4 @@ public class ShmackUtilsTest extends ShmackTestBase {
 		String actualContent = ShmackUtils.readStringFromHdfs(targetFileName);
 		assertEquals(expectedContent, actualContent);
 	}
-
 }

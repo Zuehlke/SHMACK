@@ -10,6 +10,26 @@ import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.io.FileUtils;
 
 public class ShmackUtils {
+	
+	private static String scriptDir;
+
+	public static String determineScriptDir() {
+		if (scriptDir == null){
+			try {
+				String workingDir = runOnLocalhost("/bin/pwd").getStandardOutput();
+				int idx = workingDir.indexOf("/04_implementation");
+				if (idx > 0) {
+					scriptDir = workingDir.substring(0, idx) + "/04_implementation/scripts/";
+				} else {
+					scriptDir = "";
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				scriptDir = "";
+			}
+		}
+		return scriptDir;
+	}
 
 	public static void syncFolderToMasterAndSlave(File localSrcDir, File targetDirectory)
 			throws ExecuteException, IOException {
@@ -18,7 +38,7 @@ public class ShmackUtils {
 
 	public static void syncFolderToMasterAndSlave(File localSrcDir, File targetDirectory, int slaveIndex)
 			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "sync-to-dcos-master-and-slave.sh", localSrcDir.getAbsolutePath() + "/ ",
+		runOnLocalhost("/bin/bash", determineScriptDir() + "sync-to-dcos-master-and-slave.sh", localSrcDir.getAbsolutePath() + "/ ",
 				targetDirectory.getAbsolutePath() + "/", String.valueOf(slaveIndex));
 	}
 
@@ -29,31 +49,31 @@ public class ShmackUtils {
 
 	public static void syncFolderFromSlave(File remoteSrcDir, File localTargetDir, int slaveIndex)
 			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "sync-from-slave-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
+		runOnLocalhost("/bin/bash", determineScriptDir() + "sync-from-slave-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
 				localTargetDir.getAbsolutePath() + "/", String.valueOf(slaveIndex));
 	}
 
 	public static void syncFolderToMaster(File localSrcDir, File targetDirectory) throws ExecuteException, IOException {
 		createDirectoryOnMasterIfNotExists(targetDirectory);
-		runOnLocalhost("/bin/bash", "sync-to-dcos-master.sh", localSrcDir.getAbsolutePath() + "/ ",
+		runOnLocalhost("/bin/bash", determineScriptDir() + "sync-to-dcos-master.sh", localSrcDir.getAbsolutePath() + "/ ",
 				targetDirectory.getAbsolutePath() + "/");
 	}
 
 	public static void syncFolderFromMaster(File remoteSrcDir, File localTargetDir)
 			throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "sync-from-master-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
+		runOnLocalhost("/bin/bash", determineScriptDir() + "sync-from-master-to-local.sh", remoteSrcDir.getAbsolutePath() + "/ ",
 				localTargetDir.getAbsolutePath() + "/");
 	}
 
 	public static ExecuteResult syncFolderToHdfs(File localSrcDir, File hdfsTargetDirectory)
 			throws ExecuteException, IOException {
-		return runOnLocalhost("/bin/bash", "sync-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
+		return runOnLocalhost("/bin/bash", determineScriptDir() + "sync-to-hdfs.sh", localSrcDir.getAbsolutePath() + "/ ",
 				hdfsTargetDirectory.getAbsolutePath() + "/");
 	}
 
 	public static ExecuteResult syncFolderFromHdfs(File hdfsSrcDirectory, File localTargetDir)
 			throws ExecuteException, IOException {
-		return runOnLocalhost("/bin/bash", "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
+		return runOnLocalhost("/bin/bash", determineScriptDir() + "sync-from-hdfs-to-local.sh", hdfsSrcDirectory.getAbsolutePath() + "/ ",
 				localTargetDir.getAbsolutePath() + "/");
 	}
 
@@ -89,7 +109,7 @@ public class ShmackUtils {
 			throws ExecuteException, IOException {
 
 		CommandLine cmdLineOnLocalhost = new CommandLine("/bin/bash");
-		cmdLineOnLocalhost.addArgument("run-on-dcos-master.sh");
+		cmdLineOnLocalhost.addArgument(determineScriptDir() + "run-on-dcos-master.sh");
 		cmdLineOnLocalhost.addArgument(cmdLineOnMaster.getExecutable());
 		cmdLineOnLocalhost.addArguments(cmdLineOnMaster.getArguments());
 
@@ -135,12 +155,12 @@ public class ShmackUtils {
 	}
 
 	public static void copyToHdfs(File localSrcFile, File hdfsTargetFile) throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "copy-to-hdfs.sh", localSrcFile.getAbsolutePath(),
+		runOnLocalhost("/bin/bash", determineScriptDir() + "copy-to-hdfs.sh", localSrcFile.getAbsolutePath(),
 				hdfsTargetFile.getAbsolutePath());
 	}
 
 	public static void copyFromHdfs(File hdfsSrcFile, File localTargetFile) throws ExecuteException, IOException {
-		runOnLocalhost("/bin/bash", "copy-from-hdfs.sh", hdfsSrcFile.getAbsolutePath(),
+		runOnLocalhost("/bin/bash", determineScriptDir() + "copy-from-hdfs.sh", hdfsSrcFile.getAbsolutePath(),
 				localTargetFile.getAbsolutePath());
 	}
 
