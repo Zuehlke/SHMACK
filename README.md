@@ -12,11 +12,21 @@ C. = Cassandra
 
 K. = Kafka
 
-## Trying some default stack for Big Data prototypes (May come out different from the above).
+## A modern stack for Big Data applications
+
+SHMACK is open source under terms of Apache License 2.0 (see **[License Details](#license)**).
+For now, it provides a quick start to set up a Mesos cluster with Spark and Cassandra on Amazon Web Services (AWS), 
+with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity stack](#https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
+and being enriched by Hatch applications (closed source).
 
 #<font color="red">WARNING: things can get expensive $$$$$ !</font>
 When setting up the tutorial servers on Amazon AWS and letting them running, there will be monthly costs of approx **1700 $** !
 Please make sure that servers are only used as required. See [FAQ](#avoidBill) section in this document.
+
+Don't get scared too much - for temporary use, this is fine as 1700$ per month is still less than 60$ a day. 
+If the days are limited, e.g. for just a few days of experimentation, than this is fine - but better keep an eye on your [AWS costs](#https://console.aws.amazon.com/billing/home).
+For production, there would be many things needed to be done first anyway (see [Limitations](#limitations)) - so 
+running costs would be a rather minor issue.
 
 # What do I need to read before working on this project? --> Exactly THIS! #
 * Backlog is an Excel-File in order to prioritize and filter issues: **[here](#backlog)**
@@ -29,23 +39,23 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
 # Vision #
 * We want like to be fast when ramping up cloud infrastructure.
 * We do not want to answer "we never did this" to customers when asked.
-* We want to know where the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
+* We want to know what the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
 * We want to create a RUA for Machine Learning to acquire customers and show competence.
 
-* **@wgi: TODO Please correct / append this vision.**
-
 ### Installation
+Everything can be performed free of charge until you start up nodes in the cloud (called "Stack creation"). 
 
-#### To be done once:
+
+#### Register accounts
+* Create GitHub account (if you don't have one yet): https://github.com/join
 * Create AWS account **[here](https://aws.amazon.com/de/)**
-* Create a Virtual Machine $
+
+
+#### Devenv setup
+* Create a Virtual Machine
   * assign at least 4 GB RAM and 30 GB HDD! 
-  * Recommended: **[Ubuntu >= 14.04.3 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
-    * Optional: Install cinnamon desktop manager: 
-      * http://www.webupd8.org/2014/12/install-cinnamon-24-stable-in-ubuntu.html
-      * Un-Assign `Ctrl-Space` using `ibus-setup`  see **[here](http://askubuntu.com/questions/445676/ctrl-space-not-working-in-terminal-after-installing-cinnamon)**
-        
-  * Alternative: **[LinuxMint >= 17.02](http://www.linuxmint.com/download.php)** with VirtualBox 
+  * Recommended: **[Ubuntu >= 14.04.4 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+  * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine), also OS X works for most parts 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
@@ -57,6 +67,11 @@ Please make sure that servers are only used as required. See [FAQ](#avoidBill) s
     * Setup github Credentials
       * `git config --global credential.helper cache`
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
+    * Optional: You may consider installing an additional git GUI, on Mac OS X or Windows, [Atlassian SourceTree](*https://www.sourcetreeapp.com) works nice. 
+  * Download and install a reasonable new JDK supporting Java 8
+    * DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer
+    * The JDK that is included in Ubuntu 14.04 LTS is unfortunately too old
+    * Easiest on Ubuntu is to use a PPA as described [here](#http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04)
   * `mkdir ${HOME}/shmack`
   * `cd ${HOME}/shmack && git clone https://<yourgithubusername>@github.com/Zuehlke/SHMACK.git repo`
   * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
@@ -100,17 +115,20 @@ export PATH
     * "Import" --> "Gradle Project"
     * Click "Build model"
     * Select all projects
-
+  * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
+    * Provides a nice support for editing shell scripts in Eclipse
+    * Install new software... Add http://download.eclipse.org/technology/dltk/updates-dev/latest/
+    * Select "ShellEd IDE" and "Python IDE" and "next" to install
     
 #### Stack Creation and Deletion 
-##### Stack Creation
-  * `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
+##### Stack Creation (from now on, you pay for usage)
+  * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes (first time only)
-  * Confirm all installations (several times): `Continue installing? [yes/no]` --> yes
+  * Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
   * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts)
     * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
     * Confirm SSH security prompts
@@ -161,11 +179,12 @@ export PATH
 | Issue  | = Can be a **"User Story"** (to be in sync with scrum and github terminology) or a **Bug**|
 
 
+<a name="limitations"></a>
 # Important Limitations / Things to consider before going productive
 * As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 * What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
-* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http acces is possible. https needs to be implemented.
+* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented.
 * Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
 
 
@@ -350,3 +369,20 @@ ___
 
 [github]:https://github.com/zuehlke-ch
 [bitbucket]:https://bitbucket.org/zuehlke/
+
+<a name="license"></a>
+# License Details
+
+Copyright 2016
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
