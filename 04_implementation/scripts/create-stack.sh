@@ -69,15 +69,17 @@ date
 getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
 
+run update-node-info.sh
+
 function deploySmackStack {
 	run cd ${DCOS_INSTALL_DIR}
 	run curl -O https://downloads.mesosphere.io/dcos-cli/install.sh
-	run bash install.sh . http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
+	run bash install.sh --add-path . http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
+	run dcos package install chronos --yes
+	run dcos package install hdfs --yes
+	run dcos package install marathon --yes
+	run dcos package install spark --yes
 	run dcos package install cassandra
-	run dcos package install chronos
-	run dcos package install hdfs
-	run dcos package install marathon
-	run dcos package install spark
 }
 run deploySmackStack
 date
