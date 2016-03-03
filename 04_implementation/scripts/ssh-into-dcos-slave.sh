@@ -19,6 +19,9 @@ SLAVE_INTERNAL_IP=`getSlaveAttribute.sh ${CURRENT_NODE_INFO_FILE} ${SLAVE_INDEX}
 echo "SSH into SLAVE ID ${SLAVE_ID} with internal IP-Address ${SLAVE_INTERNAL_IP}..."
 echo "  (If this blocks, make sure the network does allow ssh. Most Corporate Networks don't!)"
 
+## according to https://docs.mesosphere.com/administration/sshcluster/ you could use dcos node ssh also for that
+# dcos node ssh --master-proxy --slave=${SLAVE_ID}
+## but the SLAVE_ID is not just an index, but the true ID ... and there's not yet an easy way to determine that :-( 
 ssh -A -t -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} ssh -A -t core@${SLAVE_INTERNAL_IP}
 
 # we do NOT want to use "dcos node ssh --master-proxy --slave=${SLAVE_ID}" as we cannot reliably determine which slave Adress or IP is used.
