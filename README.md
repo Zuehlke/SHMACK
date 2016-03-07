@@ -124,8 +124,11 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
     * Select all projects
   * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
     * Provides a nice support for editing shell scripts in Eclipse
-    * Install new software... Add http://download.eclipse.org/technology/dltk/updates-dev/latest/
+    * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
     * Select "ShellEd IDE" and "Python IDE" and "next" to install
+  * Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
+    * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
+    * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
   * Optional: If you prefer to work also  occasionally from OS X or Windows, install also the following on your OS of choice:
     * [AWS Commandline Client](http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os) 
     * [Docker Toolbox](https://www.docker.com/products/docker-toolbox) 
