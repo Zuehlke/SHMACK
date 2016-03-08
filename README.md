@@ -288,7 +288,7 @@ cd spark-1.6.0-bin-hadoop2.6/bin/
 ```
 scala> scala.util.Properties.versionString
 res0: String = version 2.10.5
-``
+```
 * But executing distributed tasks will fail
 ```
 scala> sc.parallelize(0 to 10, 8).count
