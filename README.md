@@ -51,10 +51,13 @@ Everything can be performed free of charge until you start up nodes in the cloud
 * Create AWS account **[here](https://aws.amazon.com/de/)**
 
 
-#### Devenv setup
+#### Development Environment setup
+
 * Create a Virtual Machine
   * assign at least 4 GB RAM and 30 GB HDD! 
-  * Recommended: **[Ubuntu >= 14.04.4 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+  * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+    * Would prefer an LTS version, but **14.04 is too outdated and some of the installed certificates are no longer accepted**.
+    * Maybe 16.04 LTS will work fine again. But until it comes out, better stick to 15.10 which is known to cause no major headaches. 
   * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine), also OS X works for most parts 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
@@ -67,14 +70,25 @@ Everything can be performed free of charge until you start up nodes in the cloud
     * Setup github Credentials
       * `git config --global credential.helper cache`
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
-    * Optional: You may consider installing an additional git GUI, on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
-  * Download and install a reasonable new JDK supporting Java 8
-    * DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer
-    * The JDK that is included in Ubuntu 14.04 LTS is unfortunately too old
-    * Easiest on Ubuntu is to use a PPA as described [here](#http://askubuntu.com/questions/521145/how-to-install-oracle-java-on-ubuntu-14-04)
+    * Optional: You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
+      More clients listed on https://git-scm.com/downloads/guis.  
   * `mkdir ${HOME}/shmack`
-  * `cd ${HOME}/shmack && git clone https://<yourgithubusername>@github.com/Zuehlke/SHMACK.git repo`
+  * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
   * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
+    * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
+    * Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
+      for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
+    * Optional: DCOS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
+  * Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.bashrc`
+```
+alias cds='cd ${HOME}/shmack/repo/'
+alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
+PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
+export PATH
+```
+  * Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
+    install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
+
   * Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
     * Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
       * https://console.aws.amazon.com/iam/home?#users
@@ -92,21 +106,14 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
       * Key pair name: `shmack-key-pair-01` 
         **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
       * Create .ssh directory `mkdir ${HOME}/.ssh`
-      * Save the key pair (copy-paste is OK) `vim.tiny ${HOME}/.ssh/shmack-key-pair-01.pem`
+      * Save the key pair (copy-paste is OK) `gedit ${HOME}/.ssh/shmack-key-pair-01.pem`
         **Attention: Use exactly this filename as it is referenced in the scripts!**
       * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
+      * `ssh-add ${HOME}/.ssh/shmack-key-pair-01.pem`
 
   * Download and install eclipse
     * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
-    * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-1-linux-gtk-x86_64.tar.gz` 
-  * Append the following lines at the **end** of your `${HOME}/.bashrc`
-```
-alias cds='cd ${HOME}/shmack/repo/'
-alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
-PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
-PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
-export PATH
-```
+    * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
   * Add gradle support to eclipse
     * open `eclipse`
     * Open `Help --> Eclipse Marketplace`
@@ -117,10 +124,21 @@ export PATH
     * Select all projects
   * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
     * Provides a nice support for editing shell scripts in Eclipse
-    * Install new software... Add http://download.eclipse.org/technology/dltk/updates-dev/latest/
+    * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
     * Select "ShellEd IDE" and "Python IDE" and "next" to install
+  * Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
+    * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
+    * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
+  * Optional: If you prefer to work also  occasionally from OS X or Windows, install also the following on your OS of choice:
+    * [AWS Commandline Client](http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os) 
+    * [Docker Toolbox](https://www.docker.com/products/docker-toolbox) 
     
 #### Stack Creation and Deletion 
+Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
+some of directly accessible (acting as gateways), others only accessible through the gateway nodes.¨
+The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
+setup dcos packeges to form SHMACK.
+
 ##### Stack Creation (from now on, you pay for usage)
   * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
@@ -129,12 +147,14 @@ export PATH
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes (first time only)
   * Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
+    * Even after the command returns, it will still take some time until every package is fully operational
+    * In the Mesos Master UI you will see them initially in status "Idle" or "Unhealthy" until they converge to "Healthy",
+    in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
   * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts)
     * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
     * Confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
-
   
 <a name="stackDeletion"></a>
 ##### Stack Deletion
@@ -336,6 +356,14 @@ To fix this:
 * Shutdown VM completely (reboot is *not* enough in VirtualBox)
 * Start VM
 * Now the clock of the VM should be OK and aws-cli should work fine again.
+
+## I forgot my AWS credentials / closed the browser too early.
+You can always setup new credentials without needing to setup a new account, so this is no big deal:
+* Go to htps://console.aws.amazon.com/iam/home?region=us-west-1
+* Select your user
+* In the tab Security Credentials click the button Create Access Key
+* Open a shell and run `aws configure` again using the new credentials
+* Optional: Delete the old access key that is no longer in use 
 
 <a name="setupFailing"></a>
 ## What should I do if the setup of the stack has failed?
