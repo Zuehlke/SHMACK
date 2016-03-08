@@ -68,35 +68,4 @@ date
 getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
 
-function deploySmackStack {
-	run sudo -H pip install --upgrade pip virtualenv dcoscli
-	run mkdir -p ${HOME}/.dcos/
-	run dcos config set core.reporting true
-	run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
-	run dcos config set core.ssl_verify false
-	run dcos config set core.timeout 5
-	run dcos package install chronos --yes
-	run dcos package install hdfs --yes
-	run dcos package install marathon --yes
-	run dcos package install spark --yes
-	run dcos package install cassandra
-}
-run deploySmackStack
-date
-
-run update-node-info.sh
-
-echo
-read -p "Press Enter to confirm ssh-identities (and logout from cluster after confirmations)." 
-${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0
-
-run open-shmack-master-console.sh
-
-echo
-echo 
-echo "Master URL: http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`"
-echo "Public Slave URL: http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_FILE}`"
-
-echo "see also: open-shmack-master-console.sh"
-echo "see also: open-shmack-client.sh"
-echo
+run init-dcos-stack.sh

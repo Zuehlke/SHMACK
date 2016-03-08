@@ -25,11 +25,11 @@ export SSH_KEY_LOCATION=${HOME}/.ssh/shmack-key-pair-01.pem
 
 export TARGET_DIR=${SCRIPTS_DIR}/target
 
-export DCOS_INSTALL_DIR=${TARGET_DIR}/dcos
-
 export TMP_OUTPUT_DIR=${TARGET_DIR}/tmp-output
 
 export CURRENT_STATE_DIR=${TARGET_DIR}/current-state
+export CURRENT_STATE_DIR_RELATIVE=target/current-state
+export STATE_TAR_FILE=stack-state.tgz
 
 export CURRENT_STACK_ID_FILE=${CURRENT_STATE_DIR}/StackId
 export CURRENT_STACK_NAME_FILE=${CURRENT_STATE_DIR}/StackName
@@ -39,9 +39,7 @@ export CURRENT_PUBLIC_SLAVE_DNS_FILE=${CURRENT_STATE_DIR}/PublicSlaveDnsAddress
 export CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE=${CURRENT_STATE_DIR}/MasterNodeSshIpAddress
 export CURRENT_NODE_INFO_FILE=${CURRENT_STATE_DIR}/NodeInfo.json
 
-PATH=${SCRIPTS_DIR}:${PATH}
-PATH=${SCRIPTS_DIR}/helpers:${PATH}
-PATH=${PATH}:${DCOS_INSTALL_DIR}/bin
+PATH=${SCRIPTS_DIR}:${SCRIPTS_DIR}/helpers:${PATH}
 export PATH
 
 # taken from http://rabexc.org/posts/pitfalls-of-ssh-agents
