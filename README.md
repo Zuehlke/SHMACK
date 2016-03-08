@@ -294,7 +294,7 @@ res0: String = version 2.10.5
 scala> sc.parallelize(0 to 10, 8).count
 ```
 will complain with
-``WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster ui
+```WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster ui
 to ensure that workers are registered and have sufficient memory```
 
 **TODO** Figure out, what's wrong. Tried to set [coarse grained mode and docker image](http://spark.apache.org/docs/latest/running-on-mesos.html) as `--conf` options, but didn't help.  
