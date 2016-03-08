@@ -51,15 +51,17 @@ Everything can be performed free of charge until you start up nodes in the cloud
 * Create AWS account **[here](https://aws.amazon.com/de/)**
 
 
+<a name="devEnvSetup" />
 #### Development Environment setup
-
 * Create a Virtual Machine
   * assign at least 4 GB RAM and 30 GB HDD! 
   * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
     * Would prefer an LTS version, but **14.04 is too outdated and some of the installed certificates are no longer accepted**.
     * Maybe 16.04 LTS will work fine again. But until it comes out, better stick to 15.10 which is known to cause no major headaches. 
-  * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine), also OS X works for most parts 
+  * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
+  * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
+    This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
   * `sudo apt-get install xsel git`
@@ -139,6 +141,7 @@ some of directly accessible (acting as gateways), others only accessible through
 The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
 setup dcos packeges to form SHMACK.
 
+<a name="stackCreation" />
 ##### Stack Creation (from now on, you pay for usage)
   * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
@@ -156,7 +159,7 @@ setup dcos packeges to form SHMACK.
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
   
-<a name="stackDeletion"></a>
+<a name="stackDeletion" />
 ##### Stack Deletion
   * Option 1 (recommended):
     `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
@@ -199,7 +202,7 @@ setup dcos packeges to form SHMACK.
 | Issue  | = Can be a **"User Story"** (to be in sync with scrum and github terminology) or a **Bug**|
 
 
-<a name="limitations"></a>
+<a name="limitations" />
 # Important Limitations / Things to consider before going productive
 * As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 * What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
@@ -209,7 +212,7 @@ setup dcos packeges to form SHMACK.
 
 
 # FAQ
-<a name="avoidBill"></a>
+<a name="avoidBill" />
 ## How do I avoid to be surprised by a monthly bill of **1700 $** ?
 Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. 
 Set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences). 
@@ -223,7 +226,24 @@ The only official supported way to stop AWS bills is to completely delete the st
 * To delete a stack it is not sufficient to just terminate the EC2 instances as they are contained in an autoscaling group.
 * To delete a stack see **[here](#stackDeletion)**
 
-<a name="backlog"></a>
+<a name="shareCluster" />
+## Can I share a running cluster with other people I work with to reduce costs?
+In principle, you can. But be aware that you may block each other with running tasks.
+* Each of you has to perform the complete [Development Environment Setup](#devEnvSetup), 
+  except that only the one creating the stack needs to setup an AWS account.
+* Ideally, create additional accounts for each additional user
+	* Go to htps://console.aws.amazon.com/iam/home?region=us-west-1
+	* Create a new user for each person to use your cluster
+	* Mail them the credentials including their `shmack-key-pair-01.pem`, AWS Access Key ID, and AWS Secret Access Key
+	* They will have to use them as described for [lost credentials](#forgotCred).
+* [Create your stack](#stackCreation) and exchange the state
+	* Use `capture-stack-state.sh` and distribute the generated file `stack-state.tgz`
+	* They will have to use `populate-copied-stack-state.sh` to make use of the shared cluster
+* Finally, when you are all done
+	* One of you has to [Delete the stack](#stackDeletion) 
+	* Delete/inactivate the additional accounts in htps://console.aws.amazon.com/iam/home?region=us-west-1
+
+<a name="backlog" />
 ## Where is the Backlog?
 The Backlog is an Excel-File which contains for each story
 - the short name 
@@ -235,7 +255,7 @@ We use the Excel-Format due to the following reasons:
 2. we want to filter for open issues only (otherwise the backlog would become too long)
 3. we do not (yet) want to introduce another tool like trello to keep thing simple and together.
 
-<a name="nonImplFiles"></a>
+<a name="nonImplFiles" />
 ## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?
 Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMACK/tree/master/03_analysis_design/Issues
 ````
@@ -250,12 +270,36 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 `${HOME}/shmack/repo/04_implementation/scripts/change-number-of-slaves.sh <new number of slaves>`
 **Attention**: Data in HDFS is **destroyed** when scaling down!!
 
-## Which Java Version can be used?
-As of 2015-11-17 Spark-Jobs are failing because only Java 7 is available in the cluster.
-Therefore Java 7 must be used until support for Java 8 is available.
-Remark: as of 2015-11-17 the EC2 instance have Java 8!
+## Which Java/Scala/Python Version can be used?
+As of 2016-03-08 Java 1.8.0_51, Spark 1.6 with Scala 2.10.5, and Python 3.4 are deployed on the created stack.
 
-<a name="checkStackSetup"></a>
+<a name="sparkShell" />
+## Can I run an interactive Spark Shell?
+Yes, you can - but unfortunately this is rather a smoke test than a usable environment so far.
+* See https://support.mesosphere.com/hc/en-us/articles/206118703-Launching-spark-shell-on-a-DCOS-master-node
+```
+ssh-into-dcos-master.sh
+curl -O http://d3kbcqa49mib13.cloudfront.net/spark-1.6.0-bin-hadoop2.6.tgz
+tar xzf spark-1.6.0-bin-hadoop2.6.tgz
+cd spark-1.6.0-bin-hadoop2.6/bin/
+./spark-shell --master mesos://<local-ip>:5050
+```
+* You can run simple commands with that
+```
+scala> scala.util.Properties.versionString
+res0: String = version 2.10.5
+``
+* But executing distributed tasks will fail
+```
+scala> sc.parallelize(0 to 10, 8).count
+```
+will complain with
+``WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster ui
+to ensure that workers are registered and have sufficient memory```
+
+**TODO** Figure out, what's wrong. Tried to set [coarse grained mode and docker image](http://spark.apache.org/docs/latest/running-on-mesos.html) as `--conf` options, but didn't help.  
+
+<a name="checkStackSetup" />
 ## What should I do to check if the setup was successful?
 Execute the testcase `ShmackUtilsTest` in eclipse.
 If this testcase fails: see **[here](#inTestcasesFailing)**
@@ -357,9 +401,10 @@ To fix this:
 * Start VM
 * Now the clock of the VM should be OK and aws-cli should work fine again.
 
+<a name="forgotCred" />
 ## I forgot my AWS credentials / closed the browser too early.
 You can always setup new credentials without needing to setup a new account, so this is no big deal:
-* Go to htps://console.aws.amazon.com/iam/home?region=us-west-1
+* Go to https://console.aws.amazon.com/iam/home?region=us-west-1
 * Select your user
 * In the tab Security Credentials click the button Create Access Key
 * Open a shell and run `aws configure` again using the new credentials
