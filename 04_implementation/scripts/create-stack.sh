@@ -18,7 +18,6 @@ SLAVE_INSTANCE_COUNT=5
 ########  NOTHING to change below this line (no hardcoded values)
 ###################################################################################################
 
-run mkdir -p ${DCOS_INSTALL_DIR}
 run mkdir -p ${TMP_OUTPUT_DIR}
 run mkdir -p ${CURRENT_STATE_DIR}
 
@@ -70,9 +69,12 @@ getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > 
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
 
 function deploySmackStack {
-	run cd ${DCOS_INSTALL_DIR}
-	run curl -O https://downloads.mesosphere.io/dcos-cli/install.sh
-	run bash install.sh . http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
+	run sudo -H pip install --upgrade pip virtualenv dcoscli
+	run mkdir -p ${HOME}/.dcos/
+	run dcos config set core.reporting true
+	run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
+	run dcos config set core.ssl_verify false
+	run dcos config set core.timeout 5
 	run dcos package install chronos --yes
 	run dcos package install hdfs --yes
 	run dcos package install marathon --yes
@@ -98,5 +100,3 @@ echo "Public Slave URL: http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_FILE}`"
 echo "see also: open-shmack-master-console.sh"
 echo "see also: open-shmack-client.sh"
 echo
-
-
