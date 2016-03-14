@@ -1,6 +1,25 @@
 # This environment has to be sourced by all public scripts.
 # It defines paths to files which are shared among scripts.
 
+###################################################################################################
+########  Change the following variables to adjust your stack if needed
+###################################################################################################
+
+STACK_NAME="MyShmackStack-1"
+# Mesosphere CloudFormation template for operating DCOS on AWS 
+TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
+# the SSH keypair .pem file created in AWS Console to access your running instances
+KEY_PAIR_NAME="shmack-key-pair-01"
+
+# A single public slave is sufficient and keeps costs down 
+# when not running in production or testing fault tolerance  
+PUBLIC_SLAVE_INSTANCE_COUNT=1
+
+###################################################################################################
+########  NOTHING to change below this line (no hardcoded values)
+###################################################################################################
+
+
 if [ -f "./shmack_env" ] ; then
   export SCRIPTS_DIR=`pwd`
 else 
@@ -21,7 +40,7 @@ function run {
 }
 export -f run
 
-export SSH_KEY_LOCATION=${HOME}/.ssh/shmack-key-pair-01.pem
+export SSH_KEY_LOCATION=${HOME}/.ssh/${KEY_PAIR_NAME}.pem
 
 export TARGET_DIR=${SCRIPTS_DIR}/target
 
@@ -60,3 +79,9 @@ function setup-ssh-agent {
 	fi
 }
 setup-ssh-agent
+
+# AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
+TEMPLATE_PARAMETERS=" ParameterKey=AcceptEULA,ParameterValue=Yes"
+TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
+TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
+export TEMPLATE_PARAMETERS

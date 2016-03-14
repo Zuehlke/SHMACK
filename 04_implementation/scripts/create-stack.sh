@@ -5,13 +5,15 @@ cd `dirname ${BASH_SOURCE[0]}`
 
 
 ###################################################################################################
-########  All parameters are here, maybe change them to command line options later
+########  See also shmack_env for shared parameters
 ###################################################################################################
 
-STACK_NAME="MyShmackStack-1"
-TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
-KEY_PAIR_NAME="shmack-key-pair-01"
-PUBLIC_SLAVE_INSTANCE_COUNT=1
+# Number of worker nodes. Need significant memory and fast I/O, so usually configured to
+# use m3.xlarge instances (4 vCPU, 15 GB Memory, 2x40 GB SSD; about 0.15 USD per hour each)
+# Theoretically, a minimum of 3 could work, but so far, 5 was needed to run a cluster without problems.
+# Wihtout special setup with Amazon, you can run up to 40 nodes per region; 
+# so leaving aside the 3 infrastructure nodes (master + backup, public slave), 
+# this leaves you the potential to start at most 37 worker slave instances. 
 SLAVE_INSTANCE_COUNT=5
 
 ###################################################################################################
@@ -21,19 +23,14 @@ SLAVE_INSTANCE_COUNT=5
 run mkdir -p ${TMP_OUTPUT_DIR}
 run mkdir -p ${CURRENT_STATE_DIR}
 
-# AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
-PARAMETERS=""
-PARAMETERS="${PARAMETERS} ParameterKey=AcceptEULA,ParameterValue=Yes"
-PARAMETERS="${PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
-PARAMETERS="${PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
-PARAMETERS="${PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
+TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
 
 CLOUD_FORMATION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/cloud-formation-result.json
 
 echo "${STACK_NAME}" > ${CURRENT_STACK_NAME_FILE}
 
 echo "Creating stack ${STACK_NAME} in aws..."
-run aws cloudformation create-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
+run aws cloudformation create-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${TEMPLATE_PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
 
 echo "Extracting StackId:"
 run get-stack-id.sh ${CLOUD_FORMATION_OUTPUT_FILE} | tee ${CURRENT_STACK_ID_FILE} 

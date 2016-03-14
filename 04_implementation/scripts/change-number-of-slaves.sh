@@ -9,34 +9,19 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-###################################################################################################
-########  All parameters are here, maybe change them to command line options later
-###################################################################################################
-
-TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
-KEY_PAIR_NAME="shmack-key-pair-01"
-PUBLIC_SLAVE_INSTANCE_COUNT=1
-
-###################################################################################################
-########  NOTHING to change below this line (no hardcoded values)
-###################################################################################################
+########  See shmack_env for shared parameters
 
 STACK_NAME=`cat ${CURRENT_STACK_NAME_FILE}`
 SLAVE_INSTANCE_COUNT="$1"
 
-# AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
-PARAMETERS=""
-PARAMETERS="${PARAMETERS} ParameterKey=AcceptEULA,ParameterValue=Yes"
-PARAMETERS="${PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
-PARAMETERS="${PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
-PARAMETERS="${PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
+TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
 
 CLOUD_FORMATION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/cloud-formation-update-result.json
 
 echo "${STACK_NAME}" > ${CURRENT_STACK_NAME_FILE}
 
 echo "Updating stack ${STACK_NAME} in aws to ${SLAVE_INSTANCE_COUNT} slave instances..."
-run aws cloudformation update-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
+run aws cloudformation update-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${TEMPLATE_PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
 
 date
 echo -n "Stack update initialized. Waiting for all EC2 instances ready..."
