@@ -5,15 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.ExecuteException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +15,7 @@ import com.zuehlke.shmack.sparkjobs.infrastructure.ExecExceptionHandling;
 import com.zuehlke.shmack.sparkjobs.infrastructure.ExecuteResult;
 import com.zuehlke.shmack.sparkjobs.infrastructure.ShmackUtils;
 
-public class RemoteSparkTestRunner extends ShmackTestBase {
+public class RemoteSparkTestRunner {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RemoteSparkTestRunner.class);
 
@@ -29,13 +23,6 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	private static final String DETAILS_FILENAME = "DETAILS";
 	private static final String STATUS_FILENAME = "STATUS";
 	private static final String RESULT_BIN_FILENAME = "RESULT.bin";
-	private static final String RESULT_TEXT_FILENAME = "RESULT.txt";
-
-	protected static JavaSparkContext createSparkContext(String appName) {
-		SparkConf sparkConf = new SparkConf().setAppName(appName);
-		JavaSparkContext jsc = new JavaSparkContext(sparkConf);
-		return jsc;
-	}
 
 	public static final String SUBMITTED = "SUBMITTED";
 	public static final String RUNNING = "RUNNING";
@@ -43,9 +30,14 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	public static final String SUCCESSFUL = "SUCCESSFUL";
 
 	private static final long STATUS_POLL_INTERVAL_MILLIS = 1_000;
+	
+	private static final File HDFS_RESSOURCES_DIRECTORY = new File(RemoteSparkTestRunner.SPARK_TESTS_HDFS_FOLDER,
+			"resources");
+
+	private static boolean ressourcesAlreadyInSync = false;
 
 	private String testcaseId;
-	private Class<? extends RemoteSparkTestBase> testClass;
+	private Class<?> testClass;
 
 	private static boolean fatJarAlreadyCopied;
 
@@ -57,7 +49,7 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	 *            used to create distinct directories for results and input
 	 *            files.
 	 */
-	public RemoteSparkTestRunner(Class<? extends RemoteSparkTestBase> testClass, String testcaseId) {
+	public RemoteSparkTestRunner(Class<?> testClass, String testcaseId) {
 		this.testClass = testClass;
 		if (testcaseId.contains(" ")) {
 			throw new IllegalArgumentException(
@@ -66,55 +58,20 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 		this.testcaseId = testcaseId;
 	}
 
-	public final void executeWithStatusTracking(TestableSparkJob<? extends Serializable> job) throws Exception {
-		boolean successful = false;
-		try (JavaSparkContext spark = createSparkContext(job.getApplicationName())) {
-			writeStatus(RUNNING, null);
-			Serializable result = job.execute(spark);
-			writeResultObject(result);
-			writeStatus(SUCCESSFUL, null);
-			successful = true;
-		} catch (Exception ex) {
-			writeStatus(FAILED, "Caught Exception: \n" + ex + " \n " + ExceptionUtils.getStackTrace(ex));
-			throw ex;
-		} finally {
-			if (!successful) {
-				writeStatus(FAILED,
-						"something really very bad happended. Maybe a java.lang.Error (which shall never be caught) ...");
-			}
-		}
+	static File getHdfsStatusFile(final Class<?> testClass, final String testcaseId) {
+		return new File(getHdfsTestJobFolder(testClass, testcaseId), STATUS_FILENAME);
 	}
 
-	private void writeResultObject(Serializable result) throws IOException, URISyntaxException {
-		File binFile = new File(getHdfsTestJobFolder(), RESULT_BIN_FILENAME);
-		HdfsUtils.writeObjectToHdfsFile(binFile, result);
+	static File getHdfsResultFile(final Class<?> testClass, final String testcaseId) {
+		return new File(getHdfsTestJobFolder(testClass, testcaseId), RESULT_BIN_FILENAME);
 	}
 
-	private void writeStatus(String status, String details) {
-		try {
-			HdfsUtils.writeStringToHdfsFile(getHdfsStatusFile(), status);
-			if (details != null) {
-				HdfsUtils.writeStringToHdfsFile(getHdfsDetailsFile(), details);
-			}
-		} catch (IOException | URISyntaxException e) {
-			throw new RuntimeException("Failed to write test status or details to HDFS", e);
-		}
+	static File getHdfsDetailsFile(final Class<?> testClass, final String testcaseId) {
+		return new File(getHdfsTestJobFolder(testClass, testcaseId), DETAILS_FILENAME);
 	}
 
-	private File getHdfsStatusFile() {
-		return new File(getHdfsTestJobFolder(), STATUS_FILENAME);
-	}
-
-	private File getHdfsResultFile() {
-		return new File(getHdfsTestJobFolder(), RESULT_BIN_FILENAME);
-	}
-
-	private File getHdfsDetailsFile() {
-		return new File(getHdfsTestJobFolder(), DETAILS_FILENAME);
-	}
-
-	private File getHdfsTestJobFolder() {
-		return new File(SPARK_TESTS_HDFS_FOLDER, testClass.getName() + "/" + testcaseId);
+	static File getHdfsTestJobFolder(final Class<?> testclass, final String testCaseId) {
+		return new File(SPARK_TESTS_HDFS_FOLDER, testclass.getName() + "/" + testCaseId);
 	}
 
 	private File getLocalTestJobFolder() {
@@ -125,20 +82,17 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 		return new File(getLocalTestJobFolder(), RESULT_BIN_FILENAME);
 	}
 
-	private File getLocalResultTextFile() {
-		return new File(getLocalTestJobFolder(), RESULT_TEXT_FILENAME);
-	}
-
 	public void executeSparkRemote(String... sparkMainArguments) throws Exception {
-		LOGGER.info("HDFS Working Directory: hdfs://hdfs" + getHdfsTestJobFolder().getAbsolutePath());
+		final File hdfsTestJobFolder = getHdfsTestJobFolder(testClass, testcaseId);
+		LOGGER.info("HDFS Working Directory: hdfs://hdfs" + hdfsTestJobFolder.getAbsolutePath());
 		LOGGER.info("Deleting old status and result files...");
-		ShmackUtils.deleteInHdfs(getHdfsTestJobFolder());
-		File hdfsJarFile = syncFatJatToHdfs();
+		ShmackUtils.deleteInHdfs(hdfsTestJobFolder);
+		final File hdfsJarFile = syncFatJatToHdfs();
 
 		String hdfsJarFileURL = ShmackUtils.getHdfsURL(hdfsJarFile);
 
 		LOGGER.info("Writing initial Job status to HDFS...");
-		ShmackUtils.writeStringToHdfs(getHdfsStatusFile(), SUBMITTED);
+		ShmackUtils.writeStringToHdfs(getHdfsStatusFile(testClass, testcaseId), SUBMITTED);
 
 		LOGGER.info("Submitting Spark-Job...");
 		CommandLine cmdLine = new CommandLine("bash");
@@ -173,12 +127,12 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	public void waitForSparkFinished() throws Exception {
 		String statusText;
 		do {
-			statusText = ShmackUtils.readStringFromHdfs(getHdfsStatusFile());
+			statusText = ShmackUtils.readStringFromHdfs(getHdfsStatusFile(testClass, testcaseId));
 			LOGGER.info("Status from HDFS-File:" + statusText);
 			Thread.sleep(STATUS_POLL_INTERVAL_MILLIS);
 		} while (RUNNING.equals(statusText) || SUBMITTED.equals(statusText));
 		if (!SUCCESSFUL.equals(statusText)) {
-			String errorDetails = ShmackUtils.readStringFromHdfs(getHdfsDetailsFile());
+			String errorDetails = ShmackUtils.readStringFromHdfs(getHdfsDetailsFile(testClass, testcaseId));
 			throw new RuntimeException("Spark Execution failed. Details: \n" + errorDetails);
 		}
 	}
@@ -187,15 +141,11 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 	public <T extends Serializable> T getRemoteResult() throws Exception {
 		File localResultFile = getLocalResultBinaryFile();
 		LOGGER.info("Copying result to " + localResultFile.getAbsolutePath() + " ...");
-		ShmackUtils.copyFromHdfs(getHdfsResultFile(), localResultFile);
+		ShmackUtils.copyFromHdfs(getHdfsResultFile(testClass, testcaseId), localResultFile);
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(localResultFile))) {
 			Object result = ois.readObject();
 			return (T) result;
 		}
-	}
-
-	public void writeRemoteResultAsStringToFile(Object remoteResult) throws IOException {
-		FileUtils.writeStringToFile(getLocalResultTextFile(), String.valueOf(remoteResult), StandardCharsets.UTF_8);
 	}
 
 	public int getDriverCores() {
@@ -212,6 +162,24 @@ public class RemoteSparkTestRunner extends ShmackTestBase {
 
 	public void setDriverMemory(String driverMemory) {
 		this.driverMemory = driverMemory;
+	}
+
+	public synchronized void syncTestRessourcesToHdfs() throws ExecuteException, IOException {
+		if (ressourcesAlreadyInSync) {
+			LOGGER.info("SKIPPING copy test resources to HDFS as already done before.");
+			return;
+		}
+		LOGGER.info("Copying test resources to HDFS: " + ShmackUtils.getHdfsURL( HDFS_RESSOURCES_DIRECTORY)) ;
+		ShmackUtils.syncFolderToHdfs(new File("src/test/resources"), HDFS_RESSOURCES_DIRECTORY);
+		ressourcesAlreadyInSync = true;
+	}
+
+	public static String getHdfsTestRessourcePath(String relativeRessourcePath) {
+		return "hdfs://hdfs" + HDFS_RESSOURCES_DIRECTORY.getAbsolutePath() + "/" + relativeRessourcePath;
+	}
+
+	static File getResultBinFile(final Class<?> testClass, final String testcaseId) {
+		return new File(getHdfsTestJobFolder(testClass, testcaseId), RESULT_BIN_FILENAME);
 	}
 
 }

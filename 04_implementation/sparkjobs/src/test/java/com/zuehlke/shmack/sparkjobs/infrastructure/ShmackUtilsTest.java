@@ -16,9 +16,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zuehlke.shmack.sparkjobs.base.ShmackTestBase;
-
-public class ShmackUtilsTest extends ShmackTestBase {
+public class ShmackUtilsTest {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ShmackUtilsTest.class);
 	
@@ -205,5 +203,12 @@ public class ShmackUtilsTest extends ShmackTestBase {
 		ShmackUtils.writeStringToHdfs(targetFileName, expectedContent);
 		String actualContent = ShmackUtils.readStringFromHdfs(targetFileName);
 		assertEquals(expectedContent, actualContent);
+	}
+	
+	protected static void assertExecuteResultStandardOutputContains(String expectedSubstring, ExecuteResult executeResult) {
+		if (executeResult.getStandardOutput().contains(expectedSubstring)) {
+			return;
+		}
+		fail("output of process does not contain '" + expectedSubstring + "': " + executeResult);
 	}
 }

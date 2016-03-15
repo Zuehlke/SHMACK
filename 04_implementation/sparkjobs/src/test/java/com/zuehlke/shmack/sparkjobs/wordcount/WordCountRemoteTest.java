@@ -1,25 +1,25 @@
 package com.zuehlke.shmack.sparkjobs.wordcount;
 
 import static org.junit.Assert.assertEquals;
+import static com.zuehlke.shmack.sparkjobs.wordcount.SortedCountAsserter.assertPosition;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zuehlke.shmack.sparkjobs.base.HdfsUtils;
-import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestBase;
+import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestExecutionContext;
 import com.zuehlke.shmack.sparkjobs.base.RemoteSparkTestRunner;
 import com.zuehlke.shmack.sparkjobs.base.SortedCounts;
 
-public class WordCountRemoteTest extends RemoteSparkTestBase {
+public class WordCountRemoteTest {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(WordCountRemoteTest.class);
 
 	@Test
 	public void testWordcountRemote() throws Exception {
-		syncTestRessourcesToHdfs();
-
-		RemoteSparkTestRunner runner = createTestRunner();
+		RemoteSparkTestRunner runner = new RemoteSparkTestRunner(WordCountRemoteTest.class, "myTest-1");
+		runner.syncTestRessourcesToHdfs();
 
 		runner.executeSparkRemote();
 		runner.waitForSparkFinished();
@@ -35,15 +35,11 @@ public class WordCountRemoteTest extends RemoteSparkTestBase {
 	public static void main(String[] args) throws Exception {
 		HdfsUtils.pingHdfs();
 
-		RemoteSparkTestRunner runner = createTestRunner();
-		String inputFile = getHdfsTestRessourcePath("tweets/tweets_big_data_2000.json");
+		RemoteSparkTestExecutionContext execution = new RemoteSparkTestExecutionContext(WordCountRemoteTest.class, "myTest-1");
+		String inputFile = RemoteSparkTestRunner.getHdfsTestRessourcePath("tweets/tweets_big_data_2000.json");
 		LOGGER.info("Using input file for testing: " + inputFile);
 		WordCount wordCount = new WordCount(inputFile);
-		runner.executeWithStatusTracking(wordCount);
-	}
-
-	private static RemoteSparkTestRunner createTestRunner() {
-		return new RemoteSparkTestRunner(WordCountRemoteTest.class, "myTest-1");
+		execution.executeWithStatusTracking(wordCount);
 	}
 
 }
