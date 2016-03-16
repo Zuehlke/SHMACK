@@ -10,17 +10,28 @@ else
 		CLI_OPTION=""
 fi		
 
-run sudo -H pip install --upgrade pip virtualenv dcoscli
+run pip install --upgrade pip virtualenv dcoscli
 run mkdir -p ${HOME}/.dcos/
 run dcos config set core.reporting true
 run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
 run dcos config set core.ssl_verify false
 run dcos config set core.timeout 5
-run dcos package install chronos ${CLI_OPTION} --yes
-run dcos package install hdfs ${CLI_OPTION} --yes
-run dcos package install marathon ${CLI_OPTION} --yes
-run dcos package install spark ${CLI_OPTION} --yes
-run dcos package install cassandra ${CLI_OPTION}
+run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
+
+for package in `cat ${CURRENT_STACK_INSTALL_PACKAGES_FILE}`
+do
+	run dcos package install ${package} ${CLI_OPTION} --yes
+done
+
+for package in `cat ${CURRENT_STACK_OPTIONAL_PACKAGES_FILE}`
+do
+	run dcos package install ${package} ${CLI_OPTION}
+done
+
+for package in `cat ${CURRENT_STACK_INSTALL_APPS_FILE}`
+do
+	run dcos package install --app ${package} ${CLI_OPTION}
+done
 
 date
 

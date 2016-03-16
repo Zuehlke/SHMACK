@@ -11,10 +11,27 @@ cd `dirname ${BASH_SOURCE[0]}`
 # Number of worker nodes. Need significant memory and fast I/O, so usually configured to
 # use m3.xlarge instances (4 vCPU, 15 GB Memory, 2x40 GB SSD; about 0.15 USD per hour each)
 # Theoretically, a minimum of 3 could work, but so far, 5 was needed to run a cluster without problems.
-# Wihtout special setup with Amazon, you can run up to 40 nodes per region; 
+# Without special setup with Amazon, you can run up to 40 nodes per region; 
 # so leaving aside the 3 infrastructure nodes (master + backup, public slave), 
 # this leaves you the potential to start at most 37 worker slave instances. 
+#
+# If memory becomes the bottleneck, better switch to memory optimized instances like r3.xlarge
+# (https://aws.amazon.com/ec2/instance-types/) instead of cranking up generic instance count.
 SLAVE_INSTANCE_COUNT=5
+
+# Space-separated list of packages to install (without asking)
+# 'hdfs' and 'spark' are needed to run the spark unit tests.
+# You can later install additional packages using 'dcos package install'
+INSTALL_PACKAGES="hdfs spark chronos marathon marathon-lb"
+
+# Space-separated list of optional packages to install if user confirms with 'yes' 
+# You can later install additional packages using 'dcos package install'
+OPTIONAL_PACKAGES="cassandra"
+
+# Space-separated list of apps to install (without asking)
+# 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb'
+# You can later install additional packages using 'dcos package install --app'
+INSTALL_APPS="zeppelin"
 
 ###################################################################################################
 ########  NOTHING to change below this line (no hardcoded values)
@@ -64,5 +81,13 @@ date
 
 getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
+
+run aws ec2 describe-security-groups --filters "Name=description,Values=Mesos Slaves Public" --query 'SecurityGroups[].GroupId' --output text > ${CURRENT_PUBLIC_SLAVE_SECGROUP_FILE}
+run aws ec2 describe-instances --filters "Name=instance-state-code,Values=16" "Name=instance.group-id,Values=`cat ${CURRENT_PUBLIC_SLAVE_SECGROUP_FILE}`" --query 'Reservations[].Instances[].[PublicDnsName,Tags[?Key==Name].Value[]]' --output text > ${CURRENT_PUBLIC_SLAVE_DNS_NAME_FILE}
+
+echo ${INSTALL_PACKAGES} > ${CURRENT_STACK_INSTALL_PACKAGES_FILE}
+echo ${OPTIONAL_PACKAGES} > ${CURRENT_STACK_OPTIONAL_PACKAGES_FILE}
+echo ${INSTALL_APPS} > ${CURRENT_STACK_INSTALL_APPS_FILE}
+echo ${OPTIONAL_APPS} > ${CURRENT_STACK_OPTIONAL_APPS_FILE}
 
 run init-dcos-stack.sh

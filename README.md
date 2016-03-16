@@ -65,19 +65,10 @@ Everything can be performed free of charge until you start up nodes in the cloud
   * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
   * `sudo apt-get install xsel git`
-  * setup GIT (source of commands: https://help.github.com/articles/set-up-git/ )
-    * `git config --global user.name "YOUR NAME"`
-    * `git config --global user.email "your_GITHUB_email_address@example.com"`
-    * `git config --global push.default simple`
-    * Setup github Credentials
-      * `git config --global credential.helper cache`
-      * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
-    * Optional: You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
-      More clients listed on https://git-scm.com/downloads/guis.  
-  * `mkdir ${HOME}/shmack`
-  * `cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+  * `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
   * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
     * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
+    * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
     * Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
       for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
     * Optional: DCOS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
@@ -88,6 +79,15 @@ alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
 export PATH
 ```
+  * Optional: setup git for commandline usage (source of commands: https://help.github.com/articles/set-up-git/ )
+    * `git config --global user.name "YOUR NAME"`
+    * `git config --global user.email "your_GITHUB_email_address@example.com"`
+    * `git config --global push.default simple`
+    * Setup github Credentials
+      * `git config --global credential.helper cache`
+      * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
+    * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
+      More clients listed on https://git-scm.com/downloads/guis.  
   * Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
     install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
@@ -214,8 +214,9 @@ setup dcos packeges to form SHMACK.
 # FAQ
 <a name="avoidBill" />
 ## How do I avoid to be surprised by a monthly bill of **1700 $** ?
-Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. 
-Set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences). 
+Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. You also install the [AWS Console Mobile App](https://aws.amazon.com/console/mobile/) to even have an eye on the running instances and aggregated costs when you are sitting at your desk - and take actions if needed. 
+
+To not constantly poll the costs, set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences).
 
 And then: be careful when to start and stop the AWS instances.
 As of 2015-10-23 there is **no** officially supported way to suspend AWS EC2 instances.
@@ -298,6 +299,10 @@ will complain with
 to ensure that workers are registered and have sufficient memory```
 
 **TODO** Figure out, what's wrong. Tried to set [coarse grained mode and docker image](http://spark.apache.org/docs/latest/running-on-mesos.html) as `--conf` options, but didn't help.  
+
+* [Apache Zeppelin](http://zeppelin.incubator.apache.org/) can replace the need for interactive data analysis and provide even nice visualizations. You access Zeppelin on your running stack simply with: `open-shmack-zeppelin.sh`
+The URL of Zeppelin will be available also outside the VM.
+
 
 <a name="checkStackSetup" />
 ## What should I do to check if the setup was successful?
@@ -395,11 +400,19 @@ You can do this ...
 
 # Troubleshooting
 ## I get a `SignatureDoesNotMatch` error in aws-cli.
+In detail, stack operation reports somethning like:
+`A client error (SignatureDoesNotMatch) occurred when calling the CreateStack operation: Signature expired: 20160315T200648Z is now earlier than 20160316T091536Z (20160316T092036Z - 5 min.)`
+
 Likely the clock of your virtual maching is wrong. 
+
 To fix this:
 * Shutdown VM completely (reboot is *not* enough in VirtualBox)
 * Start VM
 * Now the clock of the VM should be OK and aws-cli should work fine again.
+
+Just to be on the safe side, you should probably also update the AWS Commandline Interface:
+* `sudo -H pip install --upgrade awscli`
+
 
 <a name="forgotCred" />
 ## I forgot my AWS credentials / closed the browser too early.
