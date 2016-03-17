@@ -17,7 +17,7 @@ run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
 run dcos config set core.ssl_verify false
 run dcos config set core.timeout 5
 
-if [ "Multiverse" != `dcos package repo list | grep --only-matching Multiverse` ]
+if [ "MultiversePresent" != "`dcos package repo list | grep --only-matching Multiverse`Present" ]
 	then
 		run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
 fi
@@ -32,7 +32,7 @@ do
 	run dcos package install ${package} ${CLI_OPTION}
 done
 
-if [ "" == ${CLI_OPTION} ]
+if [ "Noop" == "${CLI_OPTION}Noop" ]
 	then
 		# In contrast to packages, apps don't have a --cli option and need to be installed only once
 		# They also don't ask for confirmation, so --yes makes no difference 
