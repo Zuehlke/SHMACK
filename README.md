@@ -29,13 +29,13 @@ For production, there would be many things needed to be done first anyway (see [
 running costs would be a rather minor issue.
 
 # Vision
-* We want like to be fast when ramping up cloud infrastructure.
+* We want to be fast when ramping up cloud infrastructure.
 * We do not want to answer "we never did this" to customers when asked.
 * We want to know what the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
 * We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning to acquire customers and be able to show competence not only on paper, but running in the cloud.
 
 # Installation
-Everything can be performed free of charge until you start up nodes in the cloud (called "Stack creation"). 
+Everything can be performed free of charge until you start up nodes in the cloud (called [Stack creation](stackCreation)). 
 
 
 ## Register accounts
@@ -54,7 +54,6 @@ Everything can be performed free of charge until you start up nodes in the cloud
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
     This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
-  * Hint: If Copy/Paste does not work, check whether VM-tools are installed.
 * In the Virtual machine
   * `sudo apt-get install xsel git`
   * `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
@@ -237,18 +236,6 @@ In principle, you can. But be aware that you may block each other with running t
 * Finally, when you are all done
 	* One of you has to [Delete the stack](#stackDeletion) 
 	* Delete/inactivate the additional accounts in htps://console.aws.amazon.com/iam/home?region=us-west-1
-
-<a name="backlog" />
-## Where is the Backlog?
-The Backlog is an Excel-File which contains for each story
-- the short name 
-- the Category 
-- the link to the Issue in github (which contains the details description of the story)
-
-We use the Excel-Format due to the following reasons: 
-1. we want to prioritize the issues
-2. we want to filter for open issues only (otherwise the backlog would become too long)
-3. we do not (yet) want to introduce another tool like trello to keep thing simple and together.
 
 <a name="nonImplFiles" />
 ## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?
