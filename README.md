@@ -45,90 +45,92 @@ Everything can be performed free of charge until you start up nodes in the cloud
 
 <a name="devEnvSetup" />
 ## Development Environment setup
-* Create a Virtual Machine
-  * assign at least 4 GB RAM and 30 GB HDD! 
-  * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
-    * Would prefer an LTS version, but **14.04 is too outdated and some of the installed certificates are no longer accepted**.
-    * Maybe 16.04 LTS will work fine again. But until it comes out, better stick to 15.10 which is known to cause no major headaches. 
-  * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
+You will need a (for now) a Linux machine to control and configure the running SHMACK stack. 
+You will also need that in order to develop and contribute. 
+
+### Create a Virtual Machine
+* assign at least 4 GB RAM and 30 GB HDD! 
+* Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+  * Would prefer an LTS version, but **14.04 is too outdated and some of the installed certificates are no longer accepted**.
+  * Maybe 16.04 LTS will work fine again. But until it comes out, better stick to 15.10 which is known to cause no major headaches. 
+* Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
     This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
-* In the Virtual machine
-  * `sudo apt-get install xsel git`
-  * `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
-  * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
-    * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
-    * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
-    * Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
-      for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
-    * Optional: DCOS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
-  * Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.bashrc`
+### In the Virtual machine
+* `sudo apt-get install xsel git`
+* `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+* `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
+  * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
+  * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
+* Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
+  for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
+* Optional: DCOS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
+* Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.bashrc`
 ```
 alias cds='cd ${HOME}/shmack/repo/'
 alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
 export PATH
 ```
-  * Optional: setup git for commandline usage (source of commands: https://help.github.com/articles/set-up-git/ )
-    * `git config --global user.name "YOUR NAME"`
-    * `git config --global user.email "your_GITHUB_email_address@example.com"`
-    * `git config --global push.default simple`
-    * Setup github Credentials
-      * `git config --global credential.helper cache`
-      * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
-    * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
-      More clients listed on https://git-scm.com/downloads/guis.
-  * Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
+* Optional: setup git for commandline usage (source of commands: https://help.github.com/articles/set-up-git/ )
+  * `git config --global user.name "YOUR NAME"`
+  * `git config --global user.email "your_GITHUB_email_address@example.com"`
+  * `git config --global push.default simple`
+  * Setup github Credentials
+    * `git config --global credential.helper cache`
+    * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
+  * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
+    More clients listed on https://git-scm.com/downloads/guis.
+* Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
     install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
-  * Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
-    * Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
-      * https://console.aws.amazon.com/iam/home?#users
-      * Username: `shmack`
-      * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
-    * `aws configure`
-      * `AWS Access Key ID [None]: [from browser page]`
-      * `AWS Secret Access Key [None]: [from browser page]`
-      * `Default region name [None]: us-west-1`  (VERY important, DO NOT change this!)
-      * `Default output format [None]: json`
-    * Assign Admin-Permissions to user `shmack` (Tab "Permissions", --> "Attach Policy" --> "Administrator Access"): 
-https://console.aws.amazon.com/iam/home?#users/shmack 
-    * Create a AWS Key-Pair in region **us-west-1**: 
+### Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
+* Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
+  * https://console.aws.amazon.com/iam/home?#users
+  * Username: `shmack`
+  * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
+* `aws configure`
+  * `AWS Access Key ID [None]: [from browser page]`
+  * `AWS Secret Access Key [None]: [from browser page]`
+  * `Default region name [None]: us-west-1`  (VERY important, DO NOT change this!)
+  * `Default output format [None]: json`
+* Assign Admin-Permissions to user `shmack` (Tab "Permissions", --> "Attach Policy" --> "Administrator Access"): https://console.aws.amazon.com/iam/home?#users/shmack 
+  * Create a AWS Key-Pair in region **us-west-1**: 
 https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:sort=keyName
-      * Key pair name: `shmack-key-pair-01` 
-        **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
-      * Create .ssh directory `mkdir ${HOME}/.ssh`
-      * Save the key pair (copy-paste is OK) `gedit ${HOME}/.ssh/shmack-key-pair-01.pem`
-        **Attention: Use exactly this filename as it is referenced in the scripts!**
-      * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
-      * `ssh-add ${HOME}/.ssh/shmack-key-pair-01.pem`
-      * **WARNING**: Keep your credentials and keypair safe. <font color="red">**Never, ever commit them** into a public github repo.</font>
-	If someone steals and abuses them, the costs may easily exceed anything [you were afraid of](#avoidBill).
+    * Key pair name: `shmack-key-pair-01` 
+      **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
+    * Create .ssh directory `mkdir ${HOME}/.ssh`
+    * Save the key pair (copy-paste is OK) `gedit ${HOME}/.ssh/shmack-key-pair-01.pem`
+      **Attention: Use exactly this filename as it is referenced in the scripts!**
+    * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
+    * `ssh-add ${HOME}/.ssh/shmack-key-pair-01.pem`
+    * **WARNING**: Keep your credentials and keypair safe. <font color="red">**Never, ever commit them** into a public github repo.</font>
+    If someone steals and abuses them, the costs may easily exceed anything [you were afraid of](#avoidBill).
 	And there shouldn't be a need to commit them in first place, so don't do it!
 	Your local installation knows your credentials through `aws configure`, 
 	so you don't need to store them for SHMACK. 
 	The only case in which you may need some AWS credentials otherwise, may probably be to copy data from S3.
 	Make sure you always perform this as one-time operations you do not need to commit! 
 
-  * Download, install, and configure Eclipse for the use in SHMACK
-    * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
-    * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
-  * Add gradle support to eclipse
-    * open `eclipse`
-    * Open `Help --> Eclipse Marketplace`
-    * Install `Gradle IDE Pack`
-  * Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
-    * "Import" --> "Gradle Project"
-    * Click "Build model"
-    * Select all projects
-  * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
-    * Provides a nice support for editing shell scripts in Eclipse
-    * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
-    * Select "ShellEd IDE" and "Python IDE" and "next" to install
-  * Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
-    * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
-    * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
+### Download, install, and configure Eclipse for the use in SHMACK
+* Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
+* Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
+* Add gradle support to eclipse
+  * open `eclipse`
+  * Open `Help --> Eclipse Marketplace`
+  * Install `Gradle IDE Pack`
+* Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
+  * "Import" --> "Gradle Project"
+  * Click "Build model"
+  * Select all projects
+* Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
+  * Provides a nice support for editing shell scripts in Eclipse
+  * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
+  * Select "ShellEd IDE" and "Python IDE" and "next" to install
+* Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
+  * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
+  * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
     
 ## Stack Creation and Deletion 
 Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
