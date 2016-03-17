@@ -5,8 +5,14 @@ cd `dirname ${BASH_SOURCE[0]}`
 
 if [ -e ${STATE_TAR_FILE} ]
 	then 
-		run rm -r ${HOME}/.dcos/
-		run rm -r ${CURRENT_STATE_DIR}
+		if [ -e ${HOME}/.dcos/ ]
+			then
+				run rm -r ${HOME}/.dcos/
+		fi
+		if [ -e ${CURRENT_STATE_DIR} ]
+			then
+				run rm -r ${CURRENT_STATE_DIR}
+		fi
 		echo "Populating state..."
 		run tar xzvf ${STATE_TAR_FILE}
 

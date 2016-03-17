@@ -16,7 +16,11 @@ run dcos config set core.reporting true
 run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
 run dcos config set core.ssl_verify false
 run dcos config set core.timeout 5
-run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
+
+if [ "Multiverse" != `dcos package repo list | grep --only-matching Multiverse` ]
+	then
+		run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
+fi
 
 for package in `cat ${CURRENT_STACK_INSTALL_PACKAGES_FILE}`
 do
@@ -28,11 +32,15 @@ do
 	run dcos package install ${package} ${CLI_OPTION}
 done
 
-for package in `cat ${CURRENT_STACK_INSTALL_APPS_FILE}`
-do
-	run dcos package install --app ${package} ${CLI_OPTION}
-done
-
+if [ "" == ${CLI_OPTION} ]
+	then
+		# In contrast to packages, apps don't have a --cli option and need to be installed only once
+		# They also don't ask for confirmation, so --yes makes no difference 
+		for package in `cat ${CURRENT_STACK_INSTALL_APPS_FILE}`
+		do
+			run dcos package install --app ${package}
+		done
+fi
 date
 
 run update-node-info.sh
