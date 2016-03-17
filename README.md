@@ -28,31 +28,23 @@ If the days are limited, e.g. for just a few days of experimentation, than this 
 For production, there would be many things needed to be done first anyway (see [Limitations](#limitations)) - so 
 running costs would be a rather minor issue.
 
-# What do I need to read before working on this project? --> Exactly THIS! #
-* Backlog is an Excel-File in order to prioritize and filter issues: **[here](#backlog)**
-* Details for Backlog-Items are github issues with a link from the Backlog
-* Any files used for work on specific issues can be found **[here](https://github.com/Zuehlke/SHMACK/tree/master/03_analysis_design/Issues)**, see also **[FAQ](#nonImplFiles)**
-* Whatever can be automated shall be automated and checked in the `04_implementation` folder **[here](https://github.com/Zuehlke/SHMACK/tree/master/04_implementation)** (common sense may be applied ;-)
-* The [Vision](#vision)
-* [Installation instructions](#installation)
-
-# Vision #
+# Vision
 * We want like to be fast when ramping up cloud infrastructure.
 * We do not want to answer "we never did this" to customers when asked.
 * We want to know what the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
-* We want to create a RUA for Machine Learning to acquire customers and show competence.
+* We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning to acquire customers and be able to show competence not only on paper, but running in the cloud.
 
-### Installation
+# Installation
 Everything can be performed free of charge until you start up nodes in the cloud (called "Stack creation"). 
 
 
-#### Register accounts
+## Register accounts
 * Create GitHub account (if you don't have one yet): https://github.com/join
 * Create AWS account **[here](https://aws.amazon.com/de/)**
 
 
 <a name="devEnvSetup" />
-#### Development Environment setup
+## Development Environment setup
 * Create a Virtual Machine
   * assign at least 4 GB RAM and 30 GB HDD! 
   * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
@@ -87,7 +79,7 @@ export PATH
       * `git config --global credential.helper cache`
       * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
     * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
-      More clients listed on https://git-scm.com/downloads/guis.  
+      More clients listed on https://git-scm.com/downloads/guis.
   * Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
     install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
@@ -112,8 +104,15 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
         **Attention: Use exactly this filename as it is referenced in the scripts!**
       * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
       * `ssh-add ${HOME}/.ssh/shmack-key-pair-01.pem`
+      * **WARNING**: Keep your credentials and keypair safe. <font color="red">**Never, ever commit them** into a public github repo.</font>
+	If someone steals and abuses them, the costs may easily exceed anything [you were afraid of](#avoidBill).
+	And there shouldn't be a need to commit them in first place, so don't do it!
+	Your local installation knows your credentials through `aws configure`, 
+	so you don't need to store them for SHMACK. 
+	The only case in which you may need some AWS credentials otherwise, may probably be to copy data from S3.
+	Make sure you always perform this as one-time operations you do not need to commit! 
 
-  * Download and install eclipse
+  * Download, install, and configure Eclipse for the use in SHMACK
     * Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
     * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
   * Add gradle support to eclipse
@@ -131,18 +130,15 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
     * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
     * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
-  * Optional: If you prefer to work also  occasionally from OS X or Windows, install also the following on your OS of choice:
-    * [AWS Commandline Client](http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os) 
-    * [Docker Toolbox](https://www.docker.com/products/docker-toolbox) 
     
-#### Stack Creation and Deletion 
+## Stack Creation and Deletion 
 Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
 some of directly accessible (acting as gateways), others only accessible through the gateway nodes.¨
 The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
 setup dcos packeges to form SHMACK.
 
 <a name="stackCreation" />
-##### Stack Creation (from now on, you pay for usage)
+### Stack Creation (from now on, you pay for usage)
   * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
@@ -160,7 +156,7 @@ setup dcos packeges to form SHMACK.
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
   
 <a name="stackDeletion" />
-##### Stack Deletion
+### Stack Deletion
   * Option 1 (recommended):
     `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
   * Option 2 (manual):
@@ -172,12 +168,12 @@ setup dcos packeges to form SHMACK.
 	* ... there are no autoscaling groups left: https://us-west-1.console.aws.amazon.com/ec2/autoscaling/home
 	* ... there are no running EC2 instances or Volumes: https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1
 
-#### Affiliate
-* Focusgroup - Big Data / Cloud
+# Affiliate
+* Zühlke Focusgroup - Big Data / Cloud
 * Team - TODO
 * Initiator - wgi
 
-# Links #
+# Links
 * [Mesosphere Homepage](https://mesosphere.com/)
 * [Documentation](http://docs.mesosphere.com/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
@@ -189,18 +185,11 @@ setup dcos packeges to form SHMACK.
   * [APPLE DETAILS HOW IT REBUILT SIRI ON MESOS](https://mesosphere.com/blog/2015/04/23/apple-details-j-a-r-v-i-s-the-mesos-framework-that-runs-siri/)
 * Other Ressources
   * AMP Lab - Reference Architecture: https://amplab.cs.berkeley.edu/software/
-  * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/  
+  * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/
   * Public Datasets (S3): https://aws.amazon.com/de/public-data-sets/
   * Reference Architecture for Netflix Style recommendation engines: https://github.com/fluxcapacitor
   * Apache Spark Example Use Cases (with Code): https://github.com/4Quant
   * Apache Spark Twitter Word Count: https://github.com/snowplow/spark-example-project
-
-
-# Glossary
-| Term | Definition |
-|--------|--------|
-| Issue  | = Can be a **"User Story"** (to be in sync with scrum and github terminology) or a **Bug**|
-
 
 <a name="limitations" />
 # Important Limitations / Things to consider before going productive
@@ -226,6 +215,11 @@ The only official supported way to stop AWS bills is to completely delete the st
 **ATTENTION**: 
 * To delete a stack it is not sufficient to just terminate the EC2 instances as they are contained in an autoscaling group.
 * To delete a stack see **[here](#stackDeletion)**
+
+And make sure, you keep your credentials for AWS safe!
+* Never commit your AWS key ID + Secret Access Key to a repository, in particular not to a public one. There are [reports of people actively exploiting this](http://readwrite.com/2014/04/15/amazon-web-services-hack-bitcoin-miners-github/). Probably we could integegarte [Git Secrets](https://github.com/awslabs/git-secrets)...
+* The same is probably true for your `shmack-key-pair-01.pem`, although this will usually only grant access to your running instances; not the option to run new instances and thus create additional costs.
+* Whenever in doubt, better inactive and delete your AWS credentials and create new ones as described in [lost credentials](#forgotCred). 
 
 <a name="shareCluster" />
 ## Can I share a running cluster with other people I work with to reduce costs?
