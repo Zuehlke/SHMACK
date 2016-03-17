@@ -58,7 +58,7 @@ You will also need that in order to develop and contribute.
   * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
     This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
 ### In the Virtual machine
-* `sudo apt-get install xsel git`
+* `sudo apt-get install git`
 * `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
 * `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
   * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
@@ -101,7 +101,8 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
     * Key pair name: `shmack-key-pair-01` 
       **Attention: Use exactly this Key pair name as it is referenced in the scripts!**
     * Create .ssh directory `mkdir ${HOME}/.ssh`
-    * Save the key pair (copy-paste is OK) `gedit ${HOME}/.ssh/shmack-key-pair-01.pem`
+    * Save the key pair. Most likely, your browser will download the file automatically to the Downloads folder. 
+      If not, and the key pair appears in the browser, copy-paste is OK, open an editor to copy to and save it with: `gedit ${HOME}/.ssh/shmack-key-pair-01.pem`
       **Attention: Use exactly this filename as it is referenced in the scripts!**
     * `chmod 600 ${HOME}/.ssh/shmack-key-pair-01.pem`
     * `ssh-add ${HOME}/.ssh/shmack-key-pair-01.pem`
@@ -114,14 +115,14 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 	Make sure you always perform this as one-time operations you do not need to commit! 
 
 ### Download, install, and configure Eclipse for the use in SHMACK
-* Download `Eclipse IDE for Java EE Developers ` from https://www.eclipse.org/downloads/ 
+* Download `Eclipse IDE for Java EE Developers` as 64 bit for Linux from https://www.eclipse.org/downloads/ 
 * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
 * Add gradle support to eclipse
-  * open `eclipse`
+  * open `eclipse/eclipse`
   * Open `Help --> Eclipse Marketplace`
-  * Install `Gradle IDE Pack`
+  * Install `Gradle (STS) IDE Pack`
 * Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
-  * "Import" --> "Gradle Project"
+  * "Import" --> "Gradle (STS) Project"
   * Click "Build model"
   * Select all projects
 * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
@@ -144,13 +145,15 @@ setup dcos packeges to form SHMACK.
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
+  * In order to automatically install, update, and configure the [DCOS Commandline Interface](https://docs.mesosphere.com/administration/cli/install-cli/), 
+    you will be prompted to enter your passwword as part of the installation process needs to run via sudo.  
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
-  * `Modify your bash profile to add DCOS to your PATH? [yes/no]` --> yes (first time only)
-  * Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
+  * DCOS will now install the packages defined in `create-stack.sh`
+  	* Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
     * Even after the command returns, it will still take some time until every package is fully operational
     * In the Mesos Master UI you will see them initially in status "Idle" or "Unhealthy" until they converge to "Healthy",
-    in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
-  * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts)
+      in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
+  * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts, needed among others for unit tests to run without manual interaction)
     * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
     * Confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
