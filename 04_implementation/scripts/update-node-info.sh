@@ -3,6 +3,8 @@
 cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
 
+run mkdir --parents ${TMP_OUTPUT_DIR}
+
 MASTER_NODE_METADATA_FILE=${TMP_OUTPUT_DIR}/master-node-metadata.json
 # as of 2015-11-04 this file contains exactly this JSON: 
 # {"PUBLIC_IPV4": "54.183.250.79"}

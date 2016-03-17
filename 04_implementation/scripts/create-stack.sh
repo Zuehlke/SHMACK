@@ -37,8 +37,8 @@ INSTALL_APPS="zeppelin"
 ########  NOTHING to change below this line (no hardcoded values)
 ###################################################################################################
 
-run mkdir -p ${TMP_OUTPUT_DIR}
-run mkdir -p ${CURRENT_STATE_DIR}
+run mkdir --parents ${TMP_OUTPUT_DIR}
+run mkdir --parents ${CURRENT_STATE_DIR}
 
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
 
