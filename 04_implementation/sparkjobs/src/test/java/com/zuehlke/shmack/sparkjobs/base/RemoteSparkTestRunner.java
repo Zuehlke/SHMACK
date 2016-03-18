@@ -96,7 +96,7 @@ public class RemoteSparkTestRunner {
 
 		LOGGER.info("Submitting Spark-Job...");
 		CommandLine cmdLine = new CommandLine("bash");
-		cmdLine.addArgument("submit-spark-job.sh");
+		cmdLine.addArgument(ShmackUtils.determineScriptDir() + "submit-spark-job.sh");
 		cmdLine.addArgument("-Dspark.mesos.coarse=true");
 		cmdLine.addArgument("--driver-cores");
 		cmdLine.addArgument(String.valueOf(getDriverCores()));
