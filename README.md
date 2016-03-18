@@ -125,6 +125,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * "Import" --> "Gradle (STS) Project"
   * Click "Build model"
   * Select all projects
+* Optional: Perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs  
 * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
   * Provides a nice support for editing shell scripts in Eclipse
   * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
@@ -132,6 +133,19 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 * Optional: Install Eclipse support for Scala from http://scala-ide.org/download/current.html
   * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
   * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
+
+### Optional: Use IntelliJ IDEA for the use in SHMACK
+* Download and install IntelliJ IDEA ... so far, the Community Edition should be sufficient.
+* Open IntelliJ and make sure, you have a JVM configured. If not, first create a new empty project to configure it!
+  * In new project, set for Java the Project SDK to a new JDK and select /usr/lib/jvm/java-1.8.0-openjdk-amd64`
+  * You may also select Scala with use new library, download scala version 2.10.5
+* Select File -> New -> Project from existing sources... -> /home/shmacky/shmack/repo/04_implementation
+  * Import project from external model -> Gradle
+  * Use gradle wrapper task configuration
+  * Finish -> This Window -> confirm selection of three modules with `Ok` -> And `Add root` when prompted
+* It wil take quite some time until scanning for files to index finishes
+* You may now perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs 
+
     
 ## Stack Creation and Deletion 
 Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
@@ -300,6 +314,7 @@ Look at the examples:
 * `JavaSparkPiLocalTest`
 * `WordCountLocalTest`
 
+<a name="sparkTests" />
 ## How can I execute Unit-Tests on a remote Spark instance (i.e. in the Amazon EC2 cluster)?
 Look at the examples:
 * `JavaSparkPiRemoteTest`
