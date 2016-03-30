@@ -24,6 +24,6 @@ echo "  (If this blocks, make sure the network does allow ssh. Most Corporate Ne
 ## but the SLAVE_ID is not just an index, but the true ID ... and there's not yet an easy way to determine that :-( 
 ssh -A -t -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} ssh -A -t core@${SLAVE_INTERNAL_IP}
 
-# we do NOT want to use "dcos node ssh --master-proxy --slave=${SLAVE_ID}" as we cannot reliably determine which slave Adress or IP is used.
+# we do NOT want to use "dcos node ssh --master-proxy --slave=${SLAVE_ID}" as we cannot reliably determine which slave address or IP is used.
 # to know this is important for sync-to-dcos-master-and-slave.sh to work without a new authentification.
 
