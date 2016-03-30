@@ -216,7 +216,10 @@ setup dcos packeges to form SHMACK.
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
 * Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented.
 * Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
-
+* Not all DCOS Packages are production ready. 
+  * Those from [Mesosphere Universe](https://github.com/mesosphere/universe) should in a useable state, 
+    but even for Spark the info states that it is still "in beta and there may be bugs, incomplete features, incorrect documentation or other discrepencies"
+  * Those from [Mesosphere Multiverse](https://github.com/mesosphere/multiverse) are all experimental.
 
 # FAQ
 <a name="avoidBill" />
@@ -255,6 +258,14 @@ In principle, you can. But be aware that you may block each other with running t
 * Finally, when you are all done
 	* One of you has to [Delete the stack](#stackDeletion) 
 	* Delete/inactivate the additional accounts in htps://console.aws.amazon.com/iam/home?region=us-west-1
+
+## What components are available?
+That changes constantly as Mesosphere adds packages to DCOS. And we provide our own.
+* As of 2016-03-30, everything for SMACK/[Mesosphere Infinity](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/) seems to be available, *except Akka*. 
+* [Mesosphere Universe Packages](https://github.com/mesosphere/universe/tree/version-2.x/repo/packages) 
+* [Mesosphere Multiverse Packages](https://github.com/mesosphere/multiverse/tree/version-2.x/repo/packages)
+* Or type `dcos package search` to get the current list for your configured repositories.
+* ... but keep in mind the [limitations](#limitations)
 
 <a name="nonImplFiles" />
 ## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?
