@@ -35,7 +35,7 @@ running costs would be a rather minor issue.
 * We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning to acquire customers and be able to show competence not only on paper, but running in the cloud.
 
 # Installation
-Everything can be performed free of charge until you start up nodes in the cloud (called [Stack creation](stackCreation)). 
+Everything can be performed free of charge until you start up nodes in the cloud (called [Stack creation](#stackCreation)). 
 
 
 ## Register accounts
@@ -57,10 +57,11 @@ You will also need that in order to develop and contribute.
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
     This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
+
 ### In the Virtual machine
-* `sudo apt-get install git`
-* `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
-* `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
+* Install git: `sudo apt-get install git`
+* Clone the SHMACK repository: `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
+* Run the setup script: `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
   * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
   * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
 * Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
@@ -85,12 +86,13 @@ export PATH
 * Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
     install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
-### Setup AWS console (Source: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html )
-* Create AWS user including AWS Access Key (can be deleted to revoce access from VM)
+### Setup AWS console 
+Details can be found in: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+* Create AWS user including AWS Access Key (can be deleted to revoke access from VM)
   * https://console.aws.amazon.com/iam/home?#users
   * Username: `shmack`
   * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
-* `aws configure`
+* Run `aws configure`
   * `AWS Access Key ID [None]: [from browser page]`
   * `AWS Secret Access Key [None]: [from browser page]`
   * `Default region name [None]: us-west-1`  (VERY important, DO NOT change this!)
@@ -134,7 +136,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * Install new software... Add `http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/site`
   * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
 
-### Optional: Use IntelliJ IDEA for the use in SHMACK
+### Optional: Use IntelliJ IDEA for SHMACK
 * Download and install IntelliJ IDEA ... so far, the Community Edition should be sufficient.
 * Open IntelliJ and make sure, you have a JVM configured. If not, first create a new empty project to configure it!
   * In new project, set for Java the Project SDK to a new JDK and select /usr/lib/jvm/java-1.8.0-openjdk-amd64`
@@ -160,7 +162,7 @@ setup dcos packeges to form SHMACK.
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * In order to automatically install, update, and configure the [DCOS Commandline Interface](https://docs.mesosphere.com/administration/cli/install-cli/), 
-    you will be prompted to enter your passwword as part of the installation process needs to run via sudo.  
+    you will be prompted to enter your passwword as part of the installation process needs to run via sudo.
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * DCOS will now install the packages defined in `create-stack.sh`
   	* Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
@@ -193,14 +195,16 @@ setup dcos packeges to form SHMACK.
 
 # Links
 * [Mesosphere Homepage](https://mesosphere.com/)
-* [Documentation](http://docs.mesosphere.com/)
+* [Documentation](http://docs.mesosphere.com/), in particular Architecture of [Components](https://docs.mesosphere.com/administration/dcosarchitecture/components/) and [Network Security](https://docs.mesosphere.com/administration/dcosarchitecture/security/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
-* [DCOS Service Availability](https://docs.mesosphere.com/reference/servicestatus/)
 * Articles
-  * [MESOSPHERE DATACENTER OPERATING SYSTEM IS NOW GENERALLY AVAILABLE](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
-  * [MEET A NEW VERSION OF SPARK, BUILT JUST FOR THE DCOS](https://mesosphere.com/blog/2015/06/15/meet-a-new-version-of-spark-built-just-for-the-dcos/)
-  * [EVERYTHING YOU NEED TO KNOW ABOUT SCALA AND BIG DATA](https://mesosphere.com/blog/2015/07/24/learn-everything-you-need-to-know-about-scala-and-big-data-in-oakland/)
-  * [APPLE DETAILS HOW IT REBUILT SIRI ON MESOS](https://mesosphere.com/blog/2015/04/23/apple-details-j-a-r-v-i-s-the-mesos-framework-that-runs-siri/)
+  * [The Mesosphere Datacenter Operating System is now generally available](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
+  * [Meet a new version of Spark, built just for the DCOS](https://mesosphere.com/blog/2015/06/15/meet-a-new-version-of-spark-built-just-for-the-dcos/) and [Spark and Mesos: shared history and future ](https://mesosphere.com/blog/2015/06/23/spark-mesos-shared-history-and-future-mesosphere-hackweek/)
+  * [Making Apache Kafka Elastic With Apache Mesos](https://mesosphere.com/blog/2015/07/16/making-apache-kafka-elastic-with-apache-mesos/) and [Fast and flexible: Our new Kafka-DCOS service is in beta](https://mesosphere.com/blog/2016/02/04/kafka-dcos/)
+  * [Mesosphere powers the Microsoft Azure Container Service](https://mesosphere.com/blog/2015/09/29/mesosphere-and-mesos-power-the-microsoft-azure-container-service/) and [Azure Container Service, powered by the DCOS, is available for Public Preview](https://mesosphere.com/blog/2016/02/17/azure-container-service-dcos-mesosphere/)
+  * [Scaling ArangoDB to gigabytes per second on Mesosphere’s DCOS](https://mesosphere.com/blog/2015/11/30/arangodb-benchmark-dcos/)
+  * [Samsung is powering the Internet of Things with Mesos and Marathon](https://mesosphere.com/blog/2015/12/21/samsung-is-powering-the-internet-of-things-with-mesos-and-marathon/)
+  
 * Other Ressources
   * AMP Lab - Reference Architecture: https://amplab.cs.berkeley.edu/software/
   * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/
@@ -214,7 +218,7 @@ setup dcos packeges to form SHMACK.
 * As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 * What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
-* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented.
+* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented. Partially, this is only a problem of the DCOS Community Edition; the Enterprise Edition learned mayn required features some time ago in version [1.3](https://mesosphere.com/blog/2015/11/17/new-security-features-and-more-in-mesosphere-dcos-1-3/) and [1.6](https://mesosphere.com/blog/2016/03/08/mesosphere-dcos-1-6/).
 * Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
 * Not all DCOS Packages are production ready. 
   * Those from [Mesosphere Universe](https://github.com/mesosphere/universe) should in a useable state, 

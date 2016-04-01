@@ -30,7 +30,8 @@ INSTALL_PACKAGES="hdfs spark chronos marathon marathon-lb"
 OPTIONAL_PACKAGES="cassandra"
 
 # Space-separated list of apps to install (without asking)
-# 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb'
+# 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb', 
+# but you may have to also configure marathon labels for zeppelin.
 # You can later install additional packages using 'dcos package install --app'
 INSTALL_APPS="zeppelin"
 

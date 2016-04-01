@@ -26,4 +26,4 @@ ssh -A -t -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} ssh -A -t core@${SLAV
 
 # we do NOT want to use "dcos node ssh --master-proxy --slave=${SLAVE_ID}" as we cannot reliably determine which slave address or IP is used.
 # to know this is important for sync-to-dcos-master-and-slave.sh to work without a new authentification.
-
+# see also https://mesosphere.com/blog/2015/07/22/new-dcos-cli-commands-for-logs-and-ssh/
