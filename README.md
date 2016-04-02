@@ -218,10 +218,10 @@ setup dcos packeges to form SHMACK.
 * As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 * What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
-* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented. Partially, this is only a problem of the DCOS Community Edition; the Enterprise Edition learned mayn required features some time ago in version [1.3](https://mesosphere.com/blog/2015/11/17/new-security-features-and-more-in-mesosphere-dcos-1-3/) and [1.6](https://mesosphere.com/blog/2016/03/08/mesosphere-dcos-1-6/).
+* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented. Partially, this is only a problem of the DCOS Community Edition; the Enterprise Edition learned many required features some time ago in version [1.3](https://mesosphere.com/blog/2015/11/17/new-security-features-and-more-in-mesosphere-dcos-1-3/) and [1.6](https://mesosphere.com/blog/2016/03/08/mesosphere-dcos-1-6/).
 * Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
 * Not all DCOS Packages are production ready. 
-  * Those from [Mesosphere Universe](https://github.com/mesosphere/universe) should in a useable state, 
+  * Those from [Mesosphere Universe](https://github.com/mesosphere/universe) should in a usable state, 
     but even for Spark the info states that it is still "in beta and there may be bugs, incomplete features, incorrect documentation or other discrepencies"
   * Those from [Mesosphere Multiverse](https://github.com/mesosphere/multiverse) are all experimental.
 
