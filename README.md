@@ -157,7 +157,7 @@ See [DCOS Network Security Documentation](https://docs.mesosphere.com/administra
 The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
 setup DCOS packeges to form SHMACK. 
 It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
-and therefore more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
+and by that, more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
 <a name="stackCreation" />
 ### Stack Creation (from now on, you pay for usage)
@@ -166,16 +166,17 @@ and therefore more appropriate for forming short-lived clusters for quick experi
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * In order to automatically install, update, and configure the [DCOS Commandline Interface](https://docs.mesosphere.com/administration/cli/install-cli/), 
-    you will be prompted to enter your passwword as part of the installation process needs to run via sudo.
+    you will be prompted to enter your password as part of the installation process needs to run via sudo.
   * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * DCOS will now install the packages defined in `create-stack.sh`
   	* Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
     * Even after the command returns, it will still take some time until every package is fully operational
     * In the Mesos Master UI you will see them initially in status "Idle" or "Unhealthy" until they converge to "Healthy",
       in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
-  * <a name="confirmSsh"></a>Login once using ssh (in order to add mesos master to known hosts, needed among others for unit tests to run without manual interaction)
-    * `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
-    * Confirm SSH security prompts
+  * The script will now <a name="confirmSsh" />Login once using ssh 
+    * This is necessary to add mesos master to known hosts, so that scripts and unit tests can run without manual interaction
+    * Performs `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-master.sh`and `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
+    * You have to confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
   
