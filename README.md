@@ -151,9 +151,13 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
     
 ## Stack Creation and Deletion 
 Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
-some of directly accessible (acting as gateways), others only accessible through the gateway nodes.¨
+some of directly accessible (acting as gateways), others only accessible through the gateway nodes. 
+See [DCOS Network Security Documentation](https://docs.mesosphere.com/administration/dcosarchitecture/security/) for details.
+
 The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
-setup dcos packeges to form SHMACK.
+setup DCOS packeges to form SHMACK. 
+It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
+and therefore more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
 <a name="stackCreation" />
 ### Stack Creation (from now on, you pay for usage)
