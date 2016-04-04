@@ -137,9 +137,9 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * Select "Scala IDE for Eclipse" which will install sbt, Scala 2.11, and the IDE plugins
 
 ### Optional: Use IntelliJ IDEA for SHMACK
-* Download and install IntelliJ IDEA ... so far, the Community Edition should be sufficient.
+* Download and install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) ... so far, the Community Edition should be sufficient.
 * Open IntelliJ and make sure, you have a JVM configured. If not, first create a new empty project to configure it!
-  * In new project, set for Java the Project SDK to a new JDK and select /usr/lib/jvm/java-1.8.0-openjdk-amd64`
+  * In new project, set for Java the Project SDK to a new JDK and select `/usr/lib/jvm/java-1.8.0-openjdk-amd64`
   * You may also select Scala with use new library, download scala version 2.10.5
 * Select File -> New -> Project from existing sources... -> /home/shmacky/shmack/repo/04_implementation
   * Import project from external model -> Gradle
