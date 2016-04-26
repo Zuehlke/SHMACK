@@ -51,8 +51,7 @@ You will also need that in order to develop and contribute.
 ### Create a Virtual Machine
 * assign at least 4 GB RAM and 30 GB HDD! 
 * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
-  * Would prefer an LTS version, but **14.04 is too outdated and some of the installed certificates are no longer accepted**.
-  * Maybe 16.04 LTS will work fine again. But until it comes out, better stick to 15.10 which is known to cause no major headaches. 
+  * Ubuntu 16.04 LTS seems to work, but there is at least one [known issue with eclipse](#eclipseUbuntu1604) 
 * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
   * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
   * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
@@ -119,6 +118,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 ### Download, install, and configure Eclipse for the use in SHMACK
 * Download `Eclipse IDE for Java EE Developers` as 64 bit for Linux from https://www.eclipse.org/downloads/ 
 * Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
+* Warning: On Ubuntu 16.04, you need to work around [a known issue with eclipse](#eclipseUbuntu1604) 
 * Add gradle support to eclipse
   * open `eclipse/eclipse`
   * Open `Help --> Eclipse Marketplace`
@@ -444,7 +444,7 @@ You can always setup new credentials without needing to setup a new account, so 
 * Open a shell and run `aws configure` again using the new credentials
 * Optional: Delete the old access key that is no longer in use 
 
-<a name="setupFailing"></a>
+<a name="setupFailing" />
 ## What should I do if the setup of the stack has failed?
 * Try to understand the failure and fix it. Goal: As much as possible is automated and others do not fall into the same issue.
 * Delete the stack to make sure there are no costs, see **[here](#stackDeletion)**
@@ -459,12 +459,12 @@ Solution: Unplug network cable and use `zred` WiFi.
 Execute the testcase `ShmackUtilsTest` in eclipse.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
-<a name="inTestcasesFailing"></a>
+<a name="inTestcasesFailing" />
 ## What should I do if Integration testcases do not work?
 Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 
 
-<a name="sparkJobsFailing"></a>
+<a name="sparkJobsFailing" />
 ## What should I do if Spark-Jobs are failing?
 * Open the mesos Web-UI `${HOME}/shmack/repo/04_implementation/scripts/open-shmack-mesos-console.sh`
 * Click on the Link to the `sandbox` of your spark-job
@@ -474,6 +474,14 @@ Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
 ## To start with a clean state, you may delete the whole HDFS Filesystem as follows
 `ssh-into-dcos-master.sh`
 `hadoop fs -rm -r -f 'hdfs://hdfs/*'`
+
+<a name="eclipseUbuntu1604" />
+## Eclipse freezes with no apparent reason?
+Are you running Ubuntu 16.04? 
+Because there is a known issue of SWT not working properly on GTK3: http://stackoverflow.com/questions/36822242/eclipse-doesnt-work-with-ubuntu-16-04
+* set `SWT_GTK3=0` as described in on StackOverflow 
+* Restart Eclipse 
+
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
