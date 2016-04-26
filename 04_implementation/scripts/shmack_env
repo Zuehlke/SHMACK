@@ -86,7 +86,11 @@ function setup-ssh-agent {
 	  fi
 	fi
 }
-setup-ssh-agent
+
+if [ -e "${SSH_KEY_LOCATION}" ]
+	then
+		setup-ssh-agent
+fi
 
 # AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
 TEMPLATE_PARAMETERS=" ParameterKey=AcceptEULA,ParameterValue=Yes"
