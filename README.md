@@ -127,7 +127,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * "Import" --> "Gradle (STS) Project"
   * Click "Build model"
   * Select all projects
-* Optional: Perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs  
+* Optional: Perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs **NOTE:** You need to start your cluster first (see below)  
 * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
   * Provides a nice support for editing shell scripts in Eclipse
   * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
