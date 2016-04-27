@@ -159,6 +159,14 @@ setup DCOS packeges to form SHMACK.
 It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
 and by that, more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
+< name="spotinstances" />
+### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances
+To lower costs you can use spot instances. To do this, change this line in shmack_env:
+
+    TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack-config/single-master.cloudformation-spotprice.json"
+
+This is currently hosted on a private s3 bucket. If it goes down, just refer to [stackoverflow](http://stackoverflow.com/questions/31409463/spot-instances-support-dcos). You have to upload the file yourself.
+
 <a name="stackCreation" />
 ### Stack Creation (from now on, you pay for usage)
   * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
@@ -233,6 +241,7 @@ and by that, more appropriate for forming short-lived clusters for quick experim
 # FAQ
 <a name="avoidBill" />
 ## How do I avoid to be surprised by a monthly bill of **1700 $** ?
+Also check out [spot instances](#spotinstances) to reduce costs.
 Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. You also install the [AWS Console Mobile App](https://aws.amazon.com/console/mobile/) to even have an eye on the running instances and aggregated costs when you are sitting at your desk - and take actions if needed. 
 
 To not constantly poll the costs, set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences).
