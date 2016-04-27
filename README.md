@@ -159,7 +159,7 @@ setup DCOS packeges to form SHMACK.
 It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
 and by that, more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
-< name="spotinstances" />
+<a name="spotinstances" />
 ### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances
 To lower costs you can use spot instances. To do this, change this line in shmack_env:
 
