@@ -114,6 +114,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 	so you don't need to store them for SHMACK. 
 	The only case in which you may need some AWS credentials otherwise, may probably be to copy data from S3.
 	Make sure you always perform this as one-time operations you do not need to commit! 
+* Optional: For the impatient, you may now directly proceed with [Stack Creation](#stackCreation) and setup your IDE while CloudFormation takes place which will take some minutes anyway.
 
 ### Download, install, and configure Eclipse for the use in SHMACK
 * Download `Eclipse IDE for Java EE Developers` as 64 bit for Linux from https://www.eclipse.org/downloads/ 
@@ -127,7 +128,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * "Import" --> "Gradle (STS) Project"
   * Click "Build model"
   * Select all projects
-* Optional: Perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs **NOTE:** You need to start your cluster first (see below)  
+* Optional: In case you [created your stack](#stackCreation) already, you may now perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs. 
 * Optional: Install [DLTK ShellEd](#http://www.eclipse.org/dltk/install.php) for Eclipse
   * Provides a nice support for editing shell scripts in Eclipse
   * Install new software... Add `http://download.eclipse.org/technology/dltk/updates-dev/latest/`
@@ -145,8 +146,8 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * Import project from external model -> Gradle
   * Use gradle wrapper task configuration
   * Finish -> This Window -> confirm selection of three modules with `Ok` -> And `Add root` when prompted
-* It wil take quite some time until scanning for files to index finishes
-* You may now perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs 
+* It wil take quite some time until scanning for files to index finishes.
+* Optional: In case you [created your stack](#stackCreation) already, you may now perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs. 
 
     
 ## Stack Creation and Deletion 
@@ -334,20 +335,23 @@ The URL of Zeppelin will be available also outside the VM.
 
 
 <a name="checkStackSetup" />
-## What should I do to check if the setup was successful?
-Execute the testcase `ShmackUtilsTest` in eclipse.
+## What should I do to check if the setup and stack creation was successful?
+Execute the testcase `ShmackUtilsTest` in your IDE. 
+This will run some basic tests to check that your local setup is fine and can properly make use of a running stack in the AWS cloud.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
 ## How can I execute Unit-Tests on a local Spark instance?
 Look at the examples:
 * `JavaSparkPiLocalTest`
 * `WordCountLocalTest`
+These will not require any running stack and can therefore also be performed without any instance on AWS.
 
 <a name="sparkTests" />
 ## How can I execute Unit-Tests on a remote Spark instance (i.e. in the Amazon EC2 cluster)?
 Look at the examples:
 * `JavaSparkPiRemoteTest`
 * `WordCountRemoteTest`
+These **will require** a running stack, they will fail if instance on AWS are not yet (or no longer) available or cannot be access through SSH.
 
 Make sure that every thecase hase it's own `testcaseId`. This id needs only to be distinct only within one Test-Class.
 ```
@@ -470,7 +474,7 @@ If this testcase fails: see **[here](#inTestcasesFailing)**
 
 <a name="inTestcasesFailing" />
 ## What should I do if Integration testcases do not work?
-Be sure to have confirmed idendity of hosts, see **[here](#confirmSsh)**
+Be sure to have a [stack created](#createStack) successfully and confirmed idendity of hosts, see **[here](#confirmSsh)**
 
 
 <a name="sparkJobsFailing" />
