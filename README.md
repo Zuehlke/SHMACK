@@ -474,7 +474,7 @@ If this testcase fails: see **[here](#inTestcasesFailing)**
 
 <a name="inTestcasesFailing" />
 ## What should I do if Integration testcases do not work?
-Be sure to have a [stack created](#createStack) successfully and confirmed idendity of hosts, see **[here](#confirmSsh)**
+Be sure to have a [stack created](#stackCreation) successfully and confirmed idendity of hosts, see **[here](#confirmSsh)**
 
 
 <a name="sparkJobsFailing" />
