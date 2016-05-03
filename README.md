@@ -87,7 +87,9 @@ export PATH
 
 ### Setup AWS console 
 Details can be found in: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
-* Create AWS user including AWS Access Key (can be deleted to revoke access from VM)
+* Create AWS user including AWS Access Key
+  This access key will be used on command-line to tell AWS what to do. 
+  It is recommended to create distinct keys if you have different needs; so even if you have an AWS account already, better create a key just for SHMACK. That way, you can also later safely delete the key if you no longer need it.
   * https://console.aws.amazon.com/iam/home?#users
   * Username: `shmack`
   * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
@@ -176,7 +178,6 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
     * In case of failures see [Troubleshoting Section](#setupFailing)
   * In order to automatically install, update, and configure the [DCOS Commandline Interface](https://docs.mesosphere.com/administration/cli/install-cli/), 
     you will be prompted to enter your password as part of the installation process needs to run via sudo.
-  * Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
   * DCOS will now install the packages defined in `create-stack.sh`
   	* Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
     * Even after the command returns, it will still take some time until every package is fully operational
@@ -218,12 +219,17 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
   * [Mesosphere powers the Microsoft Azure Container Service](https://mesosphere.com/blog/2015/09/29/mesosphere-and-mesos-power-the-microsoft-azure-container-service/) and [Azure Container Service, powered by the DCOS, is available for Public Preview](https://mesosphere.com/blog/2016/02/17/azure-container-service-dcos-mesosphere/)
   * [Scaling ArangoDB to gigabytes per second on Mesosphere’s DCOS](https://mesosphere.com/blog/2015/11/30/arangodb-benchmark-dcos/)
   * [Samsung is powering the Internet of Things with Mesos and Marathon](https://mesosphere.com/blog/2015/12/21/samsung-is-powering-the-internet-of-things-with-mesos-and-marathon/)
-  
+* Demo use
+  * Tweeter: https://github.com/mesosphere/tweeter - a Twitter-equivalent running on DCOS using Cassandra for strorage, streeams to Kafka, and uses Zeppelin for analytics.
+  * iot-demo: https://github.com/mesosphere/iot-demo - streams Twitter tweets to Kafka, processes with Spark, stores in Cassandra, and queries using Zeppelin.
+  * cd-demo: https://github.com/mesosphere/cd-demo - implements a continuous delivery pipeline on DCOS using Jenkins and Docker.
+  * KillrWeather Time Series demo: https://github.com/mesosphere/killrweather - full SMACK stack demo including an Akka application. 
+  * Crime Buster Time Series demo: https://github.com/mesosphere/time-series-demo - streams crime data of Chicago and adds InfluxDB and Grafana to the Kafka and Spark mix.
+  * FluxCapcitor: https://github.com/fluxcapacitor - Reference Architecture for Netflix Style recommendation engines employing machine learning using a more complete, but also more complex [PANCAKE STACK](https://github.com/fluxcapacitor/pipeline/wiki)
 * Other Ressources
   * AMP Lab - Reference Architecture: https://amplab.cs.berkeley.edu/software/
   * AMP Lap Camp with exercices: http://ampcamp.berkeley.edu/5/
   * Public Datasets (S3): https://aws.amazon.com/de/public-data-sets/
-  * Reference Architecture for Netflix Style recommendation engines: https://github.com/fluxcapacitor
   * Apache Spark Example Use Cases (with Code): https://github.com/4Quant
   * Apache Spark Twitter Word Count: https://github.com/snowplow/spark-example-project
 
@@ -280,9 +286,9 @@ In principle, you can. But be aware that you may block each other with running t
 
 ## What components are available?
 That changes constantly as Mesosphere adds packages to DCOS. And we provide our own.
-* As of 2016-03-30, everything for SMACK/[Mesosphere Infinity](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/) seems to be available, *except Akka*. 
+* As of 2016-03-30, everything for SMACK/[Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/) seems to be available, *except Akka*. 
+* [Mesosphere Universe Packages for DCOS 1.7](https://github.com/mesosphere/universe-1.7/tree/version-2.x/repo/packages) 
 * [Mesosphere Universe Packages](https://github.com/mesosphere/universe/tree/version-2.x/repo/packages) 
-* [Mesosphere Multiverse Packages](https://github.com/mesosphere/multiverse/tree/version-2.x/repo/packages)
 * Or type `dcos package search` to get the current list for your configured repositories.
 * ... but keep in mind the [limitations](#limitations)
 
