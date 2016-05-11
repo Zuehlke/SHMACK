@@ -27,13 +27,13 @@ if [ -z "${ZEPPELIN_PORT}" ]
 		MASTER_IP_ADDRESS=`cat "${CURRENT_MASTER_NODE_SSH_IP_ADDRESS_FILE}"`
 		ZEPPELIN_LOCAL_FORWARD_PORT=38083
 		
-		RUNNING_PID=`ps -e --format pid,command  | grep --perl-regexp --only-matching "[0123456789]{2,6}(?= ssh.*-L${ZEPPELIN_LOCAL_FORWARD_PORT})"`
+		RUNNING_PID=`ps -e --format pid,command  | grep --perl-regexp --only-matching "[0123456789]{2,6}(?= ssh.*LocalForward ${ZEPPELIN_LOCAL_FORWARD_PORT})"`
 		if [ -n "${RUNNING_PID}" ]
 			then
 				kill ${RUNNING_PID}
 		fi
 		
-		ssh -fN -A -t -i ${SSH_KEY_LOCATION} core@${MASTER_IP_ADDRESS} -L${ZEPPELIN_LOCAL_FORWARD_PORT}:${ZEPPELIN_REMOTE_HOST}:${ZEPPELIN_REMOTE_PORT}
+		dcos node ssh --master-proxy --leader --option \'"LocalForward ${ZEPPELIN_LOCAL_FORWARD_PORT} ${ZEPPELIN_REMOTE_HOST}:${ZEPPELIN_REMOTE_PORT}"\' --option "'BatchMode yes' -fN"
 		open-browser.sh http://localhost:${ZEPPELIN_LOCAL_FORWARD_PORT}
 else
 	open-browser.sh http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_NAME_FILE}`:${ZEPPELIN_PORT}
