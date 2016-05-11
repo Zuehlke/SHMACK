@@ -33,7 +33,8 @@ OPTIONAL_PACKAGES="cassandra"
 # 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb', 
 # but you may have to also configure marathon labels for zeppelin.
 # You can later install additional packages using 'dcos package install --app'
-INSTALL_APPS="zeppelin"
+INSTALL_APPS=""
+#INSTALL_APPS="zeppelin"
 
 ###################################################################################################
 ########  NOTHING to change below this line (no hardcoded values)
