@@ -43,7 +43,7 @@ if [ "Noop" == "${CLI_OPTION}Noop" ]
 fi
 date
 
-run update-node-info.sh
+# run update-node-info.sh
 
 echo
 read -p "Press Enter to confirm ssh-identities (and logout from cluster after confirmations by typing 'exit')." 
