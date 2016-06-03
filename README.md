@@ -15,8 +15,10 @@ K. = Kafka
 ## A modern stack for Big Data applications
 
 SHMACK is open source under terms of Apache License 2.0 (see **[License Details](#license)**).
-For now, it provides a quick start to set up a Mesos cluster with Spark and Cassandra on Amazon Web Services (AWS), 
-with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as [Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
+For now, it provides a quick start to set up a Mesos cluster with Spark and Cassandra on Amazon Web Services (AWS) 
+using [Mesosphere DC/OS template](https://dcos.io/docs/1.7/administration/installing/cloud/aws/), 
+with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra, Kafka - also known as 
+[Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
 and being enriched by Hatch applications (closed source).
 
 #<font color="red">WARNING: things can get expensive $$$$$ !</font>
@@ -32,15 +34,17 @@ running costs would be a rather minor issue.
 * We want to be fast when ramping up cloud infrastructure.
 * We do not want to answer "we never did this" to customers when asked.
 * We want to know what the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
-* We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning to acquire customers and be able to show competence not only on paper, but running in the cloud.
+* We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning 
+  to acquire customers and be able to show competence not only on paper, but running in the cloud.
 
 # Installation
 Everything can be performed free of charge until you start up nodes in the cloud (called [Stack creation](#stackCreation)). 
 
 
-## Register accounts
-* Create GitHub account (if you don't have one yet): https://github.com/join
-* Create AWS account **[here](https://aws.amazon.com/de/)**
+## Register accounts (as needed)
+If you have existing accounts, they can be used. If not:
+* Create GitHub account: https://github.com/join
+* Create AWS account: https://aws.amazon.com/de/
 
 
 <a name="devEnvSetup" />
@@ -53,9 +57,9 @@ You will also need that in order to develop and contribute.
 * Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
   * Ubuntu 16.04 LTS seems to work, but there is at least one [known issue with eclipse](#eclipseUbuntu1604) 
 * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
-  * **ATTENTION**: Do NOT only start the OS from the downloaded ISO image. INSTALL the OS to the virtual machine on the virtual machine's harddisk.
-  * **ATTENTION**: The AWS and DCOS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
-    This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. For instance, CoreOS and OS X unfortunately don't get along right now.
+  * **ATTENTION**: The AWS and DC/OS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
+    This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. 
+    For instance, CoreOS and OS X unfortunately don't get along right now.
 
 ### In the Virtual machine
 * Install git: `sudo apt-get install git`
@@ -63,9 +67,9 @@ You will also need that in order to develop and contribute.
 * Run the setup script: `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
   * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
   * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
-* Optional: DCOS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
+* Optional: DC/OS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
   for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
-* Optional: DCOS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
+* Optional: DC/OS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
 * Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.bashrc`
 ```
 alias cds='cd ${HOME}/shmack/repo/'
@@ -82,7 +86,7 @@ export PATH
     * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
   * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
     More clients listed on https://git-scm.com/downloads/guis.
-* Optional: When intending to create new packages for the stack on DCOS / deploy applications, 
+* Optional: When intending to create new packages for the stack on DC/OS to deploy applications, 
     install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
 ### Setup AWS console 
@@ -155,10 +159,10 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 ## Stack Creation and Deletion 
 Mesosphere provides AWS CloudFormation templates to create a stack with several EC2 instances in autoscaling groups, 
 some of directly accessible (acting as gateways), others only accessible through the gateway nodes. 
-See [DCOS Network Security Documentation](https://docs.mesosphere.com/administration/dcosarchitecture/security/) for details.
+See [DC/OS Network Security Documentation](https://docs.mesosphere.com/overview/security/) for details.
 
 The scripts for SHMACK will not only create/delete such a stack, but also maintain the necessary IDs to communicate and 
-setup DCOS packeges to form SHMACK. 
+setup DC/OS packeges to form SHMACK. 
 It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
 and by that, more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
@@ -176,9 +180,13 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
-  * In order to automatically install, update, and configure the [DCOS Commandline Interface](https://docs.mesosphere.com/administration/cli/install-cli/), 
+  * In order to automatically install, update, and configure the [DC/OS Commandline Interface](https://docs.mesosphere.com/usage/cli/install/), 
     you will be prompted to enter your password as part of the installation process needs to run via sudo.
-  * DCOS will now install the packages defined in `create-stack.sh`
+  * Some versions of DC/OS will require activation when first used on a system. 
+    If this is the case: 
+    Open URL as instructed in `Go to the following link in your browser:` and enter verification code.
+    Whenever you are asked to authenticate using a cloud provider, it works well to use your Github account.
+  * DC/OS will now install the packages defined in `create-stack.sh`
   	* Confirm optional installations (if desired): `Continue installing? [yes/no]` --> yes
     * Even after the command returns, it will still take some time until every package is fully operational
     * In the Mesos Master UI you will see them initially in status "Idle" or "Unhealthy" until they converge to "Healthy",
@@ -189,6 +197,7 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
     * You have to confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
+  * Optional: Install additional software.
   
 <a name="stackDeletion" />
 ### Stack Deletion
@@ -213,16 +222,17 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
 * [Documentation](http://docs.mesosphere.com/), in particular Architecture of [Components](https://docs.mesosphere.com/administration/dcosarchitecture/components/) and [Network Security](https://docs.mesosphere.com/administration/dcosarchitecture/security/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
 * Articles
+  * [Introducing open source DC/OS](https://mesosphere.com/blog/2016/04/19/open-source-dcos/)
   * [The Mesosphere Datacenter Operating System is now generally available](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
-  * [Meet a new version of Spark, built just for the DCOS](https://mesosphere.com/blog/2015/06/15/meet-a-new-version-of-spark-built-just-for-the-dcos/) and [Spark and Mesos: shared history and future ](https://mesosphere.com/blog/2015/06/23/spark-mesos-shared-history-and-future-mesosphere-hackweek/)
+  * [Why DC/OS and Apache Spark are better together](https://mesosphere.com/blog/2016/05/10/why-dcos-and-apache-spark-are-better-together/) and [Spark and Mesos: shared history and future ](https://mesosphere.com/blog/2015/06/23/spark-mesos-shared-history-and-future-mesosphere-hackweek/)
   * [Making Apache Kafka Elastic With Apache Mesos](https://mesosphere.com/blog/2015/07/16/making-apache-kafka-elastic-with-apache-mesos/) and [Fast and flexible: Our new Kafka-DCOS service is in beta](https://mesosphere.com/blog/2016/02/04/kafka-dcos/)
   * [Mesosphere powers the Microsoft Azure Container Service](https://mesosphere.com/blog/2015/09/29/mesosphere-and-mesos-power-the-microsoft-azure-container-service/) and [Azure Container Service, powered by the DCOS, is available for Public Preview](https://mesosphere.com/blog/2016/02/17/azure-container-service-dcos-mesosphere/)
   * [Scaling ArangoDB to gigabytes per second on Mesosphere’s DCOS](https://mesosphere.com/blog/2015/11/30/arangodb-benchmark-dcos/)
   * [Samsung is powering the Internet of Things with Mesos and Marathon](https://mesosphere.com/blog/2015/12/21/samsung-is-powering-the-internet-of-things-with-mesos-and-marathon/)
 * Demo use
-  * Tweeter: https://github.com/mesosphere/tweeter - a Twitter-equivalent running on DCOS using Cassandra for strorage, streeams to Kafka, and uses Zeppelin for analytics.
+  * Tweeter: https://github.com/mesosphere/tweeter - a Twitter-equivalent running on DC/OS using Cassandra for strorage, streeams to Kafka, and uses Zeppelin for analytics.
   * iot-demo: https://github.com/mesosphere/iot-demo - streams Twitter tweets to Kafka, processes with Spark, stores in Cassandra, and queries using Zeppelin.
-  * cd-demo: https://github.com/mesosphere/cd-demo - implements a continuous delivery pipeline on DCOS using Jenkins and Docker.
+  * cd-demo: https://github.com/mesosphere/cd-demo - implements a continuous delivery pipeline on DC/OS using Jenkins and Docker.
   * KillrWeather Time Series demo: https://github.com/mesosphere/killrweather - full SMACK stack demo including an Akka application. 
   * Crime Buster Time Series demo: https://github.com/mesosphere/time-series-demo - streams crime data of Chicago and adds InfluxDB and Grafana to the Kafka and Spark mix.
   * FluxCapcitor: https://github.com/fluxcapacitor - Reference Architecture for Netflix Style recommendation engines employing machine learning using a more complete, but also more complex [PANCAKE STACK](https://github.com/fluxcapacitor/pipeline/wiki)
@@ -235,12 +245,13 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
 
 <a name="limitations" />
 # Important Limitations / Things to consider before going productive
-* As of 2015-10-28 the DCOS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
-* What if the number of client request "explodes". Is there a way to do autoscaling with DCOS / Mesophere WITHOUT human interaction?
+* As of 2015-10-28 the DC/OS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
+* What if the number of client request "explodes". Is there a way to do autoscaling with Mesosophere DC/OS WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
-* Make sure that admin access to the Mesos Master console is secure. As of 2015-11-27 only **passwordless** http access is possible. https needs to be implemented. Partially, this is only a problem of the DCOS Community Edition; the Enterprise Edition learned many required features some time ago in version [1.3](https://mesosphere.com/blog/2015/11/17/new-security-features-and-more-in-mesosphere-dcos-1-3/) and [1.6](https://mesosphere.com/blog/2016/03/08/mesosphere-dcos-1-6/).
+* Make sure that admin access to the Mesos Master console is secure. As of 2016-06-03 the http access is only secured by asking for a cloud login (i.e. your GitHub account). 
+  https needs to be implemented. Partially, this is only a problem of the DC/OS Community Edition; the Enterprise Edition learned many required features some time ago in version [1.3](https://mesosphere.com/blog/2015/11/17/new-security-features-and-more-in-mesosphere-dcos-1-3/) and [1.6](https://mesosphere.com/blog/2016/03/08/mesosphere-dcos-1-6/).
 * Data Locality, e.g. How do we minimze latency between data storage and Spark workers?
-* Not all DCOS Packages are production ready. 
+* Not all DC/OS Packages are production ready. 
   * Those from [Mesosphere Universe](https://github.com/mesosphere/universe) should in a usable state, 
     but even for Spark the info states that it is still "in beta and there may be bugs, incomplete features, incorrect documentation or other discrepencies"
   * Those from [Mesosphere Multiverse](https://github.com/mesosphere/multiverse) are all experimental.
@@ -285,11 +296,11 @@ In principle, you can. But be aware that you may block each other with running t
 	* Delete/inactivate the additional accounts in htps://console.aws.amazon.com/iam/home?region=us-west-1
 
 ## What components are available?
-That changes constantly as Mesosphere adds packages to DCOS. And we provide our own.
+That changes constantly as Mesosphere adds packages to DC/OS. And we provide our own.
 * As of 2016-03-30, everything for SMACK/[Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/) seems to be available, *except Akka*. 
 * [Mesosphere Universe Packages for DCOS 1.7](https://github.com/mesosphere/universe-1.7/tree/version-2.x/repo/packages) 
 * [Mesosphere Universe Packages](https://github.com/mesosphere/universe/tree/version-2.x/repo/packages) 
-* Or type `dcos package search` to get the current list for your configured repositories.
+* Or type `dcos package search` to get the current list for your configured repositories or `open-shmack-marathon-ui.sh` and select Universe on the left.
 * ... but keep in mind the [limitations](#limitations)
 
 <a name="nonImplFiles" />
