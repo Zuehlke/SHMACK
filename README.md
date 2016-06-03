@@ -129,9 +129,9 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 * Add gradle support to eclipse
   * open `eclipse/eclipse`
   * Open `Help --> Eclipse Marketplace`
-  * Install `Gradle (STS) IDE Pack`
+  * Install `Gradle IDE Pack`
 * Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
-  * "Import" --> "Gradle (STS) Project"
+  * "Import" --> "Gradle Project"
   * Click "Build model"
   * Select all projects
 * Optional: In case you [created your stack](#stackCreation) already, you may now perform [infrastructure tests](#checkStackSetup) and [some Spark test jobs](#sparkTests) in Sparkjobs. 
