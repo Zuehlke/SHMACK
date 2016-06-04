@@ -70,11 +70,9 @@ You will also need that in order to develop and contribute.
 * Optional: DC/OS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
   for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
 * Optional: DC/OS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
-* Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.bashrc`
+* Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.profile`
 ```
-alias cds='cd ${HOME}/shmack/repo/'
-alias eclipse='nohup ${HOME}/eclipse/eclipse > /dev/null 2>&1 &'
-PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts:${HOME}/shmack/repo/04_implementation/scripts/target/dcos/bin
+PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
 export PATH
 ```
 * Optional: setup git for commandline usage (source of commands: https://help.github.com/articles/set-up-git/ )
@@ -508,9 +506,7 @@ Be sure to have a [stack created](#stackCreation) successfully and confirmed ide
 <a name="eclipseUbuntu1604" />
 ## Eclipse freezes with no apparent reason?
 Are you running Ubuntu 16.04? 
-Because there is a known issue of SWT not working properly on GTK3: http://stackoverflow.com/questions/36822242/eclipse-doesnt-work-with-ubuntu-16-04
-* set `SWT_GTK3=0` as described in on StackOverflow 
-* Restart Eclipse 
+Because there is a known issue of SWT not working properly on GTK3: http://askubuntu.com/questions/761604/eclipse-not-working-in-16-04
 
 ___
 * [github] - See other project from Zühlke on github
