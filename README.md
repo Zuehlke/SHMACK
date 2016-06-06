@@ -168,7 +168,7 @@ and by that, more appropriate for forming short-lived clusters for quick experim
 ### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances
 To lower costs you can use spot instances. To do this, change this line in shmack_env:
 
-    TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack-config/single-master.cloudformation-spotprice.json"
+    TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack-spot-config/config.json"
 
 This is currently hosted on a private s3 bucket. If it goes down, just refer to [stackoverflow](http://stackoverflow.com/questions/31409463/spot-instances-support-dcos). You have to upload the file yourself.
 
