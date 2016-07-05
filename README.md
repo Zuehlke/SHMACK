@@ -220,6 +220,7 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
 * [Documentation](http://docs.mesosphere.com/), in particular Architecture of [Components](https://docs.mesosphere.com/administration/dcosarchitecture/components/) and [Network Security](https://docs.mesosphere.com/administration/dcosarchitecture/security/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
 * Articles
+  * [Data processing platforms architectures with SMACK (SMACK Overview Article)](http://datastrophic.io/data-processing-platforms-architectures-with-spark-mesos-akka-cassandra-and-kafka/)
   * [Introducing open source DC/OS](https://mesosphere.com/blog/2016/04/19/open-source-dcos/)
   * [The Mesosphere Datacenter Operating System is now generally available](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
   * [Why DC/OS and Apache Spark are better together](https://mesosphere.com/blog/2016/05/10/why-dcos-and-apache-spark-are-better-together/) and [Spark and Mesos: shared history and future ](https://mesosphere.com/blog/2015/06/23/spark-mesos-shared-history-and-future-mesosphere-hackweek/)
