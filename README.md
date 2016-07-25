@@ -54,8 +54,11 @@ You will also need that in order to develop and contribute.
 
 ### Create a Virtual Machine
 * assign at least 4 GB RAM and 30 GB HDD! 
-* Recommended: **[Ubuntu >= 15.10 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
-  * Ubuntu 16.04 LTS seems to work, but there is at least one [known issue with eclipse](#eclipseUbuntu1604) 
+* Recommended: **[Ubuntu 16.04 LTS](http://www.ubuntu.com/download/desktop)** with VMWare-Player
+  * You may use other basically every other combination you prefer, 
+    but make sure there is at least 4 GB RAM assigned to your VM and more than a single CPU assigned!
+    In particular, some of the default settings of VMWare and VirtualBox will give 
+    only 1 GB to the VM and that will let your slow down your IDE and crash it occasionally. 
 * Alternative: any other recent Linux (native, or virtualized - VirtualBox is also fine) 
   * **ATTENTION**: The AWS and DC/OS Commandline Tools (CLI) use Python with many dependencies installed and maintained through pip. 
     This may cause problems when the OS provides already some of the used libraries in older version - why it is not always possible to mix those. 
@@ -122,7 +125,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 
 ### Download, install, and configure Eclipse for the use in SHMACK
 * Download `Eclipse IDE for Java EE Developers` as 64 bit for Linux from https://www.eclipse.org/downloads/ 
-* Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-mars-2-linux-gtk-x86_64.tar.gz` 
+* Extract eclipse: `cd ${HOME}; tar xvfz Downloads/eclipse-jee-neon-R-linux-gtk-x86_64.tar.gz` 
 * Warning: On Ubuntu 16.04, you need to work around [a known issue with eclipse](#eclipseUbuntu1604) 
 * Add gradle support to eclipse
   * open `eclipse/eclipse`
@@ -220,6 +223,7 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
 * [Documentation](http://docs.mesosphere.com/), in particular Architecture of [Components](https://docs.mesosphere.com/administration/dcosarchitecture/components/) and [Network Security](https://docs.mesosphere.com/administration/dcosarchitecture/security/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
 * Articles
+  * [Data processing platforms architectures with SMACK (SMACK Overview Article)](http://datastrophic.io/data-processing-platforms-architectures-with-spark-mesos-akka-cassandra-and-kafka/)
   * [Introducing open source DC/OS](https://mesosphere.com/blog/2016/04/19/open-source-dcos/)
   * [The Mesosphere Datacenter Operating System is now generally available](https://mesosphere.com/blog/2015/06/09/the-mesosphere-datacenter-operating-system-is-now-generally-available/)
   * [Why DC/OS and Apache Spark are better together](https://mesosphere.com/blog/2016/05/10/why-dcos-and-apache-spark-are-better-together/) and [Spark and Mesos: shared history and future ](https://mesosphere.com/blog/2015/06/23/spark-mesos-shared-history-and-future-mesosphere-hackweek/)
@@ -258,7 +262,7 @@ This is currently hosted on a private s3 bucket. If it goes down, just refer to 
 <a name="avoidBill" />
 ## How do I avoid to be surprised by a monthly bill of **1700 $** ?
 Also check out [spot instances](#spotinstances) to reduce costs.
-Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. You also install the [AWS Console Mobile App](https://aws.amazon.com/console/mobile/) to even have an eye on the running instances and aggregated costs when you are sitting at your desk - and take actions if needed. 
+Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. You also install the [AWS Console Mobile App](https://aws.amazon.com/console/mobile/) to even have an eye on the running instances and aggregated costs no matter where you are - and take actions if needed like deleting a running stack. 
 
 To not constantly poll the costs, set up a [billig alert](https://console.aws.amazon.com/billing/home#/preferences).
 
