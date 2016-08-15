@@ -4,7 +4,9 @@ Need to install Zeppelin and make it accessible.
 Unfortunately, preferred ways to do so do not work yet through options, so need to reconfigure after installing
 
 > dcos package install marathon
+
 > dcos package install marathon-lb
+
 > dcos package install zeppelin
 
 > open-shmack-marathon-ui.sh 
