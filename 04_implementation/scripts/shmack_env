@@ -5,15 +5,35 @@
 ########  Change the following variables to adjust your stack if needed
 ###################################################################################################
 
-STACK_NAME="MyShmackStack-1"
-# Mesosphere CloudFormation template for operating DCOS on AWS 
-TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
 # the SSH keypair .pem file created in AWS Console to access your running instances
 KEY_PAIR_NAME="shmack-key-pair-01"
 
 # A single public slave is sufficient and keeps costs down 
 # when not running in production or testing fault tolerance  
 PUBLIC_SLAVE_INSTANCE_COUNT=1
+
+STACK_NAME="MyShmackStack-1"
+# Mesosphere CloudFormation template for operating DCOS on AWS 
+OFFICIAL_TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
+TEMPLATE_URL="${OFFICIAL_TEMPLATE_URL}"
+
+# Customized template to define the instance types to use
+#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
+# Customized template using spot prices for all the worker nodes / slaves
+#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
+
+# When using spot instances, how much are you willing to pay per instance at most.
+# It is a spot market and you will only be paying enough to outbid other users - or your instances will get down of others outbid you.
+# Depends also on the instances you are using.
+#   See https://aws.amazon.com/ec2/pricing/ in your region (us-west-1 = US West (Northern California)
+#   and https://us-west-1.console.aws.amazon.com/ec2sp/v1/spot/dashboard to get the pricing history
+# The lowest setting, m3.xlarge on-demand price is $0.308, spot prices are usually below 0.1 $/hour, but have frequent spikes up to 2$/hour.
+# For m3.2xlarge, on-demand price is $0.616/hour for instance, prices are usually below 0.2 $/hour, but have frequent spikes up to 3$/hour.
+# While r3.2xlarge with more memory, on-demand price is $0.741/hour, spot prices are usually slightly above 0.2 $/hour but have spikes only to 1.5$/hour.
+# Setting a high value will make it more likely that you can reliably use your cluster, but may create also high peak prices.
+# When in doubt: If you just go with regular on-demand prices, you are certain to get and keep your cluster running.
+MAX_SPOT_INSTANCE_PRICE="0.1"
+
 
 ###################################################################################################
 ########  NOTHING to change below this line (no hardcoded values)
