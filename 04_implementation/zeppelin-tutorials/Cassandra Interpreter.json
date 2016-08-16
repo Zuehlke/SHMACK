@@ -1,1 +1,387 @@
-{"paragraphs":[{"text":"%md\nInspired by the [Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb](https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb), \nbut taking advantage of the native %Cassandra interpreter in Zeppelin.\n\nNeeds Cassandra to be up-and-running\n\n> dcos package install cassandra\n\nand Zeppelin Interpreter for Cassandra to point to a node using mesos\n\n> cassandra.hosts: node-0.cassandra.mesos","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:27:24 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/markdown","editorHide":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270230104_-786230503","id":"20160815-141030_2113782946","result":{"code":"SUCCESS","type":"HTML","msg":"<p>Inspired by the <a href=\"https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb\">Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb</a>,\n<br  />but taking advantage of the native %Cassandra interpreter in Zeppelin.</p>\n<p>Needs Cassandra to be up-and-running</p>\n<blockquote><p>dcos package install cassandra</p>\n</blockquote>\n<p>and Zeppelin Interpreter for Cassandra to point to a node using mesos</p>\n<blockquote><p>cassandra.hosts: node-0.cassandra.mesos</p>\n</blockquote>\n"},"dateCreated":"Aug 15, 2016 2:10:30 PM","dateStarted":"Aug 15, 2016 2:27:20 PM","dateFinished":"Aug 15, 2016 2:27:20 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:979","focus":true},{"title":"Create a place to store key/value pairs (if it doesn't exists)","text":"%cassandra\nCREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\nCREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\n","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:20:25 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270343125_583460258","id":"20160815-141223_1829713864","result":{"code":"SUCCESS","type":"HTML","msg":"\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"},"dateCreated":"Aug 15, 2016 2:12:23 PM","dateStarted":"Aug 15, 2016 2:20:25 PM","dateFinished":"Aug 15, 2016 2:20:25 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:980"},{"title":"If it didn't exist, zero results should get returned. Otherwise there might be some leftovers...","text":"%cassandra\nSELECT COUNT(*) FROM test.kv; ","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:21:03 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[{"name":"count","index":0,"aggr":"sum"}],"values":[],"groups":[],"scatter":{"xAxis":{"name":"count","index":0,"aggr":"sum"}}},"enabled":true,"editorMode":"ace/mode/scala","title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270418115_622578763","id":"20160815-141338_1190579510","result":{"code":"SUCCESS","type":"TABLE","msg":"count\n197\n","comment":"","msgTable":[[{"value":"197"}]],"columnNames":[{"name":"count","index":0,"aggr":"sum"}],"rows":[["197"]]},"dateCreated":"Aug 15, 2016 2:13:38 PM","dateStarted":"Aug 15, 2016 2:21:03 PM","dateFinished":"Aug 15, 2016 2:21:03 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:981","focus":true},{"text":"%cassandra\nINSERT INTO test.kv(key, value) VALUES ('themeaningoflife', 42);","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:21:20 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","tableHide":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270450451_67248183","id":"20160815-141410_1494964922","result":{"code":"SUCCESS","type":"HTML","msg":"\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>INSERT INTO test.kv(key, value) VALUES ('themeaningoflife', 42);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>10.0.1.137:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>10.0.1.137:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"},"dateCreated":"Aug 15, 2016 2:14:10 PM","dateStarted":"Aug 15, 2016 2:20:25 PM","dateFinished":"Aug 15, 2016 2:20:25 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:982"},{"text":"%cassandra\nSELECT value FROM test.kv WHERE key='themeaningoflife';","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:20:25 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270641466_1697685971","id":"20160815-141721_783943393","result":{"code":"SUCCESS","type":"TABLE","msg":"value\n42\n","comment":"","msgTable":[[{"value":"42"}]],"columnNames":[{"name":"value","index":0,"aggr":"sum"}],"rows":[["42"]]},"dateCreated":"Aug 15, 2016 2:17:21 PM","dateStarted":"Aug 15, 2016 2:20:25 PM","dateFinished":"Aug 15, 2016 2:20:25 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:983"},{"config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","tableHide":true,"title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270781393_1140031573","id":"20160815-141941_315708028","dateCreated":"Aug 15, 2016 2:19:41 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:984","dateUpdated":"Aug 15, 2016 2:22:15 PM","dateFinished":"Aug 15, 2016 2:22:15 PM","dateStarted":"Aug 15, 2016 2:22:15 PM","title":"Cleanup","result":{"code":"SUCCESS","type":"HTML","msg":"\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>DELETE FROM test.kv WHERE key='themeaningoflife';</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"},"text":"%cassandra\nDELETE FROM test.kv WHERE key='themeaningoflife';","focus":true},{"config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471270854125_-1763006148","id":"20160815-142054_2061098904","dateCreated":"Aug 15, 2016 2:20:54 PM","status":"READY","progressUpdateIntervalMs":500,"focus":true,"$$hashKey":"object:1369"}],"name":"Cassandra Interpreter","id":"2BW66J2XW","angularObjects":{"2BU2BC8DU:shared_process":[],"2BSRHPJ7Y:shared_process":[],"2BUEM8KRS:shared_process":[],"2BVZHT9M7:shared_process":[],"2BV9XQTPU:shared_process":[],"2BVQP7H9H:shared_process":[],"2BUK5HBPF:shared_process":[],"2BUTY3R7R:shared_process":[],"2BUZ6NXFX:shared_process":[],"2BTNVDYWW:shared_process":[],"2BUEYAPFG:shared_process":[],"2BSJR6WZC:shared_process":[],"2BSKJQQ9X:shared_process":[],"2BSXVH6M1:shared_process":[],"2BTEXQWCF:shared_process":[],"2BV2FYEVM:shared_process":[],"2BSNBXXW2:shared_process":[],"2BV4BSH4N:shared_process":[]},"config":{"looknfeel":"default"},"info":{}}
+{
+	"paragraphs": [
+		{
+			"text": "%md\nInspired by the [Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb](https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb), \nbut taking advantage of the native %Cassandra interpreter in Zeppelin.\n\nNeeds Cassandra to be up-and-running\n\n> dcos package install cassandra\n\nand Zeppelin Interpreter for Cassandra to point to a node using mesos\n\n> cassandra.hosts: node-0.cassandra.mesos,node-1.cassandra.mesos,node-2.cassandra.mesos",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:27:24 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/markdown",
+				"editorHide": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270230104_-786230503",
+			"id": "20160815-141030_2113782946",
+			"result": {
+				"code": "SUCCESS",
+				"type": "HTML",
+				"msg": "<p>Inspired by the <a href=\"https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb\">Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb</a>,\n<br  />but taking advantage of the native %Cassandra interpreter in Zeppelin.</p>\n<p>Needs Cassandra to be up-and-running</p>\n<blockquote><p>dcos package install cassandra</p>\n</blockquote>\n<p>and Zeppelin Interpreter for Cassandra to point to a node using mesos</p>\n<blockquote><p>cassandra.hosts: node-0.cassandra.mesos</p>\n</blockquote>\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:10:30 PM",
+			"dateStarted": "Aug 15, 2016 2:27:20 PM",
+			"dateFinished": "Aug 15, 2016 2:27:20 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:979",
+			"focus": true
+		},
+		{
+			"title": "Create a place to store key/value pairs (if it doesn't exists)",
+			"text": "%cassandra\nCREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\nCREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\n",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:20:25 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270343125_583460258",
+			"id": "20160815-141223_1829713864",
+			"result": {
+				"code": "SUCCESS",
+				"type": "HTML",
+				"msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+			},
+			"dateCreated": "Aug 15, 2016 2:12:23 PM",
+			"dateStarted": "Aug 15, 2016 2:20:25 PM",
+			"dateFinished": "Aug 15, 2016 2:20:25 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:980"
+		},
+		{
+			"title": "If it didn't exist, zero results should get returned. Otherwise there might be some leftovers...",
+			"text": "%cassandra\nSELECT COUNT(*) FROM test.kv; ",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:21:03 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [
+						{
+							"name": "count",
+							"index": 0,
+							"aggr": "sum"
+						}
+					],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						"xAxis": {
+							"name": "count",
+							"index": 0,
+							"aggr": "sum"
+						}
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270418115_622578763",
+			"id": "20160815-141338_1190579510",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TABLE",
+				"msg": "count\n197\n",
+				"comment": "",
+				"msgTable": [
+					[
+						{
+							"value": "197"
+						}
+					]
+				],
+				"columnNames": [
+					{
+						"name": "count",
+						"index": 0,
+						"aggr": "sum"
+					}
+				],
+				"rows": [
+					[
+						"197"
+					]
+				]
+			},
+			"dateCreated": "Aug 15, 2016 2:13:38 PM",
+			"dateStarted": "Aug 15, 2016 2:21:03 PM",
+			"dateFinished": "Aug 15, 2016 2:21:03 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:981",
+			"focus": true
+		},
+		{
+			"text": "%cassandra\nINSERT INTO test.kv(key, value) VALUES ('themeaningoflife', 42);",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:21:20 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"tableHide": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270450451_67248183",
+			"id": "20160815-141410_1494964922",
+			"result": {
+				"code": "SUCCESS",
+				"type": "HTML",
+				"msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>INSERT INTO test.kv(key, value) VALUES ('themeaningoflife', 42);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>10.0.1.137:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>10.0.1.137:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+			},
+			"dateCreated": "Aug 15, 2016 2:14:10 PM",
+			"dateStarted": "Aug 15, 2016 2:20:25 PM",
+			"dateFinished": "Aug 15, 2016 2:20:25 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:982"
+		},
+		{
+			"text": "%cassandra\nSELECT value FROM test.kv WHERE key='themeaningoflife';",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:20:25 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270641466_1697685971",
+			"id": "20160815-141721_783943393",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TABLE",
+				"msg": "value\n42\n",
+				"comment": "",
+				"msgTable": [
+					[
+						{
+							"value": "42"
+						}
+					]
+				],
+				"columnNames": [
+					{
+						"name": "value",
+						"index": 0,
+						"aggr": "sum"
+					}
+				],
+				"rows": [
+					[
+						"42"
+					]
+				]
+			},
+			"dateCreated": "Aug 15, 2016 2:17:21 PM",
+			"dateStarted": "Aug 15, 2016 2:20:25 PM",
+			"dateFinished": "Aug 15, 2016 2:20:25 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:983"
+		},
+		{
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"tableHide": true,
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270781393_1140031573",
+			"id": "20160815-141941_315708028",
+			"dateCreated": "Aug 15, 2016 2:19:41 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:984",
+			"dateUpdated": "Aug 15, 2016 2:22:15 PM",
+			"dateFinished": "Aug 15, 2016 2:22:15 PM",
+			"dateStarted": "Aug 15, 2016 2:22:15 PM",
+			"title": "Cleanup",
+			"result": {
+				"code": "SUCCESS",
+				"type": "HTML",
+				"msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>DELETE FROM test.kv WHERE key='themeaningoflife';</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.2.117:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+			},
+			"text": "%cassandra\nDELETE FROM test.kv WHERE key='themeaningoflife';",
+			"focus": true
+		},
+		{
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471270854125_-1763006148",
+			"id": "20160815-142054_2061098904",
+			"dateCreated": "Aug 15, 2016 2:20:54 PM",
+			"status": "READY",
+			"progressUpdateIntervalMs": 500,
+			"focus": true,
+			"$$hashKey": "object:1369"
+		}
+	],
+	"name": "Cassandra Interpreter",
+	"id": "2BW66J2XW",
+	"angularObjects": {
+		"2BU2BC8DU:shared_process": [],
+		"2BSRHPJ7Y:shared_process": [],
+		"2BUEM8KRS:shared_process": [],
+		"2BVZHT9M7:shared_process": [],
+		"2BV9XQTPU:shared_process": [],
+		"2BVQP7H9H:shared_process": [],
+		"2BUK5HBPF:shared_process": [],
+		"2BUTY3R7R:shared_process": [],
+		"2BUZ6NXFX:shared_process": [],
+		"2BTNVDYWW:shared_process": [],
+		"2BUEYAPFG:shared_process": [],
+		"2BSJR6WZC:shared_process": [],
+		"2BSKJQQ9X:shared_process": [],
+		"2BSXVH6M1:shared_process": [],
+		"2BTEXQWCF:shared_process": [],
+		"2BV2FYEVM:shared_process": [],
+		"2BSNBXXW2:shared_process": [],
+		"2BV4BSH4N:shared_process": []
+	},
+	"config": {
+		"looknfeel": "default"
+	},
+	"info": {
+		
+	}
+}

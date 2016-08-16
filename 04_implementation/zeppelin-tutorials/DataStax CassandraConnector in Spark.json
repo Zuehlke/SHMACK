@@ -1,1 +1,583 @@
-{"paragraphs":[{"text":"%md\nInspired by the [Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb](https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb), but ported to Zeppelin 0.6.0.\n\nNeeds Cassandra to be up-and-running\n\n> dcos package install cassandra\n\nand Zeppelin Interpreter for Cassandra to point to a node using mesos\n\n> cassandra.hosts: node-0.cassandra.mesos\n\n... but also a the following dependency defined in Zeppelin Interpreter for Spark\n\n> com.datastax.spark:spark-cassandra-connector_2.10:1.5.1\n\nNewer version 1.6.0 seems may have issues with incompatible Guava version.","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:58:59 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","editorHide":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471271326894_361650610","id":"20160815-142846_758384133","result":{"code":"SUCCESS","type":"HTML","msg":"<p>Inspired by the <a href=\"https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb\">Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb</a>, but ported to Zeppelin 0.6.0.</p>\n<p>Needs Cassandra to be up-and-running</p>\n<blockquote><p>dcos package install cassandra</p>\n</blockquote>\n<p>and Zeppelin Interpreter for Cassandra to point to a node using mesos</p>\n<blockquote><p>cassandra.hosts: node-0.cassandra.mesos</p>\n</blockquote>\n<p>&hellip; but also a the following dependency defined in Zeppelin Interpreter for Spark</p>\n<blockquote><p>com.datastax.spark:spark-cassandra-connector_2.10:1.5.1</p>\n</blockquote>\n<p>Newer version 1.6.0 seems may have issues with incompatible Guava version.</p>\n"},"dateCreated":"Aug 15, 2016 2:28:46 PM","dateStarted":"Aug 15, 2016 2:58:58 PM","dateFinished":"Aug 15, 2016 2:58:58 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:172"},{"title":"Old-fashioned style of loading dependency (just to be sure)","text":"%dep\nz.load(\"com.datastax.spark:spark-cassandra-connector_2.10:1.5.1\")","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:40:50 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471271578196_794076081","id":"20160815-143258_2128981676","result":{"code":"SUCCESS","type":"TEXT","msg":"DepInterpreter(%dep) deprecated. Load dependency through GUI interpreter menu instead.\nres0: org.apache.zeppelin.dep.Dependency = org.apache.zeppelin.dep.Dependency@544934ca\n"},"dateCreated":"Aug 15, 2016 2:32:58 PM","dateStarted":"Aug 15, 2016 2:40:50 PM","dateFinished":"Aug 15, 2016 2:40:55 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:173"},{"text":"%spark\nimport com.datastax.spark.connector.cql.CassandraConnector\n\nval sparkConf = sc.getConf\nval cassandraConnector = CassandraConnector(sparkConf) ","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:40:57 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471271597648_-819160733","id":"20160815-143317_2061505519","result":{"code":"SUCCESS","type":"TEXT","msg":"import com.datastax.spark.connector.cql.CassandraConnector\nsparkConf: org.apache.spark.SparkConf = org.apache.spark.SparkConf@651db6a4\ncassandraConnector: com.datastax.spark.connector.cql.CassandraConnector = com.datastax.spark.connector.cql.CassandraConnector@1bf25bfc\n"},"dateCreated":"Aug 15, 2016 2:33:17 PM","dateStarted":"Aug 15, 2016 2:40:57 PM","dateFinished":"Aug 15, 2016 2:41:03 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:174"},{"title":"Using the connector, execute the create statements","text":"%spark\nval createKeyspace = \"CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\" \nval createTable = \"CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\"\ncassandraConnector.withSessionDo { session =>\n  session.execute(createKeyspace)\n  session.execute(createTable)\n}","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:41:42 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471271703625_-154775480","id":"20160815-143503_1650130987","result":{"code":"SUCCESS","type":"TEXT","msg":"createKeyspace: String = CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\ncreateTable: String = CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\nres1: com.datastax.driver.core.ResultSet = ResultSet[ exhausted: true, Columns[]]\n"},"dateCreated":"Aug 15, 2016 2:35:03 PM","dateStarted":"Aug 15, 2016 2:41:06 PM","dateFinished":"Aug 15, 2016 2:41:07 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:175"},{"title":"Insert some sample data","text":"%spark\nCassandraConnector(sparkConf).withSessionDo { session =>\n  for (i <- 0 until 100) {\n    val insertStatement = s\"INSERT INTO test.kv(key, value) VALUES ('key${i}', $i);\"\n    session.execute(insertStatement)\n  }\n}","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:44:25 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"title":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272226495_-928554779","id":"20160815-144346_1468054220","result":{"code":"SUCCESS","type":"TEXT","msg":""},"dateCreated":"Aug 15, 2016 2:43:46 PM","dateStarted":"Aug 15, 2016 2:44:25 PM","dateFinished":"Aug 15, 2016 2:44:26 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:176"},{"config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272245665_-674220432","id":"20160815-144405_1807777913","dateCreated":"Aug 15, 2016 2:44:05 PM","status":"READY","progressUpdateIntervalMs":500,"$$hashKey":"object:177"},{"title":"Loading and analyzing data from Cassandra","text":"%spark\nimport com.datastax.spark.connector._\n\nval rdd = sc.cassandraTable(\"test\", \"kv\")","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:44:42 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala","title":true},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471271744149_434537242","id":"20160815-143544_995789914","result":{"code":"SUCCESS","type":"TEXT","msg":"import com.datastax.spark.connector._\nrdd: com.datastax.spark.connector.rdd.CassandraTableScanRDD[com.datastax.spark.connector.CassandraRow] = CassandraTableScanRDD[1] at RDD at CassandraRDD.scala:15\n"},"dateCreated":"Aug 15, 2016 2:35:44 PM","dateStarted":"Aug 15, 2016 2:44:42 PM","dateFinished":"Aug 15, 2016 2:44:43 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:178"},{"text":"rdd.count","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:57:36 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272152785_-1669455278","id":"20160815-144232_1245639185","result":"org.apache.zeppelin.interpreter.InterpreterException: org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused","dateCreated":"Aug 15, 2016 2:42:32 PM","dateStarted":"Aug 15, 2016 2:57:36 PM","dateFinished":"Aug 15, 2016 2:57:36 PM","status":"ERROR","errorMessage":"java.net.ConnectException: Connection refused\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:155)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:239)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:262)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:176)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n","progressUpdateIntervalMs":500,"$$hashKey":"object:179"},{"text":"rdd.first","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:45:09 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272294615_674217194","id":"20160815-144454_1039833433","result":{"code":"SUCCESS","type":"TEXT","msg":"res10: com.datastax.spark.connector.CassandraRow = CassandraRow{key: key98, value: 98}\n"},"dateCreated":"Aug 15, 2016 2:44:54 PM","dateStarted":"Aug 15, 2016 2:45:09 PM","dateFinished":"Aug 15, 2016 2:45:10 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:180"},{"text":"rdd.map(_.getInt(\"value\")).sum","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:57:47 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272309802_1734231062","id":"20160815-144509_1612435975","result":"org.apache.zeppelin.interpreter.InterpreterException: org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused","dateCreated":"Aug 15, 2016 2:45:09 PM","dateStarted":"Aug 15, 2016 2:57:47 PM","dateFinished":"Aug 15, 2016 2:57:47 PM","status":"ERROR","errorMessage":"java.net.ConnectException: Connection refused\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:155)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:239)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:262)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:176)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n","progressUpdateIntervalMs":500,"$$hashKey":"object:181"},{"text":"%spark\ncase class KeyValuePair(key: String, value: Integer)\n\nval data = rdd.map(s => KeyValuePair(s.getString(\"key\"), s.getInt(\"value\"))).toDF()\n\ndata.registerTempTable(\"dataForSparkSQL\")","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:55:46 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272384641_-727099597","id":"20160815-144624_1017432378","result":{"code":"SUCCESS","type":"TEXT","msg":"defined class KeyValuePair\ndata: org.apache.spark.sql.DataFrame = [key: string, value: int]\n"},"dateCreated":"Aug 15, 2016 2:46:24 PM","dateStarted":"Aug 15, 2016 2:55:46 PM","dateFinished":"Aug 15, 2016 2:55:46 PM","status":"FINISHED","progressUpdateIntervalMs":500,"$$hashKey":"object:182"},{"text":"%sql\nSELECT COUNT(*) FROM dataForSparkSQL WHERE value > 15;","authenticationInfo":{},"dateUpdated":"Aug 15, 2016 2:55:53 PM","config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/sql"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272327320_-135432410","id":"20160815-144527_568688548","result":{"code":"ERROR","type":"TEXT","msg":"[1.54] failure: ``union'' expected but `;' found\n\nSELECT COUNT(*) FROM dataForSparkSQL WHERE value > 15;\n                                                     ^\nset zeppelin.spark.sql.stacktrace = true to see full stacktrace"},"dateCreated":"Aug 15, 2016 2:45:27 PM","dateStarted":"Aug 15, 2016 2:55:53 PM","dateFinished":"Aug 15, 2016 2:55:53 PM","status":"ERROR","progressUpdateIntervalMs":500,"$$hashKey":"object:183"},{"config":{"colWidth":12,"graph":{"mode":"table","height":300,"optionOpen":false,"keys":[],"values":[],"groups":[],"scatter":{}},"enabled":true,"editorMode":"ace/mode/scala"},"settings":{"params":{},"forms":{}},"jobName":"paragraph_1471272346192_662198033","id":"20160815-144546_131537960","dateCreated":"Aug 15, 2016 2:45:46 PM","status":"READY","progressUpdateIntervalMs":500,"$$hashKey":"object:184"}],"name":"DataStax CassandraConnector in Spark","id":"2BUJTBTGU","angularObjects":{"2BU2BC8DU:shared_process":[],"2BSRHPJ7Y:shared_process":[],"2BUEM8KRS:shared_process":[],"2BVZHT9M7:shared_process":[],"2BV9XQTPU:shared_process":[],"2BVQP7H9H:shared_process":[],"2BUK5HBPF:shared_process":[],"2BUTY3R7R:shared_process":[],"2BUZ6NXFX:shared_process":[],"2BTNVDYWW:shared_process":[],"2BUEYAPFG:shared_process":[],"2BSJR6WZC:shared_process":[],"2BSKJQQ9X:shared_process":[],"2BSXVH6M1:shared_process":[],"2BTEXQWCF:shared_process":[],"2BV2FYEVM:shared_process":[],"2BSNBXXW2:shared_process":[],"2BV4BSH4N:shared_process":[]},"config":{"looknfeel":"default"},"info":{}}
+{
+	"paragraphs": [
+		{
+			"text": "%md\nInspired by the [Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb](https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb), but ported to Zeppelin 0.6.0.\n\nNeeds Cassandra to be up-and-running\n\n> dcos package install cassandra\n\nand Zeppelin Interpreter for Cassandra to point to a node using mesos\n\n> cassandra.hosts: node-0.cassandra.mesos,node-1.cassandra.mesos,node-2.cassandra.mesos\n\n... but also a the following dependency defined in Zeppelin Interpreter for Spark\n\n> com.datastax.spark:spark-cassandra-connector_2.10:1.5.1\n\nNewer version 1.6.0 seems may have issues with incompatible Guava version.",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:58:59 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"editorHide": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471271326894_361650610",
+			"id": "20160815-142846_758384133",
+			"result": {
+				"code": "SUCCESS",
+				"type": "HTML",
+				"msg": "<p>Inspired by the <a href=\"https://github.com/andypetrella/spark-notebook/blob/master/notebooks/cassandra/Getting%20Started%20with%20Spark%20and%20Cassandra.snb\">Spark Notebook Tutorial: Getting Started with Spark and Cassandra.snb</a>, but ported to Zeppelin 0.6.0.</p>\n<p>Needs Cassandra to be up-and-running</p>\n<blockquote><p>dcos package install cassandra</p>\n</blockquote>\n<p>and Zeppelin Interpreter for Cassandra to point to a node using mesos</p>\n<blockquote><p>cassandra.hosts: node-0.cassandra.mesos</p>\n</blockquote>\n<p>&hellip; but also a the following dependency defined in Zeppelin Interpreter for Spark</p>\n<blockquote><p>com.datastax.spark:spark-cassandra-connector_2.10:1.5.1</p>\n</blockquote>\n<p>Newer version 1.6.0 seems may have issues with incompatible Guava version.</p>\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:28:46 PM",
+			"dateStarted": "Aug 15, 2016 2:58:58 PM",
+			"dateFinished": "Aug 15, 2016 2:58:58 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:172"
+		},
+		{
+			"title": "Old-fashioned style of loading dependency (just to be sure)",
+			"text": "%dep\nz.load(\"com.datastax.spark:spark-cassandra-connector_2.10:1.5.1\")",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:40:50 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471271578196_794076081",
+			"id": "20160815-143258_2128981676",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "DepInterpreter(%dep) deprecated. Load dependency through GUI interpreter menu instead.\nres0: org.apache.zeppelin.dep.Dependency = org.apache.zeppelin.dep.Dependency@544934ca\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:32:58 PM",
+			"dateStarted": "Aug 15, 2016 2:40:50 PM",
+			"dateFinished": "Aug 15, 2016 2:40:55 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:173"
+		},
+		{
+			"text": "%spark\nimport com.datastax.spark.connector.cql.CassandraConnector\n\nval sparkConf = sc.getConf\nval cassandraConnector = CassandraConnector(sparkConf) ",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:40:57 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471271597648_-819160733",
+			"id": "20160815-143317_2061505519",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "import com.datastax.spark.connector.cql.CassandraConnector\nsparkConf: org.apache.spark.SparkConf = org.apache.spark.SparkConf@651db6a4\ncassandraConnector: com.datastax.spark.connector.cql.CassandraConnector = com.datastax.spark.connector.cql.CassandraConnector@1bf25bfc\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:33:17 PM",
+			"dateStarted": "Aug 15, 2016 2:40:57 PM",
+			"dateFinished": "Aug 15, 2016 2:41:03 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:174"
+		},
+		{
+			"title": "Using the connector, execute the create statements",
+			"text": "%spark\nval createKeyspace = \"CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\" \nval createTable = \"CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\"\ncassandraConnector.withSessionDo { session =>\n  session.execute(createKeyspace)\n  session.execute(createTable)\n}",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:41:42 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471271703625_-154775480",
+			"id": "20160815-143503_1650130987",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "createKeyspace: String = CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\ncreateTable: String = CREATE TABLE IF NOT EXISTS test.kv(key text PRIMARY KEY, value int);\nres1: com.datastax.driver.core.ResultSet = ResultSet[ exhausted: true, Columns[]]\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:35:03 PM",
+			"dateStarted": "Aug 15, 2016 2:41:06 PM",
+			"dateFinished": "Aug 15, 2016 2:41:07 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:175"
+		},
+		{
+			"title": "Insert some sample data",
+			"text": "%spark\nCassandraConnector(sparkConf).withSessionDo { session =>\n  for (i <- 0 until 100) {\n    val insertStatement = s\"INSERT INTO test.kv(key, value) VALUES ('key${i}', $i);\"\n    session.execute(insertStatement)\n  }\n}",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:44:25 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"title": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272226495_-928554779",
+			"id": "20160815-144346_1468054220",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": ""
+			},
+			"dateCreated": "Aug 15, 2016 2:43:46 PM",
+			"dateStarted": "Aug 15, 2016 2:44:25 PM",
+			"dateFinished": "Aug 15, 2016 2:44:26 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:176"
+		},
+		{
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272245665_-674220432",
+			"id": "20160815-144405_1807777913",
+			"dateCreated": "Aug 15, 2016 2:44:05 PM",
+			"status": "READY",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:177"
+		},
+		{
+			"title": "Loading and analyzing data from Cassandra",
+			"text": "%spark\nimport com.datastax.spark.connector._\n\nval rdd = sc.cassandraTable(\"test\", \"kv\")",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:44:42 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala",
+				"title": true
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471271744149_434537242",
+			"id": "20160815-143544_995789914",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "import com.datastax.spark.connector._\nrdd: com.datastax.spark.connector.rdd.CassandraTableScanRDD[com.datastax.spark.connector.CassandraRow] = CassandraTableScanRDD[1] at RDD at CassandraRDD.scala:15\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:35:44 PM",
+			"dateStarted": "Aug 15, 2016 2:44:42 PM",
+			"dateFinished": "Aug 15, 2016 2:44:43 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:178"
+		},
+		{
+			"text": "rdd.count",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:57:36 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272152785_-1669455278",
+			"id": "20160815-144232_1245639185",
+			"result": "org.apache.zeppelin.interpreter.InterpreterException: org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused",
+			"dateCreated": "Aug 15, 2016 2:42:32 PM",
+			"dateStarted": "Aug 15, 2016 2:57:36 PM",
+			"dateFinished": "Aug 15, 2016 2:57:36 PM",
+			"status": "ERROR",
+			"errorMessage": "java.net.ConnectException: Connection refused\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:155)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:239)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:262)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:176)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:179"
+		},
+		{
+			"text": "rdd.first",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:45:09 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272294615_674217194",
+			"id": "20160815-144454_1039833433",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "res10: com.datastax.spark.connector.CassandraRow = CassandraRow{key: key98, value: 98}\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:44:54 PM",
+			"dateStarted": "Aug 15, 2016 2:45:09 PM",
+			"dateFinished": "Aug 15, 2016 2:45:10 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:180"
+		},
+		{
+			"text": "rdd.map(_.getInt(\"value\")).sum",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:57:47 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272309802_1734231062",
+			"id": "20160815-144509_1612435975",
+			"result": "org.apache.zeppelin.interpreter.InterpreterException: org.apache.thrift.transport.TTransportException: java.net.ConnectException: Connection refused",
+			"dateCreated": "Aug 15, 2016 2:45:09 PM",
+			"dateStarted": "Aug 15, 2016 2:57:47 PM",
+			"dateFinished": "Aug 15, 2016 2:57:47 PM",
+			"status": "ERROR",
+			"errorMessage": "java.net.ConnectException: Connection refused\n\tat java.net.PlainSocketImpl.socketConnect(Native Method)\n\tat java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)\n\tat java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)\n\tat java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)\n\tat java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)\n\tat java.net.Socket.connect(Socket.java:589)\n\tat org.apache.thrift.transport.TSocket.open(TSocket.java:182)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:51)\n\tat org.apache.zeppelin.interpreter.remote.ClientFactory.create(ClientFactory.java:37)\n\tat org.apache.commons.pool2.BasePooledObjectFactory.makeObject(BasePooledObjectFactory.java:60)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435)\n\tat org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterProcess.getClient(RemoteInterpreterProcess.java:155)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:239)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:93)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:262)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:176)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:328)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)\n\tat java.lang.Thread.run(Thread.java:745)\n",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:181"
+		},
+		{
+			"text": "%spark\ncase class KeyValuePair(key: String, value: Integer)\n\nval data = rdd.map(s => KeyValuePair(s.getString(\"key\"), s.getInt(\"value\"))).toDF()\n\ndata.registerTempTable(\"dataForSparkSQL\")",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:55:46 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272384641_-727099597",
+			"id": "20160815-144624_1017432378",
+			"result": {
+				"code": "SUCCESS",
+				"type": "TEXT",
+				"msg": "defined class KeyValuePair\ndata: org.apache.spark.sql.DataFrame = [key: string, value: int]\n"
+			},
+			"dateCreated": "Aug 15, 2016 2:46:24 PM",
+			"dateStarted": "Aug 15, 2016 2:55:46 PM",
+			"dateFinished": "Aug 15, 2016 2:55:46 PM",
+			"status": "FINISHED",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:182"
+		},
+		{
+			"text": "%sql\nSELECT COUNT(*) FROM dataForSparkSQL WHERE value > 15;",
+			"authenticationInfo": {
+				
+			},
+			"dateUpdated": "Aug 15, 2016 2:55:53 PM",
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/sql"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272327320_-135432410",
+			"id": "20160815-144527_568688548",
+			"result": {
+				"code": "ERROR",
+				"type": "TEXT",
+				"msg": "[1.54] failure: ``union'' expected but `;' found\n\nSELECT COUNT(*) FROM dataForSparkSQL WHERE value > 15;\n                                                     ^\nset zeppelin.spark.sql.stacktrace = true to see full stacktrace"
+			},
+			"dateCreated": "Aug 15, 2016 2:45:27 PM",
+			"dateStarted": "Aug 15, 2016 2:55:53 PM",
+			"dateFinished": "Aug 15, 2016 2:55:53 PM",
+			"status": "ERROR",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:183"
+		},
+		{
+			"config": {
+				"colWidth": 12,
+				"graph": {
+					"mode": "table",
+					"height": 300,
+					"optionOpen": false,
+					"keys": [],
+					"values": [],
+					"groups": [],
+					"scatter": {
+						
+					}
+				},
+				"enabled": true,
+				"editorMode": "ace/mode/scala"
+			},
+			"settings": {
+				"params": {
+					
+				},
+				"forms": {
+					
+				}
+			},
+			"jobName": "paragraph_1471272346192_662198033",
+			"id": "20160815-144546_131537960",
+			"dateCreated": "Aug 15, 2016 2:45:46 PM",
+			"status": "READY",
+			"progressUpdateIntervalMs": 500,
+			"$$hashKey": "object:184"
+		}
+	],
+	"name": "DataStax CassandraConnector in Spark",
+	"id": "2BUJTBTGU",
+	"angularObjects": {
+		"2BU2BC8DU:shared_process": [],
+		"2BSRHPJ7Y:shared_process": [],
+		"2BUEM8KRS:shared_process": [],
+		"2BVZHT9M7:shared_process": [],
+		"2BV9XQTPU:shared_process": [],
+		"2BVQP7H9H:shared_process": [],
+		"2BUK5HBPF:shared_process": [],
+		"2BUTY3R7R:shared_process": [],
+		"2BUZ6NXFX:shared_process": [],
+		"2BTNVDYWW:shared_process": [],
+		"2BUEYAPFG:shared_process": [],
+		"2BSJR6WZC:shared_process": [],
+		"2BSKJQQ9X:shared_process": [],
+		"2BSXVH6M1:shared_process": [],
+		"2BTEXQWCF:shared_process": [],
+		"2BV2FYEVM:shared_process": [],
+		"2BSNBXXW2:shared_process": [],
+		"2BV4BSH4N:shared_process": []
+	},
+	"config": {
+		"looknfeel": "default"
+	},
+	"info": {
+		
+	}
+}
