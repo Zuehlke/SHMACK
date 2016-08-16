@@ -23,8 +23,8 @@ SLAVE_INSTANCE_COUNT=5
 # Default is m3.xlarge, which should remain the lowest setting.
 # Other options could be m3.2xlarge with same number of nodes but a bit more "beefy", 
 # or the corresponding c3 or r3 instances, depending if you need more computing power (c3) or memory (r3).
-SLAVE_INSTANCE_TYPE="m3.xlarge"
-#SLAVE_INSTANCE_TYPE="r3.2xlarge"
+#SLAVE_INSTANCE_TYPE="m3.xlarge"
+SLAVE_INSTANCE_TYPE="r3.2xlarge"
 
 # Space-separated list of packages to install (without asking)
 # 'hdfs' and 'spark' are needed to run the spark unit tests.
@@ -104,8 +104,5 @@ echo ${INSTALL_PACKAGES} > ${CURRENT_STACK_INSTALL_PACKAGES_FILE}
 echo ${OPTIONAL_PACKAGES} > ${CURRENT_STACK_OPTIONAL_PACKAGES_FILE}
 echo ${INSTALL_APPS} > ${CURRENT_STACK_INSTALL_APPS_FILE}
 echo ${OPTIONAL_APPS} > ${CURRENT_STACK_OPTIONAL_APPS_FILE}
-
-# Make sure authentication is current, so we won't run into issues when initializing the stack
-run dcos auth login
 
 run init-dcos-stack.sh
