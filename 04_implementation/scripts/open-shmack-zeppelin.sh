@@ -3,7 +3,7 @@
 cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
 
-# Opens a browser to Zeppelin running on DCOS.
+# Opens a browser to Zeppelin running on DC/OS.
 # Prefers to do this through marathon-lb running on public slave.
 
 HAPROXY_STATS_FILE="${TMP_OUTPUT_DIR}/HaProxyStats.html"
