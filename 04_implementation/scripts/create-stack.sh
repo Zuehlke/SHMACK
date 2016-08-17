@@ -23,8 +23,8 @@ SLAVE_INSTANCE_COUNT=5
 # Default is m3.xlarge, which should remain the lowest setting.
 # Other options could be m3.2xlarge with same number of nodes but a bit more "beefy", 
 # or the corresponding c3 or r3 instances, depending if you need more computing power (c3) or memory (r3).
-#SLAVE_INSTANCE_TYPE="m3.xlarge"
-SLAVE_INSTANCE_TYPE="r3.2xlarge"
+SLAVE_INSTANCE_TYPE="m3.xlarge"
+#SLAVE_INSTANCE_TYPE="r3.2xlarge"
 
 # Space-separated list of packages to install (without asking)
 # 'hdfs' and 'spark' are needed to run the spark unit tests.
