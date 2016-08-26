@@ -78,17 +78,9 @@ You will also need that in order to develop and contribute.
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
 export PATH
 ```
-* Optional: setup git for commandline usage (source of commands: https://help.github.com/articles/set-up-git/ )
-  * `git config --global user.name "YOUR NAME"`
-  * `git config --global user.email "your_GITHUB_email_address@example.com"`
-  * `git config --global push.default simple`
-  * Setup github Credentials
-    * `git config --global credential.helper cache`
-    * `git config --global credential.helper 'cache --timeout=43200'`  (cache 1 day)
-  * You may consider installing an additional git GUI. Easy tools to setup on Linux are gitg, giggle, and git-cola (just apt-get them); on Mac OS X or Windows, [Atlassian SourceTree](https://www.sourcetreeapp.com) works nice. 
-    More clients listed on https://git-scm.com/downloads/guis.
+* Optional: setup additonal tools to better work with git as described [here](./GitHelp.md)
 * Optional: When intending to create new packages for the stack on DC/OS to deploy applications, 
-    install Docker: https://docs.docker.com/engine/installation/linux/ubuntulinux/
+    install [Docker](https://www.docker.com/) as described [here](./Docker.md)
 
 ### Setup AWS console 
 Details can be found in: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
@@ -171,9 +163,9 @@ and by that, more appropriate for forming short-lived clusters for quick experim
 ### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances
 To lower costs you can use spot instances. To do this, change this line in shmack_env:
 
-    TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack-spot-config/config.json"
+    TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
 
-This is currently hosted on a private s3 bucket. If it goes down, just refer to [stackoverflow](http://stackoverflow.com/questions/31409463/spot-instances-support-dcos). You have to upload the file yourself.
+This is currently hosted on a private s3 bucket, for details see [here](./cloud-templates/README.MD).
 
 <a name="stackCreation" />
 ### Stack Creation (from now on, you pay for usage)
@@ -321,37 +313,12 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 **Attention**: Data in HDFS is **destroyed** when scaling down!!
 
 ## Which Java/Scala/Python Version can be used?
-As of 2016-03-08 Java 1.8.0_51, Spark 1.6 with Scala 2.10.5, and Python 3.4 are deployed on the created stack.
+As of 2016-08-26 Java 1.8.0_51, Spark 2.0 with Scala 2.10.5, and Python 3.4 are deployed on the created stack.
 
 <a name="sparkShell" />
 ## Can I run an interactive Spark Shell?
-Yes, you can - but unfortunately this is rather a smoke test than a usable environment so far.
-* See https://support.mesosphere.com/hc/en-us/articles/206118703-Launching-spark-shell-on-a-DCOS-master-node
-```
-ssh-into-dcos-master.sh
-curl -O http://d3kbcqa49mib13.cloudfront.net/spark-1.6.0-bin-hadoop2.6.tgz
-tar xzf spark-1.6.0-bin-hadoop2.6.tgz
-cd spark-1.6.0-bin-hadoop2.6/bin/
-./spark-shell --master mesos://<local-ip>:5050
-```
-* You can run simple commands with that
-```
-scala> scala.util.Properties.versionString
-res0: String = version 2.10.5
-```
-* But executing distributed tasks will fail
-```
-scala> sc.parallelize(0 to 10, 8).count
-```
-will complain with
-```WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster ui
-to ensure that workers are registered and have sufficient memory```
-
-**TODO** Figure out, what's wrong. Tried to set [coarse grained mode and docker image](http://spark.apache.org/docs/latest/running-on-mesos.html) as `--conf` options, but didn't help.  
-
-* [Apache Zeppelin](http://zeppelin.incubator.apache.org/) can replace the need for interactive data analysis and provide even nice visualizations. You access Zeppelin on your running stack simply with: `open-shmack-zeppelin.sh`
-The URL of Zeppelin will be available also outside the VM.
-
+Not really. [Officially](https://docs.mesosphere.com/1.7/usage/service-guides/spark/limitations/), you should use graphical webfrontends [Zeppelin](https://docs.mesosphere.com/1.7/usage/service-guides/zeppelin/) or [Spark Notebook](https://github.com/andypetrella/spark-notebook/#mesosphere-dcos) instead. 
+An [older blog posting](https://support.mesosphere.com/hc/en-us/articles/206118703-Launching-spark-shell-on-a-DCOS-master-node) showed some steps, but that never really worked for anything with parallel execution / using the master.
 
 <a name="checkStackSetup" />
 ## What should I do to check if the setup and stack creation was successful?
@@ -371,6 +338,8 @@ Look at the examples:
 * `JavaSparkPiRemoteTest`
 * `WordCountRemoteTest`
 These **will require** a running stack, they will fail if instance on AWS are not yet (or no longer) available or cannot be access through SSH.
+
+**THIS CURRENTLY DOESN'T WORK BECAUSE UPLOAD VIA RSYNC IS BROKEN**
 
 Make sure that every thecase hase it's own `testcaseId`. This id needs only to be distinct only within one Test-Class.
 ```
@@ -465,6 +434,14 @@ To fix this:
 
 Just to be on the safe side, you should probably also update the AWS Commandline Interface:
 * `sudo -H pip install --upgrade awscli`
+
+## `create-stack` fails with some message I should run `dcos auth login`
+Don't worry. This happens sometimes when you have created a DC/OS stack before and the credentials no longer fit.
+It is a pain, but very easy to fix.
+
+To fix this:
+* Do as told, execute `dcos auth login`, login with a valid account (GitHub works great), copy the activation code, and paste to the shell.
+* Run `init-dcos-stack.sh` to complete the creation of the full stack.
 
 
 <a name="forgotCred" />

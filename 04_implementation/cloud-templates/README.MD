@@ -1,6 +1,6 @@
 This folder contains patched files of the official 
 <https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json>
-... may need a refresh every now and then to align with new versions of DC/OS.
+... may need a refresh every now and then to align with new versions of DC/OS. The general instructions for that are derived from [stackoverflow](http://stackoverflow.com/questions/31409463/spot-instances-support-dcos).
 
 Main purpose is to expose more parameters, so it is easy to create a new stack with different instance types and  (optionally) using spot instances.
 
