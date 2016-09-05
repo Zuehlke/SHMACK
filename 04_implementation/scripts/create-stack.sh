@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 cd `dirname ${BASH_SOURCE[0]}`
 . ./shmack_env
@@ -30,7 +30,8 @@ SLAVE_INSTANCE_TYPE="m3.xlarge"
 # 'hdfs' and 'spark' are needed to run the spark unit tests.
 # You can later install additional packages using 'dcos package install'
 # The list of available packages can be retrieved with 'dcos package search'
-INSTALL_PACKAGES="hdfs spark chronos marathon marathon-lb"
+INSTALL_PACKAGES="spark marathon"
+#INSTALL_PACKAGES="hdfs spark chronos marathon marathon-lb"
 
 # Space-separated list of optional packages to install if user confirms with 'yes' 
 # You can later install additional packages using 'dcos package install'
