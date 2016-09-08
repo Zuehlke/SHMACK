@@ -2,7 +2,8 @@
   "paragraphs": [
     {
       "text": "%md\nSimple example how to write to Kafka (though most examples usually read a Kafka stream)\n\nMust have Kafka installed\n\n> dcos package install kafka\n\nSpark Interpreter must be configured with depency\n\n> org.apache.kafka:kafka_2.10:jar:0.10.0.0\n\nSee also <https://docs.mesosphere.com/1.7/usage/service-guides/kafka/connecting-clients/>",
-      "dateUpdated": "Aug 26, 2016 10:38:57 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:29:32 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/markdown",
@@ -22,25 +23,25 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493596_2100042555",
+      "jobName": "paragraph_1473126413647_1844870287",
       "id": "20160826-154813_14921628",
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
         "msg": "<p>Simple example how to write to Kafka (though most examples usually read a Kafka stream)</p>\n<p>Must have Kafka installed</p>\n<blockquote><p>dcos package install kafka</p>\n</blockquote>\n<p>Spark Interpreter must be configured with depency</p>\n<blockquote><p>org.apache.kafka:kafka_2.10:jar:0.10.0.0</p>\n</blockquote>\n<p>See also <a href=\"https://docs.mesosphere.com/1.7/usage/service-guides/kafka/connecting-clients/\">https://docs.mesosphere.com/1.7/usage/service-guides/kafka/connecting-clients/</a></p>\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:38:57 PM",
-      "dateFinished": "Aug 26, 2016 10:38:57 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:29:32 PM",
+      "dateFinished": "Sep 8, 2016 12:29:32 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:813",
-      "focus": true
+      "$$hashKey": "object:176"
     },
     {
       "title": "old way of loading moduls would have been...",
       "text": "%dep\nz.load(\"org.apache.kafka:kafka_2.10:jar:0.10.0.0\");",
-      "dateUpdated": "Aug 26, 2016 10:38:57 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:29:38 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/scala",
@@ -54,34 +55,35 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true
+        "enabled": true,
+        "editorHide": false
       },
       "settings": {
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493597_2099657806",
+      "jobName": "paragraph_1473126413647_1844870287",
       "id": "20160826-154813_1056737966",
       "result": {
         "code": "ERROR",
         "type": "TEXT",
         "msg": "Must be used before SparkInterpreter (%spark) initialized\nHint: put this paragraph before any Spark code and restart Zeppelin/Interpreter"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:38:57 PM",
-      "dateFinished": "Aug 26, 2016 10:38:57 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:29:38 PM",
+      "dateFinished": "Sep 8, 2016 12:29:39 PM",
       "status": "ERROR",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:814",
-      "focus": true
+      "$$hashKey": "object:177"
     },
     {
       "text": "%md\nNeed to configure, so run\n\n> dcos kafka connection\n\nor look up a Kafka broker to bootstrap",
-      "dateUpdated": "Aug 26, 2016 10:39:06 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:29:43 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/markdown",
-        "editorHide": true,
+        "editorHide": false,
         "graph": {
           "mode": "table",
           "height": 300,
@@ -97,24 +99,27 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_207826359",
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
         "msg": "<p>Need to configure, so run</p>\n<blockquote><p>dcos kafka connection</p>\n</blockquote>\n<p>or look up a Kafka broker to bootstrap</p>\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:39:06 PM",
-      "dateFinished": "Aug 26, 2016 10:39:06 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:29:43 PM",
+      "dateFinished": "Sep 8, 2016 12:29:43 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:815",
-      "focus": true
+      "$$hashKey": "object:178"
     },
     {
+      "text": "import org.apache.zookeeper.ZooKeeper\nimport scala.collection.JavaConversions._\nimport kafka.utils.Json\n\ndef extractConnection(zkData: String): String = {\n    val brokerInfo = Json.parseFull(zkData).get.asInstanceOf[Map[String, Any]]\n    val host = brokerInfo(\"host\").asInstanceOf[String]\n    val port = brokerInfo(\"port\").asInstanceOf[Int]\n    s\"$host:$port\"\n}\n\nval zk = new ZooKeeper(\"master.mesos:2181/dcos-service-kafka\", 10000, null)\nval ids = zk.getChildren(\"/brokers/ids\", false)\nval connections = scala.collection.mutable.ListBuffer.empty[String]\n\nfor (id <- ids) {\n    connections += (extractConnection(new String(zk.getData(\"/brokers/ids/\" + id, false, null))))\n}\nval bootstrapServers = connections.mkString(\",\")",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:29:52 PM",
       "config": {
         "colWidth": 12,
+        "editorMode": "ace/mode/scala",
         "graph": {
           "mode": "table",
           "height": 300,
@@ -124,34 +129,31 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "enabled": true
       },
       "settings": {
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472247199228_-1804955148",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-213319_1735374515",
-      "dateCreated": "Aug 26, 2016 9:33:19 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500,
-      "focus": true,
-      "$$hashKey": "object:1098",
-      "text": "import org.apache.zookeeper.ZooKeeper\nimport scala.collection.JavaConversions._\nimport kafka.utils.Json\n\ndef extractConnection(zkData: String): String = {\n    val brokerInfo = Json.parseFull(zkData).get.asInstanceOf[Map[String, Any]]\n    val host = brokerInfo(\"host\").asInstanceOf[String]\n    val port = brokerInfo(\"port\").asInstanceOf[Int]\n    s\"$host:$port\"\n}\n\nval zk = new ZooKeeper(\"master.mesos:2181/dcos-service-kafka\", 10000, null)\nval ids = zk.getChildren(\"/brokers/ids\", false)\nval connections = scala.collection.mutable.ListBuffer.empty[String]\n\nfor (id <- ids) {\n    connections += (extractConnection(new String(zk.getData(\"/brokers/ids/\" + id, false, null))))\n}\nval bootstrapServers = connections.mkString(\",\")",
-      "dateUpdated": "Aug 26, 2016 10:39:07 PM",
-      "dateFinished": "Aug 26, 2016 10:39:12 PM",
-      "dateStarted": "Aug 26, 2016 10:39:10 PM",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "import org.apache.zookeeper.ZooKeeper\nimport scala.collection.JavaConversions._\nimport kafka.utils.Json\nextractConnection: (zkData: String)String\nzk: org.apache.zookeeper.ZooKeeper = State:CONNECTING sessionid:0x0 local:null remoteserver:null lastZxid:0 xid:1 sent:0 recv:0 queuedpkts:0 pendingresp:0 queuedevents:0\nids: java.util.List[String] = [0, 1, 2]\nconnections: scala.collection.mutable.ListBuffer[String] = ListBuffer()\nbootstrapServers: String = 10.0.0.43:9995,10.0.1.77:9548,10.0.3.4:9875\n"
-      }
+        "msg": "import org.apache.zookeeper.ZooKeeper\nimport scala.collection.JavaConversions._\nimport kafka.utils.Json\nextractConnection: (zkData: String)String\nzk: org.apache.zookeeper.ZooKeeper = State:CONNECTING sessionid:0x0 local:null remoteserver:null lastZxid:0 xid:1 sent:0 recv:0 queuedpkts:0 pendingresp:0 queuedevents:0\nids: java.util.List[String] = [0, 1, 2]\nconnections: scala.collection.mutable.ListBuffer[String] = ListBuffer()\nbootstrapServers: String = ec2-52-53-183-225.us-west-1.compute.amazonaws.com:9585,ec2-52-53-218-149.us-west-1.compute.amazonaws.com:9780,ec2-54-183-176-19.us-west-1.compute.amazonaws.com:10054\n"
+      },
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:29:52 PM",
+      "dateFinished": "Sep 8, 2016 12:29:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:179"
     },
     {
       "title": "Create Producer",
       "text": "import java.util.Properties\nimport org.apache.kafka.clients.producer._\n\nval  producerProps = new Properties()\nproducerProps.put(\"bootstrap.servers\", bootstrapServers)\n  \nproducerProps.put(\"key.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\")\nproducerProps.put(\"value.serializer\", \"org.apache.kafka.common.serialization.StringSerializer\")\n\nval producer = new KafkaProducer[String, String](producerProps)",
-      "dateUpdated": "Aug 26, 2016 10:41:42 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:34:54 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/scala",
@@ -171,27 +173,28 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_1917106733",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "import java.util.Properties\nimport org.apache.kafka.clients.producer._\nproducerProps: java.util.Properties = {}\nres254: Object = null\nres256: Object = null\nres257: Object = null\nproducer: org.apache.kafka.clients.producer.KafkaProducer[String,String] = org.apache.kafka.clients.producer.KafkaProducer@3674c61d\n"
+        "msg": "import java.util.Properties\nimport org.apache.kafka.clients.producer._\nproducerProps: java.util.Properties = {}\nres42: Object = null\nres43: Object = null\nres44: Object = null\nproducer: org.apache.kafka.clients.producer.KafkaProducer[String,String] = org.apache.kafka.clients.producer.KafkaProducer@1611c3df\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:41:43 PM",
-      "dateFinished": "Aug 26, 2016 10:41:44 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:34:54 PM",
+      "dateFinished": "Sep 8, 2016 12:34:55 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:816",
-      "focus": true
+      "$$hashKey": "object:180"
     },
     {
       "title": "Send some messages to a topic",
       "text": "val TOPIC=\"test\"\n\nfor(i<- 1 to 50){\n  val record = new ProducerRecord(TOPIC, \"key\", s\"hello $i\")\n  producer.send(record)\n }",
-      "dateUpdated": "Aug 26, 2016 10:41:47 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:35:00 PM",
       "config": {
         "colWidth": 12,
+        "editorMode": "ace/mode/scala",
         "title": true,
         "graph": {
           "mode": "table",
@@ -202,74 +205,34 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "enabled": true
       },
       "settings": {
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_1328028494",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
         "msg": "TOPIC: String = test\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:41:47 PM",
-      "dateFinished": "Aug 26, 2016 10:41:48 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:35:00 PM",
+      "dateFinished": "Sep 8, 2016 12:35:01 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:817",
-      "focus": true
+      "$$hashKey": "object:181"
     },
     {
       "title": "Mark the end",
       "text": "val record = new ProducerRecord(TOPIC, \"key\", \"the end \"+new java.util.Date)\n producer.send(record)\n\nproducer.close()",
-      "dateUpdated": "Aug 26, 2016 10:41:49 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:35:03 PM",
       "config": {
         "colWidth": 12,
-        "title": true,
-        "graph": {
-          "mode": "table",
-          "height": 300,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true,
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1472226493598_2100812053",
-      "id": "20160826-154813_358306303",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": "record: org.apache.kafka.clients.producer.ProducerRecord[String,String] = ProducerRecord(topic=test, partition=null, key=key, value=the end Fri Aug 26 22:41:49 UTC 2016, timestamp=null)\nres263: java.util.concurrent.Future[org.apache.kafka.clients.producer.RecordMetadata] = org.apache.kafka.clients.producer.internals.FutureRecordMetadata@49d6066e\n"
-      },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:41:49 PM",
-      "dateFinished": "Aug 26, 2016 10:41:50 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:818",
-      "focus": true
-    },
-    {
-      "title": "Interact with same topic on shell on DC/OS master node",
-      "text": "%md\nTo observe somewhere else, you can actually observe on the shell the topic\n\n> ssh-into-dcos-master.sh\n\n> docker run -it mesosphere/kafka-client\n\n> ./kafka-console-consumer.sh --zookeeper master.mesos:2181/dcos-service-kafka --topic test --from-beginning\n\nAnd you can end with Ctrl-C and post also a new message to the topic\n\n> echo \"Hello from shell\" | ./kafka-console-producer.sh --topic test --broker-list broker-0.kafka.mesos:9216\n",
-      "dateUpdated": "Aug 26, 2016 10:38:57 PM",
-      "config": {
-        "colWidth": 12,
-        "editorMode": "ace/mode/markdown",
-        "editorHide": true,
+        "editorMode": "ace/mode/scala",
         "title": true,
         "graph": {
           "mode": "table",
@@ -286,27 +249,69 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
+      "id": "20160826-154813_358306303",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "record: org.apache.kafka.clients.producer.ProducerRecord[String,String] = ProducerRecord(topic=test, partition=null, key=key, value=the end Thu Sep 08 12:35:03 UTC 2016, timestamp=null)\nres48: java.util.concurrent.Future[org.apache.kafka.clients.producer.RecordMetadata] = org.apache.kafka.clients.producer.internals.FutureRecordMetadata@422db474\n"
+      },
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:35:03 PM",
+      "dateFinished": "Sep 8, 2016 12:35:04 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:182"
+    },
+    {
+      "title": "Interact with same topic on shell on DC/OS master node",
+      "text": "%md\nTo observe somewhere else, you can actually observe on the shell the topic\n\n> ssh-into-dcos-master.sh\n\n> docker run -it mesosphere/kafka-client\n\n> ./kafka-console-consumer.sh --zookeeper master.mesos:2181/dcos-service-kafka --topic test --from-beginning\n\nAnd you can end with Ctrl-C and post also a new message to the topic\n\n> echo \"Hello from shell\" | ./kafka-console-producer.sh --topic test --broker-list broker-0.kafka.mesos:9216\n",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:30:10 PM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_4245622",
       "result": {
         "code": "SUCCESS",
         "type": "HTML",
         "msg": "<p>To observe somewhere else, you can actually observe on the shell the topic</p>\n<blockquote><p>ssh-into-dcos-master.sh</p>\n<p>docker run -it mesosphere/kafka-client</p>\n<p>./kafka-console-consumer.sh &ndash;zookeeper master.mesos:2181/dcos-service-kafka &ndash;topic test &ndash;from-beginning</p>\n</blockquote>\n<p>And you can end with Ctrl-C and post also a new message to the topic</p>\n<blockquote><p>echo &ldquo;Hello from shell&rdquo; | ./kafka-console-producer.sh &ndash;topic test &ndash;broker-list broker-0.kafka.mesos:9216</p>\n</blockquote>\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:30:10 PM",
+      "dateFinished": "Sep 8, 2016 12:30:10 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:819",
-      "focus": true,
-      "dateFinished": "Aug 26, 2016 10:38:57 PM",
-      "dateStarted": "Aug 26, 2016 10:38:57 PM"
+      "$$hashKey": "object:183"
     },
     {
-      "text": "import org.apache.kafka.clients.consumer._\n\nval  consumerProps = new Properties()\nconsumerProps.put(\"bootstrap.servers\", bootstrapServers)\n  \nconsumerProps.put(\"key.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\nconsumerProps.put(\"value.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\n\nconsumerProps.put(\"value.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\nconsumerProps.put(\"group.id\", \"test-client-consumer\")\n\n\nval consumer = new KafkaConsumer[String, String](consumerProps)",
-      "dateUpdated": "Aug 26, 2016 10:42:05 PM",
+      "title": "Create Consumer",
+      "text": "import org.apache.kafka.clients.consumer._\n\nval  consumerProps = new Properties()\nconsumerProps.put(\"bootstrap.servers\", bootstrapServers)\n  \nconsumerProps.put(\"key.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\nconsumerProps.put(\"value.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\n\nconsumerProps.put(\"value.deserializer\", \"org.apache.kafka.common.serialization.StringDeserializer\")\nconsumerProps.put(\"group.id\", \"test-client-consumer\")\n\nval consumer = new KafkaConsumer[String, String](consumerProps)",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:34:50 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
         "graph": {
           "mode": "table",
           "height": 300,
@@ -316,34 +321,31 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true,
-        "editorHide": false,
-        "title": true
+        "enabled": true
       },
       "settings": {
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_1468174209",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "import org.apache.kafka.clients.consumer._\nconsumerProps: java.util.Properties = {}\nres268: Object = null\nres270: Object = null\nres271: Object = null\nres273: Object = org.apache.kafka.common.serialization.StringDeserializer\nres274: Object = null\nconsumer: org.apache.kafka.clients.consumer.KafkaConsumer[String,String] = org.apache.kafka.clients.consumer.KafkaConsumer@d991227\n"
+        "msg": "import org.apache.kafka.clients.consumer._\nconsumerProps: java.util.Properties = {}\nres31: Object = null\nres32: Object = null\nres33: Object = null\nres34: Object = org.apache.kafka.common.serialization.StringDeserializer\nres35: Object = null\nres36: Object = null\nconsumer: org.apache.kafka.clients.consumer.KafkaConsumer[String,String] = org.apache.kafka.clients.consumer.KafkaConsumer@38f2083d\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:42:05 PM",
-      "dateFinished": "Aug 26, 2016 10:42:06 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:33:56 PM",
+      "dateFinished": "Sep 8, 2016 12:33:57 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:820",
-      "title": "Create Consumer",
-      "focus": true
+      "$$hashKey": "object:184"
     },
     {
-      "title": "Subscribe To Beginning of Topic",
-      "text": "import java.util.Arrays\n\nconsumer.subscribe(Arrays.asList(TOPIC))\nconsumer.seekToBeginning(consumer.assignment)",
-      "dateUpdated": "Aug 26, 2016 10:42:25 PM",
+      "title": "Subscribe A Topic",
+      "text": "import java.util.Arrays\n\nconsumer.subscribe(Arrays.asList(TOPIC))",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:35:10 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/scala",
@@ -363,24 +365,62 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493598_2100812053",
+      "jobName": "paragraph_1473126413648_1855258507",
       "id": "20160826-154813_1493113940",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
         "msg": "import java.util.Arrays\n"
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:42:25 PM",
-      "dateFinished": "Aug 26, 2016 10:42:25 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:35:10 PM",
+      "dateFinished": "Sep 8, 2016 12:35:10 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:821",
-      "focus": true
+      "$$hashKey": "object:185"
     },
     {
+      "title": "Read some records (can be repeated until no longer interested in the topic)",
       "text": "val recordsIt = consumer.poll(100).iterator\n\nwhile (recordsIt.hasNext) {\n    val record = recordsIt.next\n    println(s\"${record.key} : ${record.value}\")\n}",
-      "dateUpdated": "Aug 26, 2016 10:42:27 PM",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:35:17 PM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473126413649_1854873758",
+      "id": "20160826-154813_400849437",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "recordsIt: java.util.Iterator[org.apache.kafka.clients.consumer.ConsumerRecord[String,String]] = org.apache.kafka.clients.consumer.ConsumerRecords$ConcatenatedIterable$1@477e95f2\nkey : hello 1\nkey : hello 2\nkey : hello 3\nkey : hello 4\nkey : hello 5\nkey : hello 6\nkey : hello 7\nkey : hello 8\nkey : hello 9\nkey : hello 10\nkey : hello 11\nkey : hello 12\nkey : hello 13\nkey : hello 14\nkey : hello 15\nkey : hello 16\nkey : hello 17\nkey : hello 18\nkey : hello 19\nkey : hello 20\nkey : hello 21\nkey : hello 22\nkey : hello 23\nkey : hello 24\nkey : hello 25\nkey : hello 26\nkey : hello 27\nkey : hello 28\nkey : hello 29\nkey : hello 30\nkey : hello 31\nkey : hello 32\nkey : hello 33\nkey : hello 34\nkey : hello 35\nkey : hello 36\nkey : hello 37\nkey : hello 38\nkey : hello 39\nkey : hello 40\nkey : hello 41\nkey : hello 42\nkey : hello 43\nkey : hello 44\nkey : hello 45\nkey : hello 46\nkey : hello 47\nkey : hello 48\nkey : hello 49\nkey : hello 50\nkey : the end Thu Sep 08 12:35:03 UTC 2016\n"
+      },
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:35:18 PM",
+      "dateFinished": "Sep 8, 2016 12:35:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:186"
+    },
+    {
+      "text": "consumer.close",
+      "authenticationInfo": {},
+      "dateUpdated": "Sep 8, 2016 12:35:23 PM",
       "config": {
         "colWidth": 12,
         "editorMode": "ace/mode/scala",
@@ -399,23 +439,22 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493599_2100427304",
-      "id": "20160826-154813_400849437",
+      "jobName": "paragraph_1473126413649_1854873758",
+      "id": "20160826-154813_299959279",
       "result": {
         "code": "SUCCESS",
         "type": "TEXT",
-        "msg": "recordsIt: java.util.Iterator[org.apache.kafka.clients.consumer.ConsumerRecord[String,String]] = org.apache.kafka.clients.consumer.ConsumerRecords$ConcatenatedIterable$1@4deed97e\nkey : hello 1\nkey : hello 2\nkey : hello 3\nkey : hello 4\nkey : hello 5\nkey : hello 6\nkey : hello 7\nkey : hello 8\nkey : hello 9\nkey : hello 10\nkey : hello 11\nkey : hello 12\nkey : hello 13\nkey : hello 14\nkey : hello 15\nkey : hello 16\nkey : hello 17\nkey : hello 18\nkey : hello 19\nkey : hello 20\nkey : hello 21\nkey : hello 22\nkey : hello 23\nkey : hello 24\nkey : hello 25\nkey : hello 26\nkey : hello 27\nkey : hello 28\nkey : hello 29\nkey : hello 30\nkey : hello 31\nkey : hello 32\nkey : hello 33\nkey : hello 34\nkey : hello 35\nkey : hello 36\nkey : hello 37\nkey : hello 38\nkey : hello 39\nkey : hello 40\nkey : hello 41\nkey : hello 42\nkey : hello 43\nkey : hello 44\nkey : hello 45\nkey : hello 46\nkey : hello 47\nkey : hello 48\nkey : hello 49\nkey : hello 50\nkey : the end Fri Aug 26 22:41:49 UTC 2016\n"
+        "msg": ""
       },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "dateStarted": "Aug 26, 2016 10:42:27 PM",
-      "dateFinished": "Aug 26, 2016 10:42:28 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
+      "dateStarted": "Sep 8, 2016 12:35:23 PM",
+      "dateFinished": "Sep 8, 2016 12:35:23 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:822",
-      "focus": true
+      "$$hashKey": "object:187"
     },
     {
-      "dateUpdated": "Aug 26, 2016 10:42:33 PM",
+      "dateUpdated": "Sep 6, 2016 1:46:53 AM",
       "config": {
         "colWidth": 12,
         "graph": {
@@ -434,66 +473,36 @@
         "params": {},
         "forms": {}
       },
-      "jobName": "paragraph_1472226493599_2100427304",
-      "id": "20160826-154813_299959279",
-      "result": {
-        "code": "SUCCESS",
-        "type": "TEXT",
-        "msg": ""
-      },
-      "dateCreated": "Aug 26, 2016 3:48:13 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:823",
-      "dateFinished": "Aug 26, 2016 10:42:34 PM",
-      "dateStarted": "Aug 26, 2016 10:42:33 PM",
-      "text": "consumer.close",
-      "focus": true
-    },
-    {
-      "config": {
-        "colWidth": 12,
-        "graph": {
-          "mode": "table",
-          "height": 300,
-          "optionOpen": false,
-          "keys": [],
-          "values": [],
-          "groups": [],
-          "scatter": {}
-        },
-        "enabled": true
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "jobName": "paragraph_1472251353912_-640871080",
+      "jobName": "paragraph_1473126413649_1854873758",
       "id": "20160826-224233_379437745",
-      "dateCreated": "Aug 26, 2016 10:42:33 PM",
+      "dateCreated": "Sep 6, 2016 1:46:53 AM",
       "status": "READY",
+      "errorMessage": "",
       "progressUpdateIntervalMs": 500,
-      "focus": true,
-      "$$hashKey": "object:1928"
+      "$$hashKey": "object:188"
     }
   ],
   "name": "Kafka",
-  "id": "2BUCA6XS2",
+  "id": "2BUJR272R",
   "angularObjects": {
-    "2BVFY4UX3": [],
-    "2BUC3DRU5": [],
-    "2BT629N42": [],
-    "2BWJBMS1G": [],
-    "2BTR33Q2U": [],
-    "2BVN57S3V": [],
-    "2BU2XZ2X6": [],
-    "2BWBU2KJR": [],
-    "2BW6YD4MU": [],
-    "2BWZBTPP6": [],
-    "2BUJCS3AP": [],
-    "2BT5HBJ7Y": [],
-    "2BWDWYVU9": [],
-    "2BTKJFSMU": []
+    "2BXVRASXW:shared_process": [],
+    "2BUG9UTJB:shared_process": [],
+    "2BWKDXNSV:shared_process": [],
+    "2BXSPQ97Z:shared_process": [],
+    "2BUW8ZTER:shared_process": [],
+    "2BXFXPW1A:shared_process": [],
+    "2BUX7A2WD:shared_process": [],
+    "2BX6YVK89:shared_process": [],
+    "2BU48K7BS:shared_process": [],
+    "2BV42RSWE:shared_process": [],
+    "2BUE5CUJ8:shared_process": [],
+    "2BWMDG7ZU:shared_process": [],
+    "2BXPGF7XP:shared_process": [],
+    "2BUQA2TDK:shared_process": [],
+    "2BXD5QQTM:shared_process": [],
+    "2BUZZSMN8:shared_process": [],
+    "2BWMWPM7Q:shared_process": [],
+    "2BUHGZQA2:shared_process": []
   },
   "config": {
     "looknfeel": "default"
