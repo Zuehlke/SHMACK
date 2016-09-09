@@ -1,0 +1,938 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\nBased on <https://academy.datastax.com/resources/getting-started-time-series-data-modeling>\n\nNeeds Cassandra to be up-and-running\n\n> dcos package install cassandra\n\nand Zeppelin Interpreter for Cassandra to point to a node using mesos\n\n> cassandra.hosts: node-0.cassandra.mesos,node-1.cassandra.mesos,node-2.cassandra.mesos",
+      "dateUpdated": "Sep 9, 2016 8:44:21 AM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419094_142019921",
+      "id": "20160815-141030_2113782946",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "<p>Based on <a href=\"https://academy.datastax.com/resources/getting-started-time-series-data-modeling\">https://academy.datastax.com/resources/getting-started-time-series-data-modeling</a></p>\n<p>Needs Cassandra to be up-and-running</p>\n<blockquote><p>dcos package install cassandra</p>\n</blockquote>\n<p>and Zeppelin Interpreter for Cassandra to point to a node using mesos</p>\n<blockquote><p>cassandra.hosts: node-0.cassandra.mesos,node-1.cassandra.mesos,node-2.cassandra.mesos</p>\n</blockquote>\n"
+      },
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5362",
+      "dateFinished": "Sep 9, 2016 8:44:21 AM",
+      "dateStarted": "Sep 9, 2016 8:44:21 AM",
+      "focus": true
+    },
+    {
+      "title": "WARNING: Don't clean up accidentally",
+      "text": "%cassandra\nDROP KEYSPACE weatherdata;",
+      "dateUpdated": "Sep 9, 2016 8:44:55 AM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419095_141635173",
+      "id": "20160909-081211_192373495",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>DROP KEYSPACE weatherdata;</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5363",
+      "dateFinished": "Sep 9, 2016 8:44:56 AM",
+      "dateStarted": "Sep 9, 2016 8:44:55 AM",
+      "focus": true
+    },
+    {
+      "title": "Time Series Pattern 1- Single Device per Row",
+      "text": "%cassandra\nCREATE KEYSPACE IF NOT EXISTS weatherdata WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };\n\nUSE weatherdata;\n\nCREATE TABLE IF NOT EXISTS  temperature (\nweatherstation_id text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY (weatherstation_id,event_time)\n);",
+      "dateUpdated": "Sep 9, 2016 8:58:54 AM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419095_141635173",
+      "id": "20160815-141223_1829713864",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>CREATE TABLE IF NOT EXISTS  weatherdata.temperature (\nweatherstation_id text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY (weatherstation_id,event_time)\n);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-2.cassandra.mesos10.0.5.97:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-2.cassandra.mesos10.0.5.97:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5364",
+      "dateFinished": "Sep 9, 2016 8:54:23 AM",
+      "dateStarted": "Sep 9, 2016 8:54:23 AM",
+      "focus": true
+    },
+    {
+      "text": "%cassandra\nDESCRIBE TABLE temperature;",
+      "dateUpdated": "Sep 9, 2016 8:58:46 AM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419095_141635173",
+      "id": "20160908-073909_101459184",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<br/>\n<br/>\n<nav class=\"navbar navbar-default\">\n    <ul class=\"nav navbar-nav\">\n        \n        <li>\n            <a><strong>DESCRIBE TABLE temperature;</strong></a>\n        </li>\n    </ul>\n    <ul class=\"nav navbar-nav navbar-right\">\n        <li class=\"dropdown\">\n            <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <strong>Legend</strong>\n                <span class=\"caret\"></span>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-dashboard text-muted\" />&nbsp;Cluster\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-folder-open text-danger\" />&nbsp;&nbsp;Keyspace\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-copyright-mark text-warning\" />&nbsp;&nbsp;UDT\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-th-list text-primary\" />&nbsp;&nbsp;Table\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-eye-open text-primary\" />&nbsp;&nbsp;Materialized View\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-random text-success\" />&nbsp;&nbsp;Function\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-retweet text-success\" />&nbsp;&nbsp;Aggregate\n                    </a>\n                </li>\n                <li role=\"separator\" class=\"divider text-muted\"></li>\n                <li class=\"dropdown-header\"><span class=\"text-primary\">Table icons</span></li>\n                <li class=\"bg-info\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-fullscreen\" />&nbsp;&nbsp;Partition Key\n                    </a>\n                </li>\n                <li class=\"bg-warning\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-pushpin\" />&nbsp;&nbsp;Static Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort\" />&nbsp;&nbsp;Clustering Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes\" />&nbsp;&nbsp;Clustering Order ASC\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes-alt\" />&nbsp;&nbsp;Clustering Order DESC\n                    </a>\n                </li>\n            </ul>\n        </li>\n        <li>\n            <a href=\"#\"></a>\n        </li>\n    </ul>\n</nav>\n<hr/>\n\n<div class=\"row\">\n    <div class=\"col-md-2\"/>\n    <div class=\"col-md-8 col-offset-md-2\">\n        <div class=\"panel panel-default table-responsive table-bordered\">\n            <table class=\"table\">\n                \n                <caption><h4 class=\"text-primary\"><i class=\"glyphicon glyphicon-th-list\"/>&nbsp;temperature</h4></caption>\n                                <thead>\n                    <tr>\n                        <th class=\"col-md-4\">Column Type</th>\n                        <th class=\"col-md-4\">Column Name</th>\n                        <th class=\"col-md-4\">Data Type</th>\n                    </tr>\n                </thead>\n                <tbody>\n                                            \n\n                    <tr class=\"info\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-fullscreen\" title=\"Partition Key\"/>\n                        </td>\n                        <td class=\"col-md-4\">weatherstation_id</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr class=\"success\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-sort\" title=\"Clustering Column\"/>\n                            &nbsp;\n                            <i class=\"glyphicon glyphicon-sort-by-attributes\" title=\"Sort ASC\"/>\n                        </td>\n                        <td class=\"col-md-4\">event_time</td>\n                        <td class=\"col-md-4\">timestamp</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">temperature</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                            \n                </tbody>\n            </table>\n            <div class=\"panel-footer\">\n                <a data-toggle=\"collapse\" data-target=\"#9dbff4c0-766b-11e6-aff9-8d522ad11762_asCQL\" class=\"text-primary\">\n                    <strong>As CQL statement</strong>\n                    <span class=\"caret\"></span>\n                </a>\n                <br/><br/>\n                <div class=\"collapse\" id=\"9dbff4c0-766b-11e6-aff9-8d522ad11762_asCQL\">\n                    <pre class=\"well\">CREATE TABLE weatherdata.temperature (\n    weatherstation_id text,\n    event_time timestamp,\n    temperature text,\n    PRIMARY KEY (weatherstation_id, event_time)\n) WITH read_repair_chance = 0.0\n   AND dclocal_read_repair_chance = 0.1\n   AND gc_grace_seconds = 864000\n   AND bloom_filter_fp_chance = 0.01\n   AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }\n   AND comment = ''\n   AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }\n   AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }\n   AND default_time_to_live = 0\n   AND speculative_retry = '99PERCENTILE'\n   AND min_index_interval = 128\n   AND max_index_interval = 2048\n   AND crc_check_chance = 1.0;</pre>\n                </div>\n            </div>\n        </div>\n            </div>\n    <div class=\"col-md-2\"></div>\n</div>"
+      },
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5365",
+      "dateFinished": "Sep 9, 2016 8:58:46 AM",
+      "dateStarted": "Sep 9, 2016 8:58:46 AM",
+      "focus": true
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410759349_-78165363",
+      "id": "20160909-084559_786251572",
+      "dateCreated": "Sep 9, 2016 8:45:59 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:5983",
+      "text": "%cassandra\nINSERT INTO temperature(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:01:00','72F');\n\nINSERT INTO temperature(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:02:00','73F');\n\nINSERT INTO temperature(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:03:00','73F');\n\nINSERT INTO temperature(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:04:00','74F');",
+      "dateUpdated": "Sep 9, 2016 8:54:45 AM",
+      "dateFinished": "Sep 9, 2016 8:54:46 AM",
+      "dateStarted": "Sep 9, 2016 8:54:46 AM",
+      "title": "Now we can insert a few data points for our weather station:",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>INSERT INTO temperature(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:04:00','74F');</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      }
+    },
+    {
+      "title": "A simple query looking for all data on a single weather station:",
+      "text": "%cassandra\nSELECT event_time,temperature\nFROM temperature\nWHERE weatherstation_id='1234ABCD';",
+      "dateUpdated": "Sep 9, 2016 8:55:06 AM",
+      "config": {
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419096_139711428",
+      "id": "20160815-141338_1190579510",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "event_time\ttemperature\nWed Apr 03 07:01:00 UTC 2013\t72F\nWed Apr 03 07:02:00 UTC 2013\t73F\nWed Apr 03 07:03:00 UTC 2013\t73F\nWed Apr 03 07:04:00 UTC 2013\t74F\n",
+        "comment": "",
+        "msgTable": [
+          [
+            {
+              "key": "temperature",
+              "value": "Wed Apr 03 07:01:00 UTC 2013"
+            },
+            {
+              "key": "temperature",
+              "value": "72F"
+            }
+          ],
+          [
+            {
+              "value": "Wed Apr 03 07:02:00 UTC 2013"
+            },
+            {
+              "value": "73F"
+            }
+          ],
+          [
+            {
+              "value": "Wed Apr 03 07:03:00 UTC 2013"
+            },
+            {
+              "value": "73F"
+            }
+          ],
+          [
+            {
+              "value": "Wed Apr 03 07:04:00 UTC 2013"
+            },
+            {
+              "value": "74F"
+            }
+          ]
+        ],
+        "columnNames": [
+          {
+            "name": "event_time",
+            "index": 0,
+            "aggr": "sum"
+          },
+          {
+            "name": "temperature",
+            "index": 1,
+            "aggr": "sum"
+          }
+        ],
+        "rows": [
+          [
+            "Wed Apr 03 07:01:00 UTC 2013",
+            "72F"
+          ],
+          [
+            "Wed Apr 03 07:02:00 UTC 2013",
+            "73F"
+          ],
+          [
+            "Wed Apr 03 07:03:00 UTC 2013",
+            "73F"
+          ],
+          [
+            "Wed Apr 03 07:04:00 UTC 2013",
+            "74F"
+          ]
+        ]
+      },
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5366",
+      "dateFinished": "Sep 9, 2016 8:55:06 AM",
+      "dateStarted": "Sep 9, 2016 8:55:06 AM",
+      "focus": true
+    },
+    {
+      "dateUpdated": "Sep 9, 2016 8:56:24 AM",
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473410419096_139711428",
+      "id": "20160908-122746_608137275",
+      "dateCreated": "Sep 9, 2016 8:40:19 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "$$hashKey": "object:5369",
+      "dateFinished": "Sep 9, 2016 8:56:24 AM",
+      "dateStarted": "Sep 9, 2016 8:56:24 AM",
+      "title": "A range query looking for data between two dates. This is also known as a slice since it will read a sequence of data from disk:",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "temperature\n73F\n73F\n",
+        "comment": "",
+        "msgTable": [
+          [
+            {
+              "value": "73F"
+            }
+          ],
+          [
+            {
+              "value": "73F"
+            }
+          ]
+        ],
+        "columnNames": [
+          {
+            "name": "temperature",
+            "index": 0,
+            "aggr": "sum"
+          }
+        ],
+        "rows": [
+          [
+            "73F"
+          ],
+          [
+            "73F"
+          ]
+        ]
+      },
+      "text": "%cassandra\nSELECT temperature\nFROM temperature\nWHERE weatherstation_id='1234ABCD'\nAND event_time > '2013-04-03 07:01:00'\nAND event_time < '2013-04-03 07:04:00';",
+      "focus": true
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411411499_1946303963",
+      "id": "20160909-085651_2001159482",
+      "dateCreated": "Sep 9, 2016 8:56:51 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6269",
+      "dateUpdated": "Sep 9, 2016 8:57:27 AM",
+      "dateFinished": "Sep 9, 2016 8:57:28 AM",
+      "dateStarted": "Sep 9, 2016 8:57:27 AM",
+      "title": "Time Series Pattern 2 - Partitioning to Limit Row Size",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>CREATE TABLE temperature_by_day (\nweatherstation_id text,\ndate text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY ((weatherstation_id,date),event_time)\n);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-1.cassandra.mesos10.0.4.234:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-1.cassandra.mesos10.0.4.234:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "text": "%cassandra\nCREATE TABLE temperature_by_day (\nweatherstation_id text,\ndate text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY ((weatherstation_id,date),event_time)\n);"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411360549_-1306055111",
+      "id": "20160909-085600_2145250839",
+      "dateCreated": "Sep 9, 2016 8:56:00 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6181",
+      "dateUpdated": "Sep 9, 2016 8:59:07 AM",
+      "dateFinished": "Sep 9, 2016 8:59:07 AM",
+      "dateStarted": "Sep 9, 2016 8:59:07 AM",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<br/>\n<br/>\n<nav class=\"navbar navbar-default\">\n    <ul class=\"nav navbar-nav\">\n        \n        <li>\n            <a><strong>DESCRIBE TABLE temperature_by_day;</strong></a>\n        </li>\n    </ul>\n    <ul class=\"nav navbar-nav navbar-right\">\n        <li class=\"dropdown\">\n            <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <strong>Legend</strong>\n                <span class=\"caret\"></span>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-dashboard text-muted\" />&nbsp;Cluster\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-folder-open text-danger\" />&nbsp;&nbsp;Keyspace\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-copyright-mark text-warning\" />&nbsp;&nbsp;UDT\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-th-list text-primary\" />&nbsp;&nbsp;Table\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-eye-open text-primary\" />&nbsp;&nbsp;Materialized View\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-random text-success\" />&nbsp;&nbsp;Function\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-retweet text-success\" />&nbsp;&nbsp;Aggregate\n                    </a>\n                </li>\n                <li role=\"separator\" class=\"divider text-muted\"></li>\n                <li class=\"dropdown-header\"><span class=\"text-primary\">Table icons</span></li>\n                <li class=\"bg-info\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-fullscreen\" />&nbsp;&nbsp;Partition Key\n                    </a>\n                </li>\n                <li class=\"bg-warning\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-pushpin\" />&nbsp;&nbsp;Static Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort\" />&nbsp;&nbsp;Clustering Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes\" />&nbsp;&nbsp;Clustering Order ASC\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes-alt\" />&nbsp;&nbsp;Clustering Order DESC\n                    </a>\n                </li>\n            </ul>\n        </li>\n        <li>\n            <a href=\"#\"></a>\n        </li>\n    </ul>\n</nav>\n<hr/>\n\n<div class=\"row\">\n    <div class=\"col-md-2\"/>\n    <div class=\"col-md-8 col-offset-md-2\">\n        <div class=\"panel panel-default table-responsive table-bordered\">\n            <table class=\"table\">\n                \n                <caption><h4 class=\"text-primary\"><i class=\"glyphicon glyphicon-th-list\"/>&nbsp;temperature_by_day</h4></caption>\n                                <thead>\n                    <tr>\n                        <th class=\"col-md-4\">Column Type</th>\n                        <th class=\"col-md-4\">Column Name</th>\n                        <th class=\"col-md-4\">Data Type</th>\n                    </tr>\n                </thead>\n                <tbody>\n                                            \n\n                    <tr class=\"info\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-fullscreen\" title=\"Partition Key\"/>\n                        </td>\n                        <td class=\"col-md-4\">weatherstation_id</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n\n                    <tr class=\"info\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-fullscreen\" title=\"Partition Key\"/>\n                        </td>\n                        <td class=\"col-md-4\">date</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr class=\"success\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-sort\" title=\"Clustering Column\"/>\n                            &nbsp;\n                            <i class=\"glyphicon glyphicon-sort-by-attributes\" title=\"Sort ASC\"/>\n                        </td>\n                        <td class=\"col-md-4\">event_time</td>\n                        <td class=\"col-md-4\">timestamp</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">temperature</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                            \n                </tbody>\n            </table>\n            <div class=\"panel-footer\">\n                <a data-toggle=\"collapse\" data-target=\"#aaaef5f0-766b-11e6-aff9-8d522ad11762_asCQL\" class=\"text-primary\">\n                    <strong>As CQL statement</strong>\n                    <span class=\"caret\"></span>\n                </a>\n                <br/><br/>\n                <div class=\"collapse\" id=\"aaaef5f0-766b-11e6-aff9-8d522ad11762_asCQL\">\n                    <pre class=\"well\">CREATE TABLE weatherdata.temperature_by_day (\n    weatherstation_id text,\n    date text,\n    event_time timestamp,\n    temperature text,\n    PRIMARY KEY ((weatherstation_id, date), event_time)\n) WITH read_repair_chance = 0.0\n   AND dclocal_read_repair_chance = 0.1\n   AND gc_grace_seconds = 864000\n   AND bloom_filter_fp_chance = 0.01\n   AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }\n   AND comment = ''\n   AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }\n   AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }\n   AND default_time_to_live = 0\n   AND speculative_retry = '99PERCENTILE'\n   AND min_index_interval = 128\n   AND max_index_interval = 2048\n   AND crc_check_chance = 1.0;</pre>\n                </div>\n            </div>\n        </div>\n            </div>\n    <div class=\"col-md-2\"></div>\n</div>"
+      },
+      "text": "%cassandra\nDESCRIBE TABLE temperature_by_day;"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411490138_-1831421249",
+      "id": "20160909-085810_1432467271",
+      "dateCreated": "Sep 9, 2016 8:58:10 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6357",
+      "dateUpdated": "Sep 9, 2016 8:59:50 AM",
+      "dateFinished": "Sep 9, 2016 8:59:46 AM",
+      "dateStarted": "Sep 9, 2016 8:59:46 AM",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "<p>Note the (weatherstation_id,date) portion. When we do that in the PRMARY KEY definition, the key will be compounded with the two elements. Now when we insert data, the key will group all weather data for a single day on a single row.</p>\n"
+      },
+      "text": "%md\nNote the (weatherstation_id,date) portion. When we do that in the PRMARY KEY definition, the key will be compounded with the two elements. Now when we insert data, the key will group all weather data for a single day on a single row."
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411586561_-1018942130",
+      "id": "20160909-085946_594110175",
+      "dateCreated": "Sep 9, 2016 8:59:46 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6453",
+      "dateUpdated": "Sep 9, 2016 9:00:53 AM",
+      "dateFinished": "Sep 9, 2016 9:00:53 AM",
+      "dateStarted": "Sep 9, 2016 9:00:53 AM",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>INSERT INTO temperature_by_day(weatherstation_id,date,event_time,temperature)\nVALUES ('1234ABCD','2013-04-04','2013-04-04 07:02:00','74F');</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "text": "%cassandra\nINSERT INTO temperature_by_day(weatherstation_id,date,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03','2013-04-03 07:01:00','72F');\n\nINSERT INTO temperature_by_day(weatherstation_id,date,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03','2013-04-03 07:02:00','73F');\n\nINSERT INTO temperature_by_day(weatherstation_id,date,event_time,temperature)\nVALUES ('1234ABCD','2013-04-04','2013-04-04 07:01:00','73F');\n\nINSERT INTO temperature_by_day(weatherstation_id,date,event_time,temperature)\nVALUES ('1234ABCD','2013-04-04','2013-04-04 07:02:00','74F');"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411653571_-1843935717",
+      "id": "20160909-090053_1612548276",
+      "dateCreated": "Sep 9, 2016 9:00:53 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6548",
+      "dateUpdated": "Sep 9, 2016 9:01:34 AM",
+      "dateFinished": "Sep 9, 2016 9:01:34 AM",
+      "dateStarted": "Sep 9, 2016 9:01:34 AM",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "weatherstation_id\tdate\tevent_time\ttemperature\n1234ABCD\t2013-04-03\tWed Apr 03 07:01:00 UTC 2013\t72F\n1234ABCD\t2013-04-03\tWed Apr 03 07:02:00 UTC 2013\t73F\n",
+        "comment": "",
+        "msgTable": [
+          [
+            {
+              "key": "date",
+              "value": "1234ABCD"
+            },
+            {
+              "key": "date",
+              "value": "2013-04-03"
+            },
+            {
+              "key": "date",
+              "value": "Wed Apr 03 07:01:00 UTC 2013"
+            },
+            {
+              "key": "date",
+              "value": "72F"
+            }
+          ],
+          [
+            {
+              "key": "event_time",
+              "value": "1234ABCD"
+            },
+            {
+              "key": "event_time",
+              "value": "2013-04-03"
+            },
+            {
+              "key": "event_time",
+              "value": "Wed Apr 03 07:02:00 UTC 2013"
+            },
+            {
+              "key": "event_time",
+              "value": "73F"
+            }
+          ]
+        ],
+        "columnNames": [
+          {
+            "name": "weatherstation_id",
+            "index": 0,
+            "aggr": "sum"
+          },
+          {
+            "name": "date",
+            "index": 1,
+            "aggr": "sum"
+          },
+          {
+            "name": "event_time",
+            "index": 2,
+            "aggr": "sum"
+          },
+          {
+            "name": "temperature",
+            "index": 3,
+            "aggr": "sum"
+          }
+        ],
+        "rows": [
+          [
+            "1234ABCD",
+            "2013-04-03",
+            "Wed Apr 03 07:01:00 UTC 2013",
+            "72F"
+          ],
+          [
+            "1234ABCD",
+            "2013-04-03",
+            "Wed Apr 03 07:02:00 UTC 2013",
+            "73F"
+          ]
+        ]
+      },
+      "text": "%cassandra\nSELECT *\nFROM temperature_by_day\nWHERE weatherstation_id='1234ABCD'\nAND date='2013-04-03';"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411677259_1631547070",
+      "id": "20160909-090117_2129073184",
+      "dateCreated": "Sep 9, 2016 9:01:17 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6617",
+      "dateUpdated": "Sep 9, 2016 9:02:47 AM",
+      "dateFinished": "Sep 9, 2016 9:02:49 AM",
+      "dateStarted": "Sep 9, 2016 9:02:47 AM",
+      "title": "Time Series Pattern 3 - Reverse Order Timeseries with Expiring Columns",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>CREATE TABLE latest_temperatures (\nweatherstation_id text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY (weatherstation_id,event_time),\n) WITH CLUSTERING ORDER BY (event_time DESC);</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "text": "%cassandra\nCREATE TABLE latest_temperatures (\nweatherstation_id text,\nevent_time timestamp,\ntemperature text,\nPRIMARY KEY (weatherstation_id,event_time),\n) WITH CLUSTERING ORDER BY (event_time DESC);"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411767949_-1024235026",
+      "id": "20160909-090247_1861331053",
+      "dateCreated": "Sep 9, 2016 9:02:47 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6705",
+      "dateUpdated": "Sep 9, 2016 9:05:43 AM",
+      "dateFinished": "Sep 9, 2016 9:05:43 AM",
+      "dateStarted": "Sep 9, 2016 9:05:43 AM",
+      "title": "Now when we insert data. Note the TTL of 20 which means the data will expire in 20 seconds:",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>INSERT INTO latest_temperatures(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:04:00','74F') USING TTL 20;</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-1.cassandra.mesos10.0.4.234:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-1.cassandra.mesos10.0.4.234:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "text": "%cassandra\nINSERT INTO latest_temperatures(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:03:00','72F') USING TTL 20;\n\nINSERT INTO latest_temperatures(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:02:00','73F') USING TTL 20;\n\nINSERT INTO latest_temperatures(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:01:00','73F') USING TTL 20;\n\nINSERT INTO latest_temperatures(weatherstation_id,event_time,temperature)\nVALUES ('1234ABCD','2013-04-03 07:04:00','74F') USING TTL 20;"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "weatherstation_id",
+              "index": 0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "event_time",
+              "index": 1,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "weatherstation_id",
+              "index": 0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "event_time",
+              "index": 1,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411817518_-693679881",
+      "id": "20160909-090337_1410679784",
+      "dateCreated": "Sep 9, 2016 9:03:37 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6778",
+      "dateUpdated": "Sep 9, 2016 9:06:24 AM",
+      "dateFinished": "Sep 9, 2016 9:05:49 AM",
+      "dateStarted": "Sep 9, 2016 9:05:49 AM",
+      "title": "Perform immediately",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "weatherstation_id\tevent_time\ttemperature\n1234ABCD\tWed Apr 03 07:04:00 UTC 2013\t74F\n1234ABCD\tWed Apr 03 07:03:00 UTC 2013\t72F\n1234ABCD\tWed Apr 03 07:02:00 UTC 2013\t73F\n1234ABCD\tWed Apr 03 07:01:00 UTC 2013\t73F\n",
+        "comment": "",
+        "msgTable": [
+          [
+            {
+              "key": "event_time",
+              "value": "1234ABCD"
+            },
+            {
+              "key": "event_time",
+              "value": "Wed Apr 03 07:04:00 UTC 2013"
+            },
+            {
+              "key": "event_time",
+              "value": "74F"
+            }
+          ],
+          [
+            {
+              "key": "temperature",
+              "value": "1234ABCD"
+            },
+            {
+              "key": "temperature",
+              "value": "Wed Apr 03 07:03:00 UTC 2013"
+            },
+            {
+              "key": "temperature",
+              "value": "72F"
+            }
+          ],
+          [
+            {
+              "value": "1234ABCD"
+            },
+            {
+              "value": "Wed Apr 03 07:02:00 UTC 2013"
+            },
+            {
+              "value": "73F"
+            }
+          ],
+          [
+            {
+              "value": "1234ABCD"
+            },
+            {
+              "value": "Wed Apr 03 07:01:00 UTC 2013"
+            },
+            {
+              "value": "73F"
+            }
+          ]
+        ],
+        "columnNames": [
+          {
+            "name": "weatherstation_id",
+            "index": 0,
+            "aggr": "sum"
+          },
+          {
+            "name": "event_time",
+            "index": 1,
+            "aggr": "sum"
+          },
+          {
+            "name": "temperature",
+            "index": 2,
+            "aggr": "sum"
+          }
+        ],
+        "rows": [
+          [
+            "1234ABCD",
+            "Wed Apr 03 07:04:00 UTC 2013",
+            "74F"
+          ],
+          [
+            "1234ABCD",
+            "Wed Apr 03 07:03:00 UTC 2013",
+            "72F"
+          ],
+          [
+            "1234ABCD",
+            "Wed Apr 03 07:02:00 UTC 2013",
+            "73F"
+          ],
+          [
+            "1234ABCD",
+            "Wed Apr 03 07:01:00 UTC 2013",
+            "73F"
+          ]
+        ]
+      },
+      "text": "%cassandra\nSELECT * FROM latest_temperatures WHERE weatherstation_id = '1234ABCD';"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473411934700_-2069187847",
+      "id": "20160909-090534_1705878988",
+      "dateCreated": "Sep 9, 2016 9:05:34 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6858",
+      "dateUpdated": "Sep 9, 2016 9:06:42 AM",
+      "dateFinished": "Sep 9, 2016 9:06:42 AM",
+      "dateStarted": "Sep 9, 2016 9:06:42 AM",
+      "title": "Wait a bit and execute:",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<div class=\"container\">\n<div class=\"row text-center\">\n<h4>No Result</h4>\n</div>\n<br/>\n    <div class=\"row\">\n    <div class=\"col-md-3\"></div>\n    <div class=\"col-md-6 col-offset-md-3 table-responsive table-bordered\">\n        <table class=\"table\">\n            <caption><h5>Last query execution info</h5></caption>\n            <thead>\n                <tr>\n                    <th>Info</th>\n                    <th>Value</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>Statement</td>\n                    <td>SELECT * FROM latest_temperatures WHERE weatherstation_id = '1234ABCD';</td>\n                </tr>\n                <tr>\n                    <td>Achieved Consistency</td>\n                    <td>N/A</td>\n                </tr>\n                <tr>\n                    <td>Tried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Queried Hosts</td>\n                    <td>node-0.cassandra.mesos10.0.7.51:9042</td>\n                </tr>\n                <tr>\n                    <td>Schema In Agreement</td>\n                    <td>true</td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n    </div>\n</div>"
+      },
+      "text": "%cassandra\nSELECT * FROM latest_temperatures WHERE weatherstation_id = '1234ABCD';"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473412002228_-1802264055",
+      "id": "20160909-090642_1630203523",
+      "dateCreated": "Sep 9, 2016 9:06:42 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:6958"
+    }
+  ],
+  "name": "Timeseries Example in Cassandra",
+  "id": "2BX8BJUDG",
+  "angularObjects": {
+    "2BXVRASXW:shared_process": [],
+    "2BUG9UTJB:shared_process": [],
+    "2BWKDXNSV:shared_process": [],
+    "2BXSPQ97Z:shared_process": [],
+    "2BUW8ZTER:shared_process": [],
+    "2BXFXPW1A:shared_process": [],
+    "2BUX7A2WD:shared_process": [],
+    "2BX6YVK89:shared_process": [],
+    "2BU48K7BS:shared_process": [],
+    "2BV42RSWE:shared_process": [],
+    "2BUE5CUJ8:shared_process": [],
+    "2BWMDG7ZU:shared_process": [],
+    "2BXPGF7XP:shared_process": [],
+    "2BUQA2TDK:shared_process": [],
+    "2BXD5QQTM:shared_process": [],
+    "2BUZZSMN8:shared_process": [],
+    "2BWMWPM7Q:shared_process": [],
+    "2BUHGZQA2:shared_process": []
+  },
+  "config": {
+    "looknfeel": "default"
+  },
+  "info": {}
+}
