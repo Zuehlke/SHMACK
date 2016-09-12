@@ -35,7 +35,177 @@
       "dateFinished": "Sep 8, 2016 12:25:57 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1091"
+      "$$hashKey": "object:7131"
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "cluster_name",
+              "index": 0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "release_version",
+              "index": 1,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "cluster_name",
+              "index": 0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "release_version",
+              "index": 1,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473657413220_1602826538",
+      "id": "20160912-051653_866151783",
+      "dateCreated": "Sep 12, 2016 5:16:53 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:7626",
+      "text": "%cassandra\nSELECT cluster_name, release_version, native_protocol_version, cql_version, schema_version, thrift_version FROM system.local;",
+      "dateUpdated": "Sep 12, 2016 5:22:44 AM",
+      "dateFinished": "Sep 12, 2016 5:22:44 AM",
+      "dateStarted": "Sep 12, 2016 5:22:44 AM",
+      "title": "First: Find out who you talk to",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "cluster_name\trelease_version\tnative_protocol_version\tcql_version\tschema_version\tthrift_version\ncassandra\t3.0.7\t4\t3.4.0\t8879750e-bbe4-3efe-a5f7-c62d8432466b\t20.1.0\n",
+        "comment": "",
+        "msgTable": [
+          [
+            {
+              "key": "release_version",
+              "value": "cassandra"
+            },
+            {
+              "key": "release_version",
+              "value": "3.0.7"
+            },
+            {
+              "key": "release_version",
+              "value": "4"
+            },
+            {
+              "key": "release_version",
+              "value": "3.4.0"
+            },
+            {
+              "key": "release_version",
+              "value": "8879750e-bbe4-3efe-a5f7-c62d8432466b"
+            },
+            {
+              "key": "release_version",
+              "value": "20.1.0"
+            }
+          ]
+        ],
+        "columnNames": [
+          {
+            "name": "cluster_name",
+            "index": 0,
+            "aggr": "sum"
+          },
+          {
+            "name": "release_version",
+            "index": 1,
+            "aggr": "sum"
+          },
+          {
+            "name": "native_protocol_version",
+            "index": 2,
+            "aggr": "sum"
+          },
+          {
+            "name": "cql_version",
+            "index": 3,
+            "aggr": "sum"
+          },
+          {
+            "name": "schema_version",
+            "index": 4,
+            "aggr": "sum"
+          },
+          {
+            "name": "thrift_version",
+            "index": 5,
+            "aggr": "sum"
+          }
+        ],
+        "rows": [
+          [
+            "cassandra",
+            "3.0.7",
+            "4",
+            "3.4.0",
+            "8879750e-bbe4-3efe-a5f7-c62d8432466b",
+            "20.1.0"
+          ]
+        ]
+      }
+    },
+    {
+      "config": {
+        "colWidth": 12,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1473657535060_-93395090",
+      "id": "20160912-051855_1549655253",
+      "dateCreated": "Sep 12, 2016 5:18:55 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500,
+      "focus": true,
+      "$$hashKey": "object:7776",
+      "text": "%cassandra\nDESCRIBE TABLE system.local;",
+      "dateUpdated": "Sep 12, 2016 5:22:08 AM",
+      "dateFinished": "Sep 12, 2016 5:22:08 AM",
+      "dateStarted": "Sep 12, 2016 5:22:08 AM",
+      "title": "In case you are interested in other parameters...",
+      "result": {
+        "code": "SUCCESS",
+        "type": "HTML",
+        "msg": "\n\n<br/>\n<br/>\n<nav class=\"navbar navbar-default\">\n    <ul class=\"nav navbar-nav\">\n        \n        <li>\n            <a><strong>DESCRIBE TABLE system.local;</strong></a>\n        </li>\n    </ul>\n    <ul class=\"nav navbar-nav navbar-right\">\n        <li class=\"dropdown\">\n            <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <strong>Legend</strong>\n                <span class=\"caret\"></span>\n            </a>\n            <ul class=\"dropdown-menu\">\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-dashboard text-muted\" />&nbsp;Cluster\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-folder-open text-danger\" />&nbsp;&nbsp;Keyspace\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-copyright-mark text-warning\" />&nbsp;&nbsp;UDT\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-th-list text-primary\" />&nbsp;&nbsp;Table\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-eye-open text-primary\" />&nbsp;&nbsp;Materialized View\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-random text-success\" />&nbsp;&nbsp;Function\n                    </a>\n                </li>\n                <li>\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-retweet text-success\" />&nbsp;&nbsp;Aggregate\n                    </a>\n                </li>\n                <li role=\"separator\" class=\"divider text-muted\"></li>\n                <li class=\"dropdown-header\"><span class=\"text-primary\">Table icons</span></li>\n                <li class=\"bg-info\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-fullscreen\" />&nbsp;&nbsp;Partition Key\n                    </a>\n                </li>\n                <li class=\"bg-warning\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-pushpin\" />&nbsp;&nbsp;Static Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort\" />&nbsp;&nbsp;Clustering Column\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes\" />&nbsp;&nbsp;Clustering Order ASC\n                    </a>\n                </li>\n                <li class=\"bg-success\">\n                    <a role=\"button\">\n                        <i class=\"glyphicon glyphicon-sort-by-attributes-alt\" />&nbsp;&nbsp;Clustering Order DESC\n                    </a>\n                </li>\n            </ul>\n        </li>\n        <li>\n            <a href=\"#\"></a>\n        </li>\n    </ul>\n</nav>\n<hr/>\n\n<div class=\"row\">\n    <div class=\"col-md-2\"/>\n    <div class=\"col-md-8 col-offset-md-2\">\n        <div class=\"panel panel-default table-responsive table-bordered\">\n            <table class=\"table\">\n                \n                <caption><h4 class=\"text-primary\"><i class=\"glyphicon glyphicon-th-list\"/>&nbsp;local</h4></caption>\n                                <thead>\n                    <tr>\n                        <th class=\"col-md-4\">Column Type</th>\n                        <th class=\"col-md-4\">Column Name</th>\n                        <th class=\"col-md-4\">Data Type</th>\n                    </tr>\n                </thead>\n                <tbody>\n                                            \n\n                    <tr class=\"info\">\n                        <td class=\"col-md-4\">\n                            <i class=\"glyphicon glyphicon-fullscreen\" title=\"Partition Key\"/>\n                        </td>\n                        <td class=\"col-md-4\">key</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">bootstrapped</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">broadcast_address</td>\n                        <td class=\"col-md-4\">inet</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">cluster_name</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">cql_version</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">data_center</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">gossip_generation</td>\n                        <td class=\"col-md-4\">int</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">host_id</td>\n                        <td class=\"col-md-4\">uuid</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">listen_address</td>\n                        <td class=\"col-md-4\">inet</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">native_protocol_version</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">partitioner</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">rack</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">release_version</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">rpc_address</td>\n                        <td class=\"col-md-4\">inet</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">schema_version</td>\n                        <td class=\"col-md-4\">uuid</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">thrift_version</td>\n                        <td class=\"col-md-4\">text</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">tokens</td>\n                        <td class=\"col-md-4\">set&lt;text&gt;</td>\n                    </tr>\n                                                                    \n                    <tr>\n                        <td class=\"col-md-4\"></td>\n                        <td class=\"col-md-4\">truncated_at</td>\n                        <td class=\"col-md-4\">map&lt;uuid, blob&gt;</td>\n                    </tr>\n                                            \n                </tbody>\n            </table>\n            <div class=\"panel-footer\">\n                <a data-toggle=\"collapse\" data-target=\"#d9bd4ec0-78a8-11e6-aff9-8d522ad11762_asCQL\" class=\"text-primary\">\n                    <strong>As CQL statement</strong>\n                    <span class=\"caret\"></span>\n                </a>\n                <br/><br/>\n                <div class=\"collapse\" id=\"d9bd4ec0-78a8-11e6-aff9-8d522ad11762_asCQL\">\n                    <pre class=\"well\">CREATE TABLE system.local (\n    key text,\n    bootstrapped text,\n    broadcast_address inet,\n    cluster_name text,\n    cql_version text,\n    data_center text,\n    gossip_generation int,\n    host_id uuid,\n    listen_address inet,\n    native_protocol_version text,\n    partitioner text,\n    rack text,\n    release_version text,\n    rpc_address inet,\n    schema_version uuid,\n    thrift_version text,\n    tokens set&lt;text&gt;,\n    truncated_at map&lt;uuid, blob&gt;,\n    PRIMARY KEY (key)\n) WITH read_repair_chance = 0.0\n   AND dclocal_read_repair_chance = 0.0\n   AND gc_grace_seconds = 0\n   AND bloom_filter_fp_chance = 0.01\n   AND caching = { 'keys' : 'ALL', 'rows_per_partition' : 'NONE' }\n   AND comment = 'information about the local node'\n   AND compaction = { 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy', 'max_threshold' : 32, 'min_threshold' : 4 }\n   AND compression = { 'chunk_length_in_kb' : 64, 'class' : 'org.apache.cassandra.io.compress.LZ4Compressor' }\n   AND default_time_to_live = 0\n   AND speculative_retry = '99PERCENTILE'\n   AND min_index_interval = 128\n   AND max_index_interval = 2048\n   AND crc_check_chance = 1.0;</pre>\n                </div>\n            </div>\n        </div>\n            </div>\n    <div class=\"col-md-2\"></div>\n</div>"
+      }
     },
     {
       "title": "Create a place to store key/value pairs (if it doesn't exists)",
@@ -73,7 +243,7 @@
       "dateFinished": "Sep 8, 2016 12:26:05 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1092"
+      "$$hashKey": "object:7132"
     },
     {
       "text": "%cassandra\nuse test;\ndescribe table kv;",
@@ -109,7 +279,7 @@
       "dateFinished": "Sep 8, 2016 12:26:12 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1093"
+      "$$hashKey": "object:7133"
     },
     {
       "title": "If it didn't exist, zero results should get returned. Otherwise there might be some leftovers...",
@@ -179,7 +349,7 @@
       "dateFinished": "Sep 8, 2016 12:26:40 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1094"
+      "$$hashKey": "object:7134"
     },
     {
       "text": "%cassandra\nINSERT INTO test.kv(key, value) VALUES ('themeaningoflife', 42);",
@@ -216,7 +386,7 @@
       "dateFinished": "Sep 8, 2016 12:26:46 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1095"
+      "$$hashKey": "object:7135"
     },
     {
       "text": "%cassandra\nSELECT value FROM test.kv WHERE key='themeaningoflife';",
@@ -272,7 +442,7 @@
       "dateFinished": "Sep 8, 2016 12:26:48 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1096"
+      "$$hashKey": "object:7136"
     },
     {
       "title": "Cleanup",
@@ -311,7 +481,7 @@
       "dateFinished": "Sep 8, 2016 12:26:56 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1097"
+      "$$hashKey": "object:7137"
     },
     {
       "config": {
@@ -325,8 +495,7 @@
           "groups": [],
           "scatter": {}
         },
-        "enabled": true,
-        "editorMode": "ace/mode/scala"
+        "enabled": true
       },
       "settings": {
         "params": {},
@@ -337,7 +506,7 @@
       "dateCreated": "Sep 8, 2016 12:27:46 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500,
-      "$$hashKey": "object:1098"
+      "$$hashKey": "object:7138"
     }
   ],
   "name": "Cassandra Interpreter",
