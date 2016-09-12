@@ -7,7 +7,10 @@ Unfortunately, preferred ways to do so do not work yet through options, so need 
 
 > dcos package install marathon-lb
 
-> dcos package install zeppelin
+DC/OS 1.7 installs by default currently Zeppelin 0.5.6 which does not work well with all examples.
+Better get the more recent version 0.6.0
+
+> dcos package install --package-version=0.6.0zeppelin
 
 > open-shmack-marathon-ui.sh 
 
