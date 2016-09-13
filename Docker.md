@@ -30,9 +30,8 @@ Mainly follow the steps in <https://docs.docker.com/engine/installation/linux/ub
   * `sudo service docker restart`
   * **Log off and on again.** This is needed for your user to have the added permissions from the group it now belongs to.
     You may also restart Ubuntu, if you prefer / have updated some packages during the process.
-  * Verify that `sudo docker run hello-world` works - without any `sudo`. 
+  * Verify that `docker run hello-world` works - without any `sudo`. 
   
 * Set up [DockerHub](https://hub.docker.com/) account for pushing your images
   * If you don't have a [DockerHub](https://hub.docker.com/) account, create one!
   * `docker login`, so you can run `push` and `pull` from the shell or within scripts.
-  
