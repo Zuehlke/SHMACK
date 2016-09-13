@@ -72,7 +72,7 @@ You will also need that in order to develop and contribute.
   * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
 * Optional: DC/OS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
   for installing the same version, follow http://askubuntu.com/questions/56104/how-can-i-install-sun-oracles-proprietary-java-jdk-6-7-8-or-jre
-* Optional: DC/OS provides the cluster on AWS currently with Scala version "2.10.5", so better use same or newer
+* Optional: DC/OS provides the cluster on AWS currently with Scala version "2.11.8", so better use same or newer
 * Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.profile`
 ```
 PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
@@ -140,7 +140,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 * Download and install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) ... so far, the Community Edition should be sufficient.
 * Open IntelliJ and make sure, you have a JVM configured. If not, first create a new empty project to configure it!
   * In new project, set for Java the Project SDK to a new JDK and select `/usr/lib/jvm/java-1.8.0-openjdk-amd64`
-  * You may also select Scala with use new library, download scala version 2.10.5
+  * You may also select Scala with use new library, download scala version 2.11.8
 * Select File -> New -> Project from existing sources... -> /home/shmacky/shmack/repo/04_implementation
   * Import project from external model -> Gradle
   * Use gradle wrapper task configuration
@@ -213,6 +213,7 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
 # Links
 * [Mesosphere Homepage](https://mesosphere.com/)
 * [Documentation](http://docs.mesosphere.com/), in particular Architecture of [Components](https://docs.mesosphere.com/administration/dcosarchitecture/components/) and [Network Security](https://docs.mesosphere.com/administration/dcosarchitecture/security/)
+* DC/OS for [Data Infrastructure](https://mesosphere.com/solutions/data/)
 * [Tutorials](https://docs.mesosphere.com/tutorials/)
 * Articles
   * [Data processing platforms architectures with SMACK (SMACK Overview Article)](http://datastrophic.io/data-processing-platforms-architectures-with-spark-mesos-akka-cassandra-and-kafka/)
@@ -313,7 +314,7 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 **Attention**: Data in HDFS is **destroyed** when scaling down!!
 
 ## Which Java/Scala/Python Version can be used?
-As of 2016-08-26 Java 1.8.0_51, Spark 2.0 with Scala 2.10.5, and Python 3.4 are deployed on the created stack.
+As of 2016-08-26 Java 1.8.0_51, Spark 2.0 with Scala 2.11.8, and Python 3.4 are deployed on the created stack.
 
 <a name="sparkShell" />
 ## Can I run an interactive Spark Shell?
