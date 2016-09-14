@@ -12,15 +12,22 @@ KEY_PAIR_NAME="shmack-key-pair-01"
 # when not running in production or testing fault tolerance  
 PUBLIC_SLAVE_INSTANCE_COUNT=1
 
-STACK_NAME="MyShmackStack-1"
+STACK_NAME="MainIngestionStack"
 # Mesosphere CloudFormation template for operating DCOS on AWS 
 OFFICIAL_TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
 TEMPLATE_URL="${OFFICIAL_TEMPLATE_URL}"
 
 # Customized template to define the instance types to use
-#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
+TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
 # Customized template using spot prices for all the worker nodes / slaves
 #TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
+
+# Instance type as defined in https://aws.amazon.com/ec2/pricing/ used for all worker nodes / slaves
+# Default is m3.xlarge, which should remain the lowest setting.
+# Other options could be m3.2xlarge with same number of nodes but a bit more "beefy",
+# or the corresponding c3 or r3 instances, depending if you need more computing power (c3) or memory (r3).
+SLAVE_INSTANCE_TYPE="m3.xlarge"
+#SLAVE_INSTANCE_TYPE="r3.2xlarge"
 
 # When using spot instances, how much are you willing to pay per instance at most.
 # It is a spot market and you will only be paying enough to outbid other users - or your instances will get down of others outbid you.
@@ -116,4 +123,10 @@ fi
 TEMPLATE_PARAMETERS=" ParameterKey=AcceptEULA,ParameterValue=Yes"
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
+
+if [ "${OFFICIAL_TEMPLATE_URL}Unchanged" != "${TEMPLATE_URL}Unchanged" ]
+	then
+		TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=MasterInstanceType,ParameterValue=${SLAVE_INSTANCE_TYPE} ParameterKey=SlaveInstanceType,ParameterValue=${SLAVE_INSTANCE_TYPE}  ParameterKey=PublicSlaveInstanceType,ParameterValue=${SLAVE_INSTANCE_TYPE} ParameterKey=SpotInstancePrice,ParameterValue=${MAX_SPOT_INSTANCE_PRICE} "
+fi
+
 export TEMPLATE_PARAMETERS
