@@ -34,7 +34,7 @@ running costs would be a rather minor issue.
 * We want to be fast when ramping up cloud infrastructure.
 * We do not want to answer "we never did this" to customers when asked.
 * We want to know what the issues and traps are when setting up cloud infrastructure with the SHMACK stack.
-* We want to create a reusable asset for Big Data combined with cloud-scale Data Analytics and Machine Learning 
+* We want to create a reusable asset for Big Data/Fast Data combined with cloud-scale Data Analytics and Machine Learning 
   to acquire customers and be able to show competence not only on paper, but running in the cloud.
 
 # Installation
@@ -66,8 +66,8 @@ You will also need that in order to develop and contribute.
 
 ### In the Virtual machine
 * Install git: `sudo apt-get install git`
-* Clone the SHMACK repository: `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git repo`
-* Run the setup script: `cd ${HOME}/shmack/repo/04_implementation/scripts && sudo -H bash ./setup-ubuntu.sh`
+* Clone the SHMACK repository: `mkdir ${HOME}/shmack && cd ${HOME}/shmack && git clone https://github.com/Zuehlke/SHMACK.git shmack-repo`
+* Run the setup script: `cd ${HOME}/shmack/shmack-repo/scripts && sudo -H bash ./setup-ubuntu.sh`
   * This will install among others the AWS Commandline Tools, OpenJDK 8, and Scala
   * If you don't start with a fresh image, it's probably better to have a look in `setup-ubuntu.sh` and see yourself what is missing - and install only missing bits.
 * Optional: DC/OS provides the cluster on AWS currently with Oracle java version "1.8.0_51", so better use same or newer; 
@@ -75,7 +75,7 @@ You will also need that in order to develop and contribute.
 * Optional: DC/OS provides the cluster on AWS currently with Scala version "2.11.8", so better use same or newer
 * Optional: When you like working on shell, append the following lines at the **end** of your `${HOME}/.profile`
 ```
-PATH=${PATH}:${HOME}/shmack/repo/04_implementation/scripts
+PATH=${PATH}:${HOME}/shmack/shmack-repo/scripts
 export PATH
 ```
 * Optional: setup additonal tools to better work with git as described [here](./GitHelp.md)
@@ -123,7 +123,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
   * open `eclipse/eclipse`
   * Open `Help --> Eclipse Marketplace`
   * Install `Gradle IDE Pack`
-* Import Gradle projects from `${HOME}/shmack/repo/04_implementation` into eclipse
+* Import Gradle projects from `${HOME}/shmack/shmack-repo/` into eclipse
   * "Import" --> "Gradle (STS) Project"
   * Click "Build model"
   * Select all projects
@@ -141,7 +141,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 * Open IntelliJ and make sure, you have a JVM configured. If not, first create a new empty project to configure it!
   * In new project, set for Java the Project SDK to a new JDK and select `/usr/lib/jvm/java-1.8.0-openjdk-amd64`
   * You may also select Scala with use new library, download scala version 2.11.8
-* Select File -> New -> Project from existing sources... -> /home/shmacky/shmack/repo/04_implementation
+* Select File -> New -> Project from existing sources... -> `${HOME}/shmack/shmack-repo/`
   * Import project from external model -> Gradle
   * Use gradle wrapper task configuration
   * Finish -> This Window -> confirm selection of three modules with `Ok` -> And `Add root` when prompted
@@ -169,7 +169,7 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
 
 <a name="stackCreation" />
 ### Stack Creation (from now on, you pay for usage)
-  * Execute `${HOME}/shmack/repo/04_implementation/scripts/create-stack.sh`
+  * Execute `${HOME}/shmack/shmack-repo/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
     * In case of failures see [Troubleshoting Section](#setupFailing)
@@ -186,7 +186,7 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
       in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
   * The script will now <a name="confirmSsh" />Login once using ssh 
     * This is necessary to add mesos master to known hosts, so that scripts and unit tests can run without manual interaction
-    * Performs `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-master.sh`and `${HOME}/shmack/repo/04_implementation/scripts/ssh-into-dcos-slave.sh 0`
+    * Performs `${HOME}/shmack/shmack-repo/scripts/ssh-into-dcos-master.sh`and `${HOME}/shmack/shmack-repo/scripts/ssh-into-dcos-slave.sh 0`
     * You have to confirm SSH security prompts
     * Logout from the cluser (press `Ctrl-d` or type `exit` twice)
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
@@ -195,7 +195,7 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
 <a name="stackDeletion" />
 ### Stack Deletion
   * Option 1 (recommended):
-    `${HOME}/shmack/repo/04_implementation/scripts/delete-stack.sh`
+    `${HOME}/shmack/shmack-repo/scripts/delete-stack.sh`
   * Option 2 (manual):
     * go to https://console.aws.amazon.com/cloudformation/ and delete the stack
   * Troubleshooting
@@ -281,7 +281,7 @@ In principle, you can. But be aware that you may block each other with running t
 * Ideally, create additional accounts for each additional user
 	* Go to htps://console.aws.amazon.com/iam/home?region=us-west-1
 	* Create a new user for each person to use your cluster
-	* Mail them the credentials including their `shmack-key-pair-01.pem`, AWS Access Key ID, and AWS Secret Access Key
+	* Let them get their credentials in a safe and secure way including their `shmack-key-pair-01.pem`, AWS Access Key ID, and AWS Secret Access Key
 	* They will have to use them as described for [lost credentials](#forgotCred).
 * [Create your stack](#stackCreation) and exchange the state
 	* Use `capture-stack-state.sh` and distribute the generated file `stack-state.tgz`
@@ -310,7 +310,7 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 ````
 
 ## How do I scale up/down the number of slave nodes?
-`${HOME}/shmack/repo/04_implementation/scripts/change-number-of-slaves.sh <new number of slaves>`
+`${HOME}/shmack/shmack-repo/scripts/change-number-of-slaves.sh <new number of slaves>`
 **Attention**: Data in HDFS is **destroyed** when scaling down!!
 
 ## Which Java/Scala/Python Version can be used?
