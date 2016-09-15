@@ -15,9 +15,7 @@ ZEPPELIN_PORT=`cat ${HAPROXY_STATS_FILE} | grep --perl-regexp --max-count 1 --on
 
 if [ -z "${ZEPPELIN_PORT}" ]
 	then
-		echo "Could not determine forwarded port on public slave :-("
-		echo "Please open-shmack-marathon-ui.sh and check that the label HAPROXY_GROUP=external and HAPROXY_0_PORT=<portnumber> and restart."
-		echo " - see https://github.com/mesosphere/marathon-lb"
+		open-browser.sh http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`/service/zeppelin/
 else
 	open-browser.sh http://`cat ${CURRENT_PUBLIC_SLAVE_DNS_NAME_FILE}`:${ZEPPELIN_PORT}
 fi
