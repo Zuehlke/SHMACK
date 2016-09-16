@@ -323,7 +323,12 @@ An [older blog posting](https://support.mesosphere.com/hc/en-us/articles/2061187
 
 <a name="checkStackSetup" />
 ## What should I do to check if the setup and stack creation was successful?
-Execute the testcase `ShmackUtilsTest` in your IDE. 
+
+`open-shmack-master-console.sh` and see if all services are healthy.
+
+Unfortunately, due to [issue #16](https://github.com/Zuehlke/SHMACK/issues/16) tests that require RSync no longer work,
+and that includes most of the infrastructure tests.
+Once this is fixed, you may execute the testcase `ShmackUtilsTest` in your IDE. 
 This will run some basic tests to check that your local setup is fine and can properly make use of a running stack in the AWS cloud.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
