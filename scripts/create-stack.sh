@@ -86,7 +86,11 @@ date
 getStackOutputValue.sh DnsAddress            ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_MESOS_MASTER_DNS_FILE}
 getStackOutputValue.sh PublicSlaveDnsAddress ${STACK_DESCRIPTION_OUTPUT_FILE} > ${CURRENT_PUBLIC_SLAVE_DNS_FILE}
 
-run aws ec2 describe-security-groups --filters "Name=description,Values=Mesos Slaves Public" --query 'SecurityGroups[].GroupId' --output text > ${CURRENT_PUBLIC_SLAVE_SECGROUP_FILE}
+STACK_RESSOURCES_FILE=${TMP_OUTPUT_DIR}/stack-ressources.json
+
+run aws cloudformation describe-stack-resources --stack `cat ${CURRENT_STACK_ID_FILE}` > ${STACK_RESSOURCES_FILE}
+
+run cat  ${STACK_RESSOURCES_FILE} | grep --extended-regexp --only-matching `aws ec2 describe-security-groups --filters "Name=description,Values=Mesos Slaves Public" --query 'SecurityGroups[].GroupId' --output text | sed --regexp-extended "s/\\s+/|/"` > ${CURRENT_PUBLIC_SLAVE_SECGROUP_FILE}
 run aws ec2 describe-instances --filters "Name=instance-state-code,Values=16" "Name=instance.group-id,Values=`cat ${CURRENT_PUBLIC_SLAVE_SECGROUP_FILE}`" --query 'Reservations[].Instances[].[PublicDnsName,Tags[?Key==Name].Value[]]' --output text > ${CURRENT_PUBLIC_SLAVE_DNS_NAME_FILE}
 
 echo ${INSTALL_PACKAGES} > ${CURRENT_STACK_INSTALL_PACKAGES_FILE}
