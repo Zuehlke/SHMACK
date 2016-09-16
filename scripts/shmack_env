@@ -12,13 +12,15 @@ KEY_PAIR_NAME="shmack-key-pair-01"
 # when not running in production or testing fault tolerance  
 PUBLIC_SLAVE_INSTANCE_COUNT=1
 
-STACK_NAME="MainIngestionStack"
-# Mesosphere CloudFormation template for operating DCOS on AWS 
+# Name of your stack in CloudFormation - mainly helps when several are running to know which is which and not delete the wrong one.
+STACK_NAME="MyShmackStack-1"
+
+# Mesosphere CloudFormation template for operating DCOS on AWS
 OFFICIAL_TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
 TEMPLATE_URL="${OFFICIAL_TEMPLATE_URL}"
 
 # Customized template to define the instance types to use
-TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
+#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
 # Customized template using spot prices for all the worker nodes / slaves
 #TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
 
