@@ -10,7 +10,7 @@ else
 		CLI_OPTION=""
 fi		
 
-run sudo -H pip install --upgrade pip virtualenv dcoscli
+run sudo -H pip install --upgrade pip virtualenv dcoscli==0.4.11
 run mkdir -p ${HOME}/.dcos/
 run dcos config set core.reporting true
 run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
