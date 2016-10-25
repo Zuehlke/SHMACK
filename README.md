@@ -495,6 +495,12 @@ Be sure to have a [stack created](#stackCreation) successfully and confirmed ide
 Are you running Ubuntu 16.04? 
 Because there is a known issue of SWT not working properly on GTK3: http://askubuntu.com/questions/761604/eclipse-not-working-in-16-04
 
+<a name="stuckInDeployment" />
+## Some of my dcos services are stuck in deployment
+Follow the log of a service like.
+`dcos service log --follow hdfs`
+You will see the same piece of log being logged over and over again. Analyze it (look for "failed" or similar).
+
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
