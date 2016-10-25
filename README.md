@@ -497,7 +497,7 @@ Because there is a known issue of SWT not working properly on GTK3: http://askub
 
 <a name="stuckInDeployment" />
 ## Some of my dcos services are stuck in deployment
-Follow the log of a service like.
+Follow the log of a service like this:
 `dcos service log --follow hdfs`
 You will see the same piece of log being logged over and over again. Analyze it (look for "failed" or similar).
 
