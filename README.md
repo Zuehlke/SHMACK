@@ -501,6 +501,12 @@ Follow the log of a service like this:
 `dcos service log --follow hdfs`
 You will see the same piece of log being logged over and over again. Analyze it (look for "failed" or similar).
 
+<a name="sparkOOM" />
+## Your spark driver or executors are being killed
+* Figure out through mesos console on what host (slave) the driver/executor executed on
+* ssh into the slave (`ssh-into-slave <num>`)
+* Look for oom messages like: *Memory cgroup out of memory: Kill process 26801 (java) score 1018 or sacrifice child*
+* Start increasing the memory of the driver/executor with --driver-memory / --executor-memory
 ___
 * [github] - See other project from Zühlke on github
 * [bitbucket] - ee other project from Zühlke on bitbucket
