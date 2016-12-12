@@ -43,13 +43,6 @@ if [ "Noop" == "${CLI_OPTION}Noop" ]
 fi
 date
 
-# run update-node-info.sh
-
-echo
-read -p "Press Enter to confirm ssh-identities (and logout from cluster after confirmations by typing 'exit')." 
-ssh-into-dcos-master.sh
-ssh-into-dcos-slave.sh 0
-
 run open-shmack-master-console.sh
 
 echo
