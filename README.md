@@ -89,6 +89,10 @@ Details can be found in: http://docs.aws.amazon.com/cli/latest/userguide/cli-cha
   It is recommended to create distinct keys if you have different needs; so even if you have an AWS account already, better create a key just for SHMACK. That way, you can also later safely delete the key if you no longer need it.
   * https://console.aws.amazon.com/iam/home?#users
   * Username: `shmack`
+  * Access type: Programmatic access
+  * Click next.
+  * Set permissions for shmack
+  * Attach existing policies directly: AdministratorAccess
   * **DON'T TOUCH mouse or keyboard - LEAVE THE BROWSER OPEN** (credentials are shown only here, optionally download credentials and store them in a safe place only for you)
 * Run `aws configure`
   * `AWS Access Key ID [None]: [from browser page]`
@@ -114,6 +118,7 @@ https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#KeyPairs:s
 	The only case in which you may need some AWS credentials otherwise, may probably be to copy data from S3.
 	Make sure you always perform this as one-time operations you do not need to commit! 
 * Optional: For the impatient, you may now directly proceed with [Stack Creation](#stackCreation) and setup your IDE while CloudFormation takes place which will take some minutes anyway.
+* http://aws.amazon.com/contact-us/ec2-request TODO!!!
 
 ### Download, install, and configure Eclipse for the use in SHMACK
 * Download `Eclipse IDE for Java EE Developers` as 64 bit for Linux from https://www.eclipse.org/downloads/ 

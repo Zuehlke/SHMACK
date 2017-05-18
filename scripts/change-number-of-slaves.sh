@@ -54,7 +54,7 @@ function waitForStackUpdateComplete {
 waitForStackUpdateComplete
 date
 
-run update-node-info.sh
+#run update-node-info.sh
 
 run open-shmack-master-console.sh
 

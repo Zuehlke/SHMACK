@@ -10,17 +10,22 @@ else
 		CLI_OPTION=""
 fi		
 
-run sudo -H pip install --upgrade pip virtualenv dcoscli==0.4.11
-run mkdir -p ${HOME}/.dcos/
-run dcos config set core.reporting true
-run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
-run dcos config set core.ssl_verify false
-run dcos config set core.timeout 5
 
-if [ "MultiversePresent" != "`dcos package repo list | grep --only-matching Multiverse`Present" ]
-	then
-		run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
-fi
+run curl https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-1.9/dcos -o dcos
+run sudo mv dcos /usr/local/bin
+run sudo chmod +x /usr/local/bin/dcos
+run dcos config set core.dcos_url http://`cat ${CURRENT_MESOS_MASTER_DNS_FILE}`
+run dcos auth login
+
+#run dcos config set core.reporting true
+#run dcos config set core.ssl_verify false
+#run dcos config set core.timeout 5
+
+
+#if [ "MultiversePresent" != "`dcos package repo list | grep --only-matching Multiverse`Present" ]
+#	then
+#		run dcos package repo add Multiverse https://github.com/mesosphere/multiverse/archive/version-2.x.zip
+#fi
 
 for package in `cat ${CURRENT_STACK_INSTALL_PACKAGES_FILE}`
 do

@@ -16,13 +16,14 @@ PUBLIC_SLAVE_INSTANCE_COUNT=1
 STACK_NAME="MyShmackStack-1"
 
 # Mesosphere CloudFormation template for operating DCOS on AWS
+# Current stable version might be a bit outdated
 OFFICIAL_TEMPLATE_URL="https://s3.amazonaws.com/downloads.mesosphere.io/dcos/stable/cloudformation/single-master.cloudformation.json"
 TEMPLATE_URL="${OFFICIAL_TEMPLATE_URL}"
 
 # Customized template to define the instance types to use
-#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.json"
+TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/benedikt.wedenik.smack.dcos.template/early_1.9_single-master.cloudformation.json"
 # Customized template using spot prices for all the worker nodes / slaves
-#TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
+TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/benedikt.wedenik.smack.dcos.template/early_1.9_single-master.cloudformation.spot.json"
 
 # Instance type as defined in https://aws.amazon.com/ec2/pricing/ used for all worker nodes / slaves
 # Default is m3.xlarge, which should remain the lowest setting.
@@ -122,7 +123,6 @@ if [ -e "${SSH_KEY_LOCATION}" ]
 fi
 
 # AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
-TEMPLATE_PARAMETERS=" ParameterKey=AcceptEULA,ParameterValue=Yes"
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
 

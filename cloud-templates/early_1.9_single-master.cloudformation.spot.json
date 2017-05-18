@@ -160,7 +160,7 @@
       "Default": "m3.xlarge"
     },
     "SpotInstancePrice": {
-      "Description": "Ignored: Just exists to keep scripts compatible.",
+      "Description": "Required: Maximum price to bid on spot instances or accept the default and take the risk to loose your cluster if someone outbids you.",
       "Type": "Number",
       "Default": "0.1"
     },
