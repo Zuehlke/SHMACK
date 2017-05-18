@@ -144,6 +144,26 @@
     }
   },
   "Parameters": {
+    "MasterInstanceType": {
+      "Description": "Optional: Type of AWS EC2 instance to use for master node.",
+      "Type": "String",
+      "Default": "m3.xlarge"
+    },
+    "SlaveInstanceType": {
+      "Description": "Optional: Type of AWS EC2 instance to use for slave nodes.",
+      "Type": "String",
+      "Default": "m3.xlarge"
+    },
+    "PublicSlaveInstanceType": {
+      "Description": "Optional: Type of AWS EC2 instance to use for public slave nodes.",
+      "Type": "String",
+      "Default": "m3.xlarge"
+    },
+    "SpotInstancePrice": {
+      "Description": "Ignored: Just exists to keep scripts compatible.",
+      "Type": "Number",
+      "Default": "0.1"
+    },
     "SlaveInstanceCount": {
       "Default": "5",
       "Description": "Required: Specify the number of private agent nodes or accept the default.",
@@ -919,11 +939,7 @@
         },
         "AssociatePublicIpAddress": "true",
         "InstanceType": {
-          "Fn::FindInMap": [
-            "Parameters",
-            "PublicSlaveInstanceType",
-            "default"
-          ]
+          "Ref": "PublicSlaveInstanceType"
         },
         "ImageId": {
           "Fn::FindInMap": [
@@ -2022,11 +2038,7 @@
         },
         "AssociatePublicIpAddress": "true",
         "InstanceType": {
-          "Fn::FindInMap": [
-            "Parameters",
-            "MasterInstanceType",
-            "default"
-          ]
+          "Ref": "MasterInstanceType"
         },
         "ImageId": {
           "Fn::FindInMap": [
@@ -2619,11 +2631,7 @@
         },
         "EbsOptimized": "true",
         "InstanceType": {
-          "Fn::FindInMap": [
-            "Parameters",
-            "SlaveInstanceType",
-            "default"
-          ]
+          "Ref": "SlaveInstanceType"
         },
         "ImageId": {
           "Fn::FindInMap": [
