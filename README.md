@@ -21,7 +21,7 @@ with the intention to cover the full SMACK stack (Spark, Mesos, Akka, Cassandra,
 [Mesosphere Infinity](https://mesosphere.com/infinity/) [stack](https://mesosphere.com/blog/2015/08/20/mesosphere-infinity-youre-4-words-away-from-a-complete-big-data-system/))
 and being enriched by Hatch applications (closed source).
 
-#<font color="red">WARNING: things can get expensive $$$$$ !</font>
+# <font color="red"> WARNING: things can get expensive $$$$$ !</font>
 When setting up the tutorial servers on Amazon AWS and letting them running, there will be monthly costs of approx **1700 $** !
 Please make sure that servers are only used as required. See [FAQ](#avoidBill) section in this document.
 
@@ -47,8 +47,9 @@ If you have existing accounts, they can be used. If not:
 * Create AWS account: https://aws.amazon.com/de/
 
 
-<a name="devEnvSetup" />
-## Development Environment setup
+<a name="devEnvSetup">
+
+## Development Environment setup </a>
 You will need a (for now) a Linux machine to control and configure the running SHMACK stack. 
 You will also need that in order to develop and contribute. 
 
@@ -164,16 +165,18 @@ setup DC/OS packeges to form SHMACK.
 It therefore makes the process described in https://mesosphere.com/amazon/setup/ even simpler and repeatable, 
 and by that, more appropriate for forming short-lived clusters for quick experiments or demonstrations. 
 
-<a name="spotinstances" />
-### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances
+<a name="spotinstances">
+
+### Optional: Use [spot](https://aws.amazon.com/ec2/spot/) instances </a>
 To lower costs you can use spot instances. To do this, change this line in shmack_env:
 
     TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/shmack/single-master.cloudformation.spot.json"
 
 This is currently hosted on a private s3 bucket, for details see [here](./cloud-templates/README.MD).
 
-<a name="stackCreation" />
-### Stack Creation (from now on, you pay for usage)
+<a name="stackCreation">
+
+### Stack Creation (from now on, you pay for usage) </a>
   * Execute `${HOME}/shmack/shmack-repo/scripts/create-stack.sh`
     * Wait approx. 10 Minutes
     * **Do NOT interrupt the script!** (especially do **NOT** press Ctrl-C to copy the instructed URL!)
@@ -189,7 +192,7 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
     * Even after the command returns, it will still take some time until every package is fully operational
     * In the Mesos Master UI you will see them initially in status "Idle" or "Unhealthy" until they converge to "Healthy",
       in particular Spark, HDFS, and Cassandra will need time until replications is properly initialized 
-  * The script will now <a name="confirmSsh" />Login once using ssh 
+  * The script will now <a name="confirmSsh">Login once using ssh  </a>
     * This is necessary to add mesos master to known hosts, so that scripts and unit tests can run without manual interaction
     * Performs `${HOME}/shmack/shmack-repo/scripts/ssh-into-dcos-master.sh`and `${HOME}/shmack/shmack-repo/scripts/ssh-into-dcos-slave.sh 0`
     * You have to confirm SSH security prompts
@@ -197,8 +200,9 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
   * Optional: Check whether stack creation was successful, see **[here](#checkStackSetup)** 
   * Optional: Install additional software.
   
-<a name="stackDeletion" />
-### Stack Deletion
+<a name="stackDeletion">
+
+### Stack Deletion </a>
   * Option 1 (recommended):
     `${HOME}/shmack/shmack-repo/scripts/delete-stack.sh`
   * Option 2 (manual):
@@ -243,8 +247,9 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
   * Apache Spark Example Use Cases (with Code): https://github.com/4Quant
   * Apache Spark Twitter Word Count: https://github.com/snowplow/spark-example-project
 
-<a name="limitations" />
-# Important Limitations / Things to consider before going productive
+<a name="limitations">
+
+# Important Limitations / Things to consider before going productive </a>
 * As of 2015-10-28 the DC/OS stack does **NOT work in AWS Region `eu-central-1` (Frankfurt)**. Recommended region to try is `us-west-1`. Take care of **regulatory issues** (physical location of data) when thinking about a real productive System.
 * What if the number of client request "explodes". Is there a way to do autoscaling with Mesosophere DC/OS WITHOUT human interaction?
 * As of 2015-11-13 **all data in HDFS is lost** when scaling down, e.g. from 10 to 5 Slave nodes. This is a blocking issue. If unresolved productive use of the Stack is not possible. see **[here](https://github.com/Zuehlke/SHMACK/blob/master/03_analysis_design/Issues/Issue-10%20HDFS-Access/Scaling%20Test.docx)** According to the mesosphere development team (chat), this issue is addressed by **[maintenance primitives](https://mesosphere.com/blog/2015/10/07/mesos-inverse-offers/)**. But it is not clear when it will be finished.
@@ -256,9 +261,13 @@ This is currently hosted on a private s3 bucket, for details see [here](./cloud-
     but even for Spark the info states that it is still "in beta and there may be bugs, incomplete features, incorrect documentation or other discrepencies"
   * Those from [Mesosphere Multiverse](https://github.com/mesosphere/multiverse) are all experimental.
 
+
+
 # FAQ
-<a name="avoidBill" />
-## How do I avoid to be surprised by a monthly bill of **1700 $** ?
+
+<a name="avoidBill">
+
+## How do I avoid to be surprised by a monthly bill of **1700 $** ? </a>
 Also check out [spot instances](#spotinstances) to reduce costs.
 Check regularly the [Billing and Cost Dashboard](https://console.aws.amazon.com/billing/home), which Amazon will update daily. You also install the [AWS Console Mobile App](https://aws.amazon.com/console/mobile/) to even have an eye on the running instances and aggregated costs no matter where you are - and take actions if needed like deleting a running stack. 
 
@@ -278,8 +287,10 @@ And make sure, you keep your credentials for AWS safe!
 * The same is probably true for your `shmack-key-pair-01.pem`, although this will usually only grant access to your running instances; not the option to run new instances and thus create additional costs.
 * Whenever in doubt, better inactive and delete your AWS credentials and create new ones as described in [lost credentials](#forgotCred). 
 
-<a name="shareCluster" />
-## Can I share a running cluster with other people I work with to reduce costs?
+
+<a name="shareCluster">
+
+## Can I share a running cluster with other people I work with to reduce costs? </a>
 In principle, you can. But be aware that you may block each other with running tasks.
 * Each of you has to perform the complete [Development Environment Setup](#devEnvSetup), 
   except that only the one creating the stack needs to setup an AWS account.
@@ -303,8 +314,9 @@ That changes constantly as Mesosphere adds packages to DC/OS. And we provide our
 * Or type `dcos package search` to get the current list for your configured repositories or `open-shmack-marathon-ui.sh` and select Universe on the left.
 * ... but keep in mind the [limitations](#limitations)
 
-<a name="nonImplFiles" />
-## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ?
+<a name="nonImplFiles">
+
+## Where do I put my notes / non-implementation files when working on an issue (including User-Stories) ? </a>
 Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMACK/tree/master/03_analysis_design/Issues
 ````
 <git-repo-root>
@@ -321,13 +333,15 @@ Into the `03_analysis_design/Issues` folder, see https://github.com/Zuehlke/SHMA
 ## Which Java/Scala/Python Version can be used?
 As of 2016-08-26 Java 1.8.0_51, Spark 2.0 with Scala 2.11.8, and Python 3.4 are deployed on the created stack.
 
-<a name="sparkShell" />
-## Can I run an interactive Spark Shell?
+<a name="sparkShell">
+
+## Can I run an interactive Spark Shell? </a>
 Not really. [Officially](https://docs.mesosphere.com/1.7/usage/service-guides/spark/limitations/), you should use graphical webfrontends [Zeppelin](https://docs.mesosphere.com/1.7/usage/service-guides/zeppelin/) or [Spark Notebook](https://github.com/andypetrella/spark-notebook/#mesosphere-dcos) instead. 
 An [older blog posting](https://support.mesosphere.com/hc/en-us/articles/206118703-Launching-spark-shell-on-a-DCOS-master-node) showed some steps, but that never really worked for anything with parallel execution / using the master.
 
-<a name="checkStackSetup" />
-## What should I do to check if the setup and stack creation was successful?
+<a name="checkStackSetup">
+
+## What should I do to check if the setup and stack creation was successful? </a>
 
 `open-shmack-master-console.sh` and see if all services are healthy.
 
@@ -343,8 +357,9 @@ Look at the examples:
 * `WordCountLocalTest`
 These will not require any running stack and can therefore also be performed without any instance on AWS.
 
-<a name="sparkTests" />
-## How can I execute Unit-Tests on a remote Spark instance (i.e. in the Amazon EC2 cluster)?
+<a name="sparkTests">
+
+## How can I execute Unit-Tests on a remote Spark instance (i.e. in the Amazon EC2 cluster)? </a>
 Look at the examples:
 * `JavaSparkPiRemoteTest`
 * `WordCountRemoteTest`
@@ -455,8 +470,9 @@ To fix this:
 * Run `init-dcos-stack.sh` to complete the creation of the full stack.
 
 
-<a name="forgotCred" />
-## I forgot my AWS credentials / closed the browser too early.
+<a name="forgotCred">
+
+## I forgot my AWS credentials / closed the browser too early. </a>
 You can always setup new credentials without needing to setup a new account, so this is no big deal:
 * Go to https://console.aws.amazon.com/iam/home?region=us-west-1
 * Select your user
@@ -464,8 +480,9 @@ You can always setup new credentials without needing to setup a new account, so 
 * Open a shell and run `aws configure` again using the new credentials
 * Optional: Delete the old access key that is no longer in use 
 
-<a name="setupFailing" />
-## What should I do if the setup of the stack has failed?
+<a name="setupFailing">
+
+## What should I do if the setup of the stack has failed? </a>
 * Try to understand the failure and fix it. Goal: As much as possible is automated and others do not fall into the same issue.
 * Delete the stack to make sure there are no costs, see **[here](#stackDeletion)**
 * If you still habe time: Try to create the stack again from scratch, but do not forget the **[running costs](#avoidBill)**...
@@ -479,13 +496,15 @@ Solution: Unplug network cable and use `zred` WiFi.
 Execute the testcase `ShmackUtilsTest` in eclipse.
 If this testcase fails: see **[here](#inTestcasesFailing)**
 
-<a name="inTestcasesFailing" />
-## What should I do if Integration testcases do not work?
+<a name="inTestcasesFailing">
+
+## What should I do if Integration testcases do not work? </a>
 Be sure to have a [stack created](#stackCreation) successfully and confirmed idendity of hosts, see **[here](#confirmSsh)**
 
 
-<a name="sparkJobsFailing" />
-## What should I do if Spark-Jobs are failing?
+<a name="sparkJobsFailing">
+
+## What should I do if Spark-Jobs are failing? </a>
 * Open the mesos Web-UI `${HOME}/shmack/repo/04_implementation/scripts/open-shmack-mesos-console.sh`
 * Click on the Link to the `sandbox` of your spark-job
 * Click on `stderr`  
@@ -495,19 +514,22 @@ Be sure to have a [stack created](#stackCreation) successfully and confirmed ide
 `ssh-into-dcos-master.sh`
 `hadoop fs -rm -r -f 'hdfs://hdfs/*'`
 
-<a name="eclipseUbuntu1604" />
-## Eclipse freezes with no apparent reason?
+<a name="eclipseUbuntu1604">
+
+## Eclipse freezes with no apparent reason? </a>
 Are you running Ubuntu 16.04? 
 Because there is a known issue of SWT not working properly on GTK3: http://askubuntu.com/questions/761604/eclipse-not-working-in-16-04
 
-<a name="stuckInDeployment" />
-## Some of my dcos services are stuck in deployment
+<a name="stuckInDeployment">
+
+## Some of my dcos services are stuck in deployment </a>
 Follow the log of a service like this:
 `dcos service log --follow hdfs`
 You will see the same piece of log being logged over and over again. Analyze it (look for "failed" or similar).
 
-<a name="sparkOOM" />
-## Your spark driver or executors are being killed
+<a name="sparkOOM">
+
+## Your spark driver or executors are being killed </a>
 * Figure out through mesos console on what host (slave) the driver/executor executed on
 * ssh into the slave (`ssh-into-slave <num>`)
 * Look for oom messages like: *Memory cgroup out of memory: Kill process 26801 (java) score 1018 or sacrifice child* in `dmesg`
