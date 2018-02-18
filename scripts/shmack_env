@@ -8,9 +8,20 @@
 # the SSH keypair .pem file created in AWS Console to access your running instances
 KEY_PAIR_NAME="shmack-key-pair-01"
 
-# A single public slave is sufficient and keeps costs down 
-# when not running in production or testing fault tolerance  
+# A single public slave is sufficient and keeps costs down
+# when not running in production or testing fault tolerance
 PUBLIC_SLAVE_INSTANCE_COUNT=1
+
+# Number of worker nodes. Need significant memory and fast I/O, so usually configured to
+# use m3.xlarge instances (4 vCPU, 15 GB Memory, 2x40 GB SSD; about 0.15 USD per hour each)
+# Theoretically, a minimum of 3 could work, but so far, 5 was needed to run a cluster without problems.
+# Without special setup with Amazon, you can run up to 40 nodes per region;
+# so leaving aside the 3 infrastructure nodes (master + backup, public slave),
+# this leaves you the potential to start at most 37 worker slave instances.
+#
+# If memory becomes the bottleneck, better switch to memory optimized instances like r3.xlarge
+# (https://aws.amazon.com/ec2/instance-types/) instead of cranking up generic instance count.
+SLAVE_INSTANCE_COUNT=7
 
 # Name of your stack in CloudFormation - mainly helps when several are running to know which is which and not delete the wrong one.
 STACK_NAME="MyShmackStack-1"
@@ -42,7 +53,7 @@ SLAVE_INSTANCE_TYPE="m3.xlarge"
 # While r3.2xlarge with more memory, on-demand price is $0.741/hour, spot prices are usually slightly above 0.2 $/hour but have spikes only to 1.5$/hour.
 # Setting a high value will make it more likely that you can reliably use your cluster, but may create also high peak prices.
 # When in doubt: If you just go with regular on-demand prices, you are certain to get and keep your cluster running.
-MAX_SPOT_INSTANCE_PRICE="0.1"
+MAX_SPOT_INSTANCE_PRICE="0.2"
 
 
 ###################################################################################################
@@ -52,7 +63,7 @@ MAX_SPOT_INSTANCE_PRICE="0.1"
 
 if [ -f "./shmack_env" ] ; then
   export SCRIPTS_DIR=`pwd`
-else 
+else
   echo "Scripts must ALWAYS be executed with correct current directory, i.e. directory of 'shmack_env'"
   exit 99
 fi
@@ -125,6 +136,7 @@ fi
 # AWS::IAM::AccessKey, AWS::IAM::InstanceProfile, AWS::IAM::Role, AWS::IAM::User
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=KeyName,ParameterValue=${KEY_PAIR_NAME}"
 TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=PublicSlaveInstanceCount,ParameterValue=${PUBLIC_SLAVE_INSTANCE_COUNT}"
+TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT}"
 
 if [ "${OFFICIAL_TEMPLATE_URL}Unchanged" != "${TEMPLATE_URL}Unchanged" ]
 	then

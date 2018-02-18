@@ -8,30 +8,19 @@ cd `dirname ${BASH_SOURCE[0]}`
 ########  See also shmack_env for shared parameters
 ###################################################################################################
 
-# Number of worker nodes. Need significant memory and fast I/O, so usually configured to
-# use m3.xlarge instances (4 vCPU, 15 GB Memory, 2x40 GB SSD; about 0.15 USD per hour each)
-# Theoretically, a minimum of 3 could work, but so far, 5 was needed to run a cluster without problems.
-# Without special setup with Amazon, you can run up to 40 nodes per region; 
-# so leaving aside the 3 infrastructure nodes (master + backup, public slave), 
-# this leaves you the potential to start at most 37 worker slave instances. 
-#
-# If memory becomes the bottleneck, better switch to memory optimized instances like r3.xlarge
-# (https://aws.amazon.com/ec2/instance-types/) instead of cranking up generic instance count.
-SLAVE_INSTANCE_COUNT=5
-
 # Space-separated list of packages to install (without asking)
 # 'hdfs' and 'spark' are needed to run the spark unit tests.
 # You can later install additional packages using 'dcos package install'
 # The list of available packages can be retrieved with 'dcos package search'
-INSTALL_PACKAGES="spark marathon"
+INSTALL_PACKAGES=""
 #INSTALL_PACKAGES="hdfs spark chronos marathon marathon-lb"
 
-# Space-separated list of optional packages to install if user confirms with 'yes' 
+# Space-separated list of optional packages to install if user confirms with 'yes'
 # You can later install additional packages using 'dcos package install'
 OPTIONAL_PACKAGES=""
 
 # Space-separated list of apps to install (without asking)
-# 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb', 
+# 'zeppelin' provides a nice UI for getting started - requires packages 'marathon' and 'marathon-lb',
 # but you may have to also configure marathon labels for zeppelin.
 # You can later install additional packages using 'dcos package install --app'
 INSTALL_APPS=""
@@ -44,8 +33,6 @@ INSTALL_APPS=""
 run mkdir --parents ${TMP_OUTPUT_DIR}
 run mkdir --parents ${CURRENT_STATE_DIR}
 
-TEMPLATE_PARAMETERS="${TEMPLATE_PARAMETERS} ParameterKey=SlaveInstanceCount,ParameterValue=${SLAVE_INSTANCE_COUNT} "
-
 CLOUD_FORMATION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/cloud-formation-result.json
 
 echo "${STACK_NAME}" > ${CURRENT_STACK_NAME_FILE}
@@ -54,14 +41,14 @@ echo "Creating stack ${STACK_NAME} in aws... with ${TEMPLATE_PARAMETERS}"
 run aws cloudformation create-stack --output json --stack-name ${STACK_NAME} --template-url ${TEMPLATE_URL} --parameters ${TEMPLATE_PARAMETERS} --capabilities CAPABILITY_IAM | tee ${CLOUD_FORMATION_OUTPUT_FILE}
 
 echo "Extracting StackId:"
-run get-stack-id.sh ${CLOUD_FORMATION_OUTPUT_FILE} | tee ${CURRENT_STACK_ID_FILE} 
+run get-stack-id.sh ${CLOUD_FORMATION_OUTPUT_FILE} | tee ${CURRENT_STACK_ID_FILE}
 
 date
 echo -n "Stack creation initialized. Waiting for all EC2 instances ready..."
 function waitForStackCreateComplete {
 	STACK_DESCRIPTION_OUTPUT_FILE=${TMP_OUTPUT_DIR}/stack-description.json
-	while true; do 
-		run aws cloudformation describe-stacks --output json --stack-name ${STACK_NAME} > ${STACK_DESCRIPTION_OUTPUT_FILE}		
+	while true; do
+		run aws cloudformation describe-stacks --output json --stack-name ${STACK_NAME} > ${STACK_DESCRIPTION_OUTPUT_FILE}
 		STATUS=`get-stack-status.sh ${STACK_DESCRIPTION_OUTPUT_FILE}`
 		case "$STATUS" in
 			"CREATE_COMPLETE" )
@@ -75,9 +62,9 @@ function waitForStackCreateComplete {
 				;;
 			*)
 				echo "Invalid status for AWS Stack: $STATUS"
-				exit 1 
+				exit 1
 				;;
-		esac		
+		esac
 	done
 }
 waitForStackCreateComplete
