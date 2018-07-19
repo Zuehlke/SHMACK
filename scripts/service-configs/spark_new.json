@@ -1,0 +1,20 @@
+{
+  "service": {
+    "name": "spark",
+    "cpus": 1,
+    "mem": 1024,
+    "role": "*",
+    "user": "root",
+    "docker-image": "bwedenik/spark:2.3.0-2.2.1-2-hadoop-2.6",
+    "log-level": "INFO",
+    "UCR_containerizer": false,
+    "use_bootstrap_for_IP_detect": false
+  },
+  "security": {
+    "kerberos": {
+      "enabled": false,
+      "kdc": {}
+    }
+  },
+  "hdfs": {}
+}
