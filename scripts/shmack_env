@@ -40,7 +40,7 @@ TEMPLATE_URL="https://s3-us-west-1.amazonaws.com/benedikt.wedenik.smack.dcos.tem
 # Default is m3.xlarge, which should remain the lowest setting.
 # Other options could be m3.2xlarge with same number of nodes but a bit more "beefy",
 # or the corresponding c3 or r3 instances, depending if you need more computing power (c3) or memory (r3).
-SLAVE_INSTANCE_TYPE="m3.xlarge"
+SLAVE_INSTANCE_TYPE="m3.2xlarge"
 #SLAVE_INSTANCE_TYPE="r3.2xlarge"
 
 # When using spot instances, how much are you willing to pay per instance at most.
@@ -53,7 +53,7 @@ SLAVE_INSTANCE_TYPE="m3.xlarge"
 # While r3.2xlarge with more memory, on-demand price is $0.741/hour, spot prices are usually slightly above 0.2 $/hour but have spikes only to 1.5$/hour.
 # Setting a high value will make it more likely that you can reliably use your cluster, but may create also high peak prices.
 # When in doubt: If you just go with regular on-demand prices, you are certain to get and keep your cluster running.
-MAX_SPOT_INSTANCE_PRICE="0.2"
+MAX_SPOT_INSTANCE_PRICE="0.25"
 
 
 ###################################################################################################
